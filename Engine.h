@@ -2,15 +2,11 @@
 #include "Header.h"
 
 /*OpenGL*/
-#include <GL\glew.h>
-#include <GLFW\glfw3.h>
+//#include <glm\gtc\matrix_transform.hpp>
 
-#include <glm\glm.hpp>
-#include <glm\gtc\matrix_transform.hpp>
-
+#ifndef UP
 #define UP glm::vec3(0,1,0)
-
-#define PRINT_FPS
+#endif
 
 class Engine
 {

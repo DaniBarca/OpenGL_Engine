@@ -4,8 +4,8 @@
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 
-#include <glm\glm.hpp>
-#include <glm\gtc\matrix_transform.hpp>
+#include <glm.hpp>
+#include <gtc\matrix_transform.hpp>
 
 /*C++*/
 #include <stdlib.h>
@@ -32,10 +32,5 @@ glm::mat4 getRotationMatrix(double radians, glm::vec3 axis);
 
 using namespace std;
 
-void voxelParse(string path, vector<vector<vector<int>>>* voxels, int* width, int* height, int* depth);
-void printVoxels(vector<vector<vector<int>>> voxels, int width, int height, int depth);
-
-typedef enum {
-	LEFT,
-	RIGHT
-}DIRECTION;
+/* Engine options */
+//#define PRINT_FPS
