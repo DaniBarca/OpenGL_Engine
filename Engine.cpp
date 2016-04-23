@@ -116,15 +116,18 @@ Engine* Engine::InitEngine() {
 }
 
 Engine* Engine::Loop(function<void()> Init, function<void(double)> Update, function<void()> Draw) {
+#ifdef PRINT_FPS
+	double currentFPS;
+	int count = 0;
+#endif
+
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
 
 	Init();
-	double currentFrame, delta, lastFrame = glfwGetTime() , currentFPS;
-	int count = 0;
+	double currentFrame, delta, lastFrame = glfwGetTime();
 	do {
-		if (count > 1000000)count = 0;
 		//Clear color buffer  
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -140,12 +143,14 @@ Engine* Engine::Loop(function<void()> Init, function<void(double)> Update, funct
 		// Swap buffers
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-		
+
 #ifdef PRINT_FPS
-		count++;
 		currentFPS = 1 / (glfwGetTime() - currentFrame);
-		if (count % 10 == 0)
+		count++;
+		if (count > 60) {
+			count = 0;
 			cout << currentFPS << endl;
+		}
 #endif
 		
 	} while (!glfwWindowShouldClose(window));
