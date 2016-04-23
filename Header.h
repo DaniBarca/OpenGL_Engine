@@ -31,6 +31,7 @@
 glm::mat4 getRotationMatrix(double radians, glm::vec3 axis);
 
 using namespace std;
+using namespace std::placeholders;
 
 /* Engine options */
 //#define PRINT_FPS
