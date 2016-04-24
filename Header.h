@@ -7,6 +7,13 @@
 #include <glm.hpp>
 #include <gtc\matrix_transform.hpp>
 
+/*Assimp (for 3D model load)*/
+#pragma comment(lib, "assimp-vc130-mt.lib") 
+
+#include <assimp/Importer.hpp>      // C++ importer interface
+#include <assimp/scene.h>           // Output data structure
+#include <assimp/postprocess.h>     // Post processing fla
+
 /*C++*/
 #include <stdlib.h>
 #include <stdio.h>
