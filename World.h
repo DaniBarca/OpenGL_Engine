@@ -2,8 +2,7 @@
 
 //This is the main class of a project made with this engine
 
-#ifndef WORLD_H
-#define WORLD_H
+#pragma once
 
 #include "Header.h"
 
@@ -27,5 +26,3 @@ public:
 
 	void OnMouseMove(double x, double y);
 };
-
-#endif
