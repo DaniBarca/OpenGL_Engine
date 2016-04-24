@@ -12,6 +12,12 @@ World* World::GetInstance() {
 }
 
 void World::Init() {
+	/*TESTING IMPORT WITH ASSIMP*/
+	cout << "Loading dragon" << endl;
+	Import3D("models/dragon.obj");
+
+	cout << "Loading budha" << endl;
+	Import3D("models/buddha.obj");
 }
 
 void World::Update(double dt) {
