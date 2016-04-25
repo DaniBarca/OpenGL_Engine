@@ -2,4 +2,4 @@
 
 #include "Header.h"
 
-bool Import3D(const string& path);
+bool Import3D(const string& path, aiScene* sceneResult);

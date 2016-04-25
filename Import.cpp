@@ -1,6 +1,6 @@
 #include "Import.h"
 
-bool Import3D(const string& path) {
+bool Import3D(const string& path, aiScene* sceneResult) {
 	Assimp::Importer importer;
 
 	const aiScene* scene = importer.ReadFile(path,
@@ -16,6 +16,8 @@ bool Import3D(const string& path) {
 		getchar();
 		exit(EXIT_FAILURE);
 	}
+
+	*sceneResult = *scene;
 
 	return true;
 }
