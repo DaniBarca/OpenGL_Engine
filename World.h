@@ -6,11 +6,14 @@
 
 #include "Header.h"
 #include "Import.h"
+#include "MeshObject.h"
 
 class World
 {
 	World();
 	~World();
+
+	MeshObject* mo;
 
 public:
 	static World* GetInstance();

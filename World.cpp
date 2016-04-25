@@ -12,12 +12,13 @@ World* World::GetInstance() {
 }
 
 void World::Init() {
+	aiScene scene;
+
 	/*TESTING IMPORT WITH ASSIMP*/
 	cout << "Loading dragon" << endl;
-	Import3D("models/dragon.obj");
+	Import3D("models/dragon.obj", &scene);
 
-	cout << "Loading budha" << endl;
-	Import3D("models/buddha.obj");
+	mo = new MeshObject(scene.mMeshes[0]);
 }
 
 void World::Update(double dt) {
