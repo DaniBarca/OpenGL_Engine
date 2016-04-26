@@ -3,7 +3,7 @@
 #include "Header.h"
 
 class MeshObject {
-	GLfloat* vertices;
+	GLfloat* vertexBuffer;
 	int numVertices;
 public:
 	MeshObject();

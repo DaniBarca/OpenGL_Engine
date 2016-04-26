@@ -13,6 +13,7 @@ class World
 	World();
 	~World();
 
+	aiScene asScene;
 	MeshObject* mo;
 
 public:
