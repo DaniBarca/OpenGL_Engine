@@ -1,6 +1,6 @@
 #include "Import.h"
 
-bool Import3D(const string& path, MeshObject* meshes) {
+bool Import3D(const string& path, MeshObject*& meshes) {
 	Assimp::Importer importer;
 
 	const aiScene* scene = importer.ReadFile(path,

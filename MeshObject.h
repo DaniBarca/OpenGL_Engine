@@ -1,14 +1,17 @@
 #pragma once
 
 #include "Header.h"
+#include "Import.h"
 
 class MeshObject {
-public:
+	friend bool Import3D(const string& path, MeshObject*& meshes);
+
 	GLfloat* vertexBuffer;
-	int numVertices;
-	
+	unsigned int numVertices;
+
+public:	
 	MeshObject();
 	MeshObject(aiMesh* meshData);
 
-	void Import(aiMesh* meshData);
+	void MeshObject::PrintVertices();
 };

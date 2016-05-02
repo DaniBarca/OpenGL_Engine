@@ -17,11 +17,7 @@ void World::Init() {
 	Import3D("models/teapot.obj", mo);
 	cout << "Finished teapot read" << endl;
 
-	for (GLuint i = 0; i < mo[0].numVertices * 3; ++i) {
-		std::cout << mo[0].vertexBuffer[i] << " -- ";
-		if ((i + 1) % 3 == 0)
-			std::cout << endl;
-	}
+	mo->PrintVertices();
 
 	cout << "Dafuck" << endl;
 }
