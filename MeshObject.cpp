@@ -8,9 +8,9 @@ MeshObject::MeshObject(aiMesh* meshData) : MeshObject() {
 }
 
 void MeshObject::Import(aiMesh* mesh){
-	vertexBuffer = (GLfloat*)malloc(sizeof(GLfloat) * mesh->mNumVertices * VERTICES_PER_POL);
+	vertexBuffer = new GLfloat[mesh->mNumVertices * VERTICES_PER_POL];// (GLfloat*)malloc(sizeof(GLfloat) * mesh->mNumVertices * VERTICES_PER_POL);
 
-	for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
+	for (GLuint i = 0; i < mesh->mNumVertices; ++i) {
 		vertexBuffer[i * VERTICES_PER_POL + 0] = mesh->mVertices[i].x;
 		vertexBuffer[i * VERTICES_PER_POL + 1] = mesh->mVertices[i].y;
 		vertexBuffer[i * VERTICES_PER_POL + 2] = mesh->mVertices[i].z;

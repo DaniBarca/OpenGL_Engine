@@ -14,10 +14,15 @@ World* World::GetInstance() {
 void World::Init() {
 	/*TESTING IMPORT WITH ASSIMP*/
 	cout << "Loading teapot" << endl;
-	Import3D("models/teapot.obj", &asScene);
-
+	Import3D("models/teapot.obj", mo);
 	cout << "Finished teapot read" << endl;
-	mo = new MeshObject(asScene.mMeshes[0]);
+
+	for (GLuint i = 0; i < mo[0].numVertices * 3; ++i) {
+		std::cout << mo[0].vertexBuffer[i] << " -- ";
+		if ((i + 1) % 3 == 0)
+			std::cout << endl;
+	}
+
 	cout << "Dafuck" << endl;
 }
 

@@ -3,9 +3,10 @@
 #include "Header.h"
 
 class MeshObject {
+public:
 	GLfloat* vertexBuffer;
 	int numVertices;
-public:
+	
 	MeshObject();
 	MeshObject(aiMesh* meshData);
 
