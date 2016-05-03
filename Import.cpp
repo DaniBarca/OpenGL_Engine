@@ -1,6 +1,6 @@
 #include "Import.h"
 
-bool Import3D(const string& path, MeshObject*& meshes) {
+bool Import3D(const string& path, MeshObject*& mesh) {
 	Assimp::Importer importer;
 
 	const aiScene* scene = importer.ReadFile(path,
@@ -17,16 +17,14 @@ bool Import3D(const string& path, MeshObject*& meshes) {
 		exit(EXIT_FAILURE);
 	}
 	
-	meshes = new MeshObject[1];
-	
 	const unsigned int numVertices = scene->mMeshes[0]->mNumVertices;
-	meshes[0].numVertices = numVertices;
+	mesh[0].numVertices = numVertices;
 
-	meshes[0].vertexBuffer = new GLfloat[numVertices * VERTICES_PER_POL];	
+	mesh[0].vertexBuffer = new GLfloat[numVertices * VERTICES_PER_POL];	
 	for (GLuint i = 0; i < numVertices; ++i) {
-		meshes[0].vertexBuffer[i * VERTICES_PER_POL + 0] = scene->mMeshes[0]->mVertices[i].x;
-		meshes[0].vertexBuffer[i * VERTICES_PER_POL + 1] = scene->mMeshes[0]->mVertices[i].y;
-		meshes[0].vertexBuffer[i * VERTICES_PER_POL + 2] = scene->mMeshes[0]->mVertices[i].z;
+		mesh[0].vertexBuffer[i * VERTICES_PER_POL + 0] = scene->mMeshes[0]->mVertices[i].x;
+		mesh[0].vertexBuffer[i * VERTICES_PER_POL + 1] = scene->mMeshes[0]->mVertices[i].y;
+		mesh[0].vertexBuffer[i * VERTICES_PER_POL + 2] = scene->mMeshes[0]->mVertices[i].z;
 	}
 
 	importer.FreeScene();

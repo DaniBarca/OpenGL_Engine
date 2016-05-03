@@ -5,4 +5,4 @@
 
 class MeshObject;
 
-bool Import3D(const string& path, MeshObject*& meshes);
+bool Import3D(const string& path, MeshObject*& mesh);

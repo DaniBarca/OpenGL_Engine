@@ -12,6 +12,8 @@ World* World::GetInstance() {
 }
 
 void World::Init() {
+	mo = new MeshObject[1];
+
 	/*TESTING IMPORT WITH ASSIMP*/
 	cout << "Loading teapot" << endl;
 	Import3D("models/teapot.obj", mo);
