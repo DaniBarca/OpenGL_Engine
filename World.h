@@ -2,15 +2,19 @@
 
 //This is the main class of a project made with this engine
 
-#ifndef WORLD_H
-#define WORLD_H
+#pragma once
 
 #include "Header.h"
+#include "Import.h"
+#include "MeshObject.h"
 
 class World
 {
 	World();
 	~World();
+
+	aiScene asScene;
+	MeshObject* mo;
 
 public:
 	static World* GetInstance();
@@ -27,5 +31,3 @@ public:
 
 	void OnMouseMove(double x, double y);
 };
-
-#endif
