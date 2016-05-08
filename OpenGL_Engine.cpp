@@ -12,10 +12,11 @@
 	> Linker>General>Input
 		glew32.lib;opengl32.lib;glfw3.lib;assimp-vc130-mt.lib;
 
-	> Build Events>Post-Build Event>Command-line
+	> Build Events>Pre-Build Event>Command-line
 		copy "$(ProjectDir)lib\assimp-3.2\lib\assimp-vc130-mt.dll" "$(TargetDir)assimp-vc130-mt.dll"; 
 		copy "$(ProjectDir)lib\glew-1.9.0\bin\glew32.dll" "$(TargetDir)glew32.dll";
-		xcopy "$(ProjectDir)models" "$(TargetDir)models" /e /i /Y
+		xcopy /E /I /Y /D "$(ProjectDir)models" "$(TargetDir)models"
+		xcopy /E /I /Y /D "$(ProjectDir)shaders" "$(TargetDir)shaders"
 
 	!! To be built for x64 !!
 */
