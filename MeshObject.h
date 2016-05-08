@@ -15,4 +15,8 @@ public:
 	MeshObject(aiMesh* meshData);
 
 	void MeshObject::PrintVertices();
+
+	void Init();
+	void Update(float dt);
+	void Draw();
 };

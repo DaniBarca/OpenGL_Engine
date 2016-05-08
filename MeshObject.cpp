@@ -15,3 +15,15 @@ void MeshObject::PrintVertices() {
 			cout << " -- ";
 	}
 }
+
+void MeshObject::Init() : Object3D::Init(){
+
+}
+
+void MeshObject::Update(float dt) : Object3D::Update(dt){
+
+}
+
+void MeshObject::Draw() : Object3D::Draw(){
+
+}
