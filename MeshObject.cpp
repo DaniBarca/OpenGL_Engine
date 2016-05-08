@@ -1,6 +1,7 @@
 #include "MeshObject.h"
 
 MeshObject::MeshObject() {
+	Engine::GetInstance()->LoadShader("shaders/basic_mesh_shader.vertex", "shaders/basic_mesh_shader.fragment", &shaderID);
 }
 
 MeshObject::MeshObject(aiMesh* meshData) : MeshObject() {
@@ -8,7 +9,7 @@ MeshObject::MeshObject(aiMesh* meshData) : MeshObject() {
 
 void MeshObject::PrintVertices() {
 	for (GLuint i = 0; i < (const unsigned int)(numVertices * 3); ++i) {
-		std::cout << vertexBuffer[i];
+		cout << vertices[i];
 		if ((i + 1) % 3 == 0)
 			cout << endl;
 		else
@@ -16,12 +17,21 @@ void MeshObject::PrintVertices() {
 	}
 }
 
-void MeshObject::Init() : Object3D::Init(){
+void MeshObject::Init(){
+	Object3D::Init();
 
+	/*BIND vertex buffer*/
+	glGenBuffers(1, &vertex_buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*numVertices*VERTICES_PER_POL, vertices, GL_STATIC_DRAW);
 }
 
-void MeshObject::Update(float dt) : Object3D::Update(dt){
+void MeshObject::Update(double dt){
+	Object3D::Update(dt);
+}
 
+void MeshObject::Draw(){
+	Object3D::Draw();
 }
 
 bool MeshObject::Import3D(const string& path) {
