@@ -10,6 +10,9 @@ class MeshObject : public Object3D {
 	GLfloat* vertexBuffer;
 	unsigned int numVertices;
 
+protected:
+	bool Import3D(const string& path);
+
 public:	
 	MeshObject();
 	MeshObject(aiMesh* meshData);
@@ -17,6 +20,6 @@ public:
 	void MeshObject::PrintVertices();
 
 	void Init();
-	void Update(float dt);
+	void Update(double dt);
 	void Draw();
 };
