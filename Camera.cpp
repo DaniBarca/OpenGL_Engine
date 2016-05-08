@@ -81,7 +81,7 @@ void Camera::Orbit(double HFactor, double VFactor, glm::vec3 around) {
 				2.0f * orbit_radius * glm::cos(HFactor)
 			),
 			around,
-			UP
+			V_UP
 		)
 	);
 }
