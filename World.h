@@ -5,9 +5,11 @@
 #pragma once
 
 #include "Header.h"
-#include "Import.h"
 #include "MeshObject.h"
 #include "Camera.h"
+
+#include "Teapot.h"
+#include "Dragon.h"
 
 class World
 {
@@ -15,8 +17,8 @@ class World
 	~World();
 
 	aiScene asScene;
-	MeshObject* dragon;
-	MeshObject* teapot;
+	Teapot* teapot;
+	Dragon* dragon;
 
 	unsigned int pressed_keys;
 	bool clicking;

@@ -15,11 +15,8 @@ World* World::GetInstance() {
 }
 
 void World::Init() {
-	teapot = new MeshObject();
-	dragon = new MeshObject();
-
-	Import3D("models/teapot.obj", teapot);
-	Import3D("models/dragon.obj", dragon);
+	teapot = new Teapot();
+	dragon = new Dragon();
 
 	teapot->Init();
 	dragon->Init();
