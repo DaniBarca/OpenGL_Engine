@@ -25,9 +25,6 @@
 #include "Engine.h"
 #include "World.h"
 
-#define SCREEN_WIDTH 1024
-#define SCREEN_HEIGHT 768
-
 /* program entry */
 int main(int argc, char *argv[])
 {

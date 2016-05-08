@@ -24,9 +24,36 @@
 #include <fstream>
 #include <algorithm>
 
-/*own defines*/
+using namespace std;
+using namespace std::placeholders;
+
+/***************/
+/* DEFINITIONS */
+/***************/
+
+//Screen size
+constexpr unsigned int SCREEN_WIDTH = 1024;
+constexpr unsigned int SCREEN_HEIGHT = 768;
+
+//Inverse screen size (better performance for some operations)
+//Could mean a difference if you use this data intensively
+constexpr double I_SCREEN_WIDTH  = 1.0 / ((double)SCREEN_WIDTH);
+constexpr double I_SCREEN_HEIGHT = 1.0 / ((double)SCREEN_HEIGHT);
+
+//Number of vertices of a polygon
 constexpr int VERTICES_PER_POL = 3;
 
+//Standard vector value for each direction
+#define V_UP glm::vec3(0,1,0)
+#define V_DOWN glm::vec3(0,-1,0)
+
+#define V_RIGHT glm::vec3(1,0,0)
+#define V_LEFT glm::vec3(-1,0,0)
+
+#define V_FRONT glm::vec3(0,0,1)
+#define V_BACK glm::vec3(0,0,-1)
+
+//Mathematical constants and usual operations
 constexpr double PI	     = 3.14159265358979323846f;
 constexpr double TAU     = 2*PI;
 constexpr double DEG2RAD = 0.01745329251994329576923f;
@@ -39,9 +66,6 @@ constexpr float DEGTORAD(float d) { return d*(float)DEG2RAD; };
 constexpr float RADTODEG(float r) { return r*(float)RAD2DEG; };
 
 glm::mat4 getRotationMatrix(double radians, glm::vec3 axis);
-
-using namespace std;
-using namespace std::placeholders;
 
 /* Engine options */
 //#define PRINT_FPS

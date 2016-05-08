@@ -1,11 +1,8 @@
 #pragma once
 #include "Header.h"
 
-/*OpenGL*/
-//#include <glm\gtc\matrix_transform.hpp>
-
-#ifndef UP
-#define UP glm::vec3(0,1,0)
+#ifndef V_UP
+#define V_UP glm::vec3(0,1,0)
 #endif
 
 class Engine
