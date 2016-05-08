@@ -7,6 +7,7 @@
 #include "Header.h"
 #include "Import.h"
 #include "MeshObject.h"
+#include "Camera.h"
 
 class World
 {
@@ -14,7 +15,11 @@ class World
 	~World();
 
 	aiScene asScene;
-	MeshObject* mo;
+	MeshObject* dragon;
+	MeshObject* teapot;
+
+	unsigned int pressed_keys;
+	bool clicking;
 
 public:
 	static World* GetInstance();
