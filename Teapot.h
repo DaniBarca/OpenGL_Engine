@@ -1,7 +1,6 @@
 #pragma once
 #include "Header.h"
 #include "MeshObject.h"
-#include "Import.h"
 
 class Teapot : public MeshObject
 {

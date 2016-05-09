@@ -2,7 +2,6 @@
 
 #include "Header.h"
 #include "Object3D.h"
-#include "Import.h"
 #include "Engine.h"
 
 class MeshObject : public Object3D {
