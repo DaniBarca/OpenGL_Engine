@@ -4,6 +4,7 @@
 
 class Object3D
 {
+protected:
 	glm::mat4* transform;
 
 public:

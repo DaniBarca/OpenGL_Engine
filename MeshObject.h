@@ -3,6 +3,7 @@
 #include "Header.h"
 #include "Object3D.h"
 #include "Engine.h"
+#include "Camera.h"
 
 class MeshObject : public Object3D {
 	GLfloat* vertices;

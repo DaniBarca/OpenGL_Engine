@@ -40,8 +40,9 @@ constexpr unsigned int SCREEN_HEIGHT = 768;
 constexpr double I_SCREEN_WIDTH  = 1.0 / ((double)SCREEN_WIDTH);
 constexpr double I_SCREEN_HEIGHT = 1.0 / ((double)SCREEN_HEIGHT);
 
-//Number of vertices of a polygon
-constexpr int VERTICES_PER_POL = 3;
+//Number of vertices of a polygon and dimensions
+constexpr unsigned int VERTICES_PER_POL = 3;
+constexpr unsigned int DIMENSIONS = 3;			//Which is obvious but I don't like magic numbers
 
 //Standard vector value for each direction
 #define V_UP glm::vec3(0,1,0)
