@@ -1,8 +1,7 @@
 #version 330 core
 
-// Input vertex data, different for all executions of this shader.
-layout(location = 0) in vec3 vertexPosition_modelspace;
-//layout(location = 1) in vec3 vertexColor;
+layout(location = 0) in vec3 vertex_modelspace;
+layout(location = 1) in vec3 normal_modelspace;
 
 uniform mat4 PVM;
 
@@ -10,8 +9,8 @@ out vec3 fragmentColor;
 
 void main(){
 
-    gl_Position = PVM * vec4(vertexPosition_modelspace,1);
+    gl_Position = PVM * vec4(vertex_modelspace,1);
 
-	fragmentColor = vec3(1.0f);
+	fragmentColor = normal_modelspace;
 
 }

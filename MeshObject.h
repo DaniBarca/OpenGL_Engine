@@ -7,14 +7,17 @@
 
 class MeshObject : public Object3D {
 	GLfloat* vertices;
+	GLfloat* normals;
 	unsigned int numVertices;
 
 	GLuint shaderID;
 	GLuint matrixID;
+
 	GLuint vertex_buffer;
+	GLuint normal_buffer;
 
 protected:
-	bool Import3D(const string& path);
+	bool Import3D(const string& path, bool invert_normals = false);
 
 public:	
 	MeshObject();

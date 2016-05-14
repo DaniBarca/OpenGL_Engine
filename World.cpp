@@ -19,7 +19,7 @@ void World::Init() {
 	dragon = new Dragon();
 
 	teapot->Init();
-	dragon->Init();
+	//dragon->Init();
 
 	glm::translate(*teapot->Transform(), V_LEFT * 100.0f);
 	glm::translate(*dragon->Transform(), V_RIGHT * 100.0f);
@@ -29,12 +29,12 @@ void World::Init() {
 
 void World::Update(double dt) {
 	teapot->Update(dt);
-	dragon->Update(dt);
+	//dragon->Update(dt);
 }
 
 void World::Draw() {
 	teapot->Draw();
-	dragon->Draw();
+	//dragon->Draw();
 }
 
 void World::OnKeyPress(int key, int scancode, int action, int mods) {
