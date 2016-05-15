@@ -26,10 +26,10 @@ void MeshObject::Init(){
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*numVertices*VERTICES_PER_POL, vertices, GL_STATIC_DRAW);
 
-	/*BIND normals*/
+	/*BIND polygon_normals*/
 	glGenBuffers(1, &normal_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, normal_buffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*numVertices*VERTICES_PER_POL, normals, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*numVertices*VERTICES_PER_POL, polygon_normals, GL_STATIC_DRAW);
 }
 
 void MeshObject::Update(double dt){
@@ -94,9 +94,9 @@ bool MeshObject::Import3D(const string& path, bool invert_normals) {
 	this->numVertices = scene->mMeshes[0]->mNumFaces * VERTICES_PER_POL;
 
 	this->vertices = new GLfloat[scene->mMeshes[0]->mNumFaces * VERTICES_PER_POL * DIMENSIONS];
-	this->normals  = new GLfloat[scene->mMeshes[0]->mNumFaces * VERTICES_PER_POL * DIMENSIONS];
+	this->polygon_normals  = new GLfloat[scene->mMeshes[0]->mNumFaces * VERTICES_PER_POL * DIMENSIONS];
 	
-	glm::vec3 A, B, C, N;
+	glm::vec3 A, B, C, N, EA, EB, EC, VN;
 	for (GLuint i = 0; i < scene->mMeshes[0]->mNumFaces; ++i) {
 		if (scene->mMeshes[0]->mFaces[i].mNumIndices != 3) {
 			cout << "ERROR: some of the faces are not triangles" << endl;
@@ -125,9 +125,9 @@ bool MeshObject::Import3D(const string& path, bool invert_normals) {
 		N = glm::normalize( invert_normals ? glm::cross(A - B, A - C) : glm::cross(A - B, C - A) );
 
 		for (unsigned int j = 0; j < VERTICES_PER_POL; ++j) {
-			this->normals[i * 9 + j * VERTICES_PER_POL + 0] = N.x * 0.5f + 0.5f;
-			this->normals[i * 9 + j * VERTICES_PER_POL + 1] = N.y * 0.5f + 0.5f;
-			this->normals[i * 9 + j * VERTICES_PER_POL + 2] = N.z * 0.5f + 0.5f;
+			this->polygon_normals[i * 9 + j * VERTICES_PER_POL + 0] = N.x * 0.5f + 0.5f;
+			this->polygon_normals[i * 9 + j * VERTICES_PER_POL + 1] = N.y * 0.5f + 0.5f;
+			this->polygon_normals[i * 9 + j * VERTICES_PER_POL + 2] = N.z * 0.5f + 0.5f;
 		}
 	}
 

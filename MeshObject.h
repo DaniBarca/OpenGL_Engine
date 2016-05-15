@@ -7,7 +7,7 @@
 
 class MeshObject : public Object3D {
 	GLfloat* vertices;
-	GLfloat* normals;
+	GLfloat* polygon_normals;
 	unsigned int numVertices;
 
 	GLuint shaderID;

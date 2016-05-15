@@ -7,7 +7,7 @@ Teapot::~Teapot()
 {}
 
 void Teapot::Init() {
-	Import3D("models/teapot.obj");
+	Import3D("models/teapot.obj",true);
 	MeshObject::Init();
 }
 
