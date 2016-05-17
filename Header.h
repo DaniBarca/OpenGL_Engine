@@ -23,6 +23,7 @@
 #include <functional>
 #include <fstream>
 #include <algorithm>
+#include <map>
 
 using namespace std;
 using namespace std::placeholders;

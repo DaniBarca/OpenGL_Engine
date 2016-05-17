@@ -169,6 +169,7 @@ Engine* Engine::LoadShader(string vertex_path, string fragment_path, GLuint* out
 	static map<string, GLuint> mem = map<string, GLuint>();
 	static map<string, GLuint>::iterator memit;
 
+	//Check if we had already loaded it previously
 	if ((memit = mem.find(vertex_path + fragment_path)) != mem.end()) {
 		*out_shader_id = memit->second;
 		return Instance;
