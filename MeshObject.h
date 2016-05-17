@@ -8,6 +8,7 @@
 class MeshObject : public Object3D {
 	GLfloat* vertices;
 	GLfloat* polygon_normals;
+	GLfloat* vertices_normals;
 	unsigned int numVertices;
 
 	GLuint shaderID;
@@ -16,6 +17,8 @@ class MeshObject : public Object3D {
 	GLuint vertex_buffer;
 	GLuint normal_buffer;
 
+	map<int, vector<int>> idToPos;
+	map<int, glm::vec3> vertexNormal;
 protected:
 	bool Import3D(const string& path, bool invert_normals = false);
 

@@ -1,6 +1,9 @@
 #include "MeshObject.h"
 
 MeshObject::MeshObject() {
+	idToPos = map<int, vector<int>>();
+	vertexNormal = map<int, glm::vec3>();
+
 	Engine::GetInstance()->LoadShader("shaders/basic_mesh_shader.vertex", "shaders/basic_mesh_shader.fragment", &shaderID);
 	matrixID = glGetUniformLocation(shaderID, "PVM");
 }
@@ -29,7 +32,7 @@ void MeshObject::Init(){
 	/*BIND polygon_normals*/
 	glGenBuffers(1, &normal_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, normal_buffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*numVertices*VERTICES_PER_POL, polygon_normals, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*numVertices*VERTICES_PER_POL, vertices_normals, GL_STATIC_DRAW);
 }
 
 void MeshObject::Update(double dt){
@@ -93,8 +96,9 @@ bool MeshObject::Import3D(const string& path, bool invert_normals) {
 	//Get total number of vertices (each vertex is repeated each time it appears in a polygon)
 	this->numVertices = scene->mMeshes[0]->mNumFaces * VERTICES_PER_POL;
 
-	this->vertices = new GLfloat[scene->mMeshes[0]->mNumFaces * VERTICES_PER_POL * DIMENSIONS];
+	this->vertices         = new GLfloat[scene->mMeshes[0]->mNumFaces * VERTICES_PER_POL * DIMENSIONS];
 	this->polygon_normals  = new GLfloat[scene->mMeshes[0]->mNumFaces * VERTICES_PER_POL * DIMENSIONS];
+	this->vertices_normals = new GLfloat[scene->mMeshes[0]->mNumFaces * VERTICES_PER_POL * DIMENSIONS];
 	
 	glm::vec3 A, B, C, N, EA, EB, EC, VN;
 	for (GLuint i = 0; i < scene->mMeshes[0]->mNumFaces; ++i) {
@@ -104,6 +108,19 @@ bool MeshObject::Import3D(const string& path, bool invert_normals) {
 			exit(-1);
 		}
 
+		//Since each vertex is repeated inside the vertices array, memorize the possitions where it appears
+		if (idToPos.find(scene->mMeshes[0]->mFaces[i].mIndices[0]) == idToPos.end())
+			idToPos[scene->mMeshes[0]->mFaces[i].mIndices[0]] = vector<int>();
+		if (idToPos.find(scene->mMeshes[0]->mFaces[i].mIndices[1]) == idToPos.end())
+			idToPos[scene->mMeshes[0]->mFaces[i].mIndices[1]] = vector<int>();
+		if (idToPos.find(scene->mMeshes[0]->mFaces[i].mIndices[2]) == idToPos.end())
+			idToPos[scene->mMeshes[0]->mFaces[i].mIndices[2]] = vector<int>();
+
+		idToPos[scene->mMeshes[0]->mFaces[i].mIndices[0]].push_back(i * 9 + 0);
+		idToPos[scene->mMeshes[0]->mFaces[i].mIndices[1]].push_back(i * 9 + 3);
+		idToPos[scene->mMeshes[0]->mFaces[i].mIndices[2]].push_back(i * 9 + 6);
+
+		//Store into vertices array and transform them into glm::vec3 so we can get the face normal
 		A = glm::vec3(
 			this->vertices[i * 9 + 0] = scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mFaces[i].mIndices[0]].x,
 			this->vertices[i * 9 + 1] = scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mFaces[i].mIndices[0]].y,
@@ -124,10 +141,36 @@ bool MeshObject::Import3D(const string& path, bool invert_normals) {
 
 		N = glm::normalize( invert_normals ? glm::cross(A - B, A - C) : glm::cross(A - B, C - A) );
 
-		for (unsigned int j = 0; j < VERTICES_PER_POL; ++j) {
-			this->polygon_normals[i * 9 + j * VERTICES_PER_POL + 0] = N.x * 0.5f + 0.5f;
-			this->polygon_normals[i * 9 + j * VERTICES_PER_POL + 1] = N.y * 0.5f + 0.5f;
-			this->polygon_normals[i * 9 + j * VERTICES_PER_POL + 2] = N.z * 0.5f + 0.5f;
+		for (unsigned int j = 0; j < VERTICES_PER_POL; ++j) {             // vvvvvvvvvvvvv Use this if you want to visualize normals
+			this->polygon_normals[i * 9 + j * VERTICES_PER_POL + 0] = N.x;// *0.5f + 0.5f;
+			this->polygon_normals[i * 9 + j * VERTICES_PER_POL + 1] = N.y;// *0.5f + 0.5f;
+			this->polygon_normals[i * 9 + j * VERTICES_PER_POL + 2] = N.z;// *0.5f + 0.5f;
+		}
+
+		//Add face normal for each vertex, at the end we will normalize each result, getting the vertex normal
+		if (vertexNormal.find(scene->mMeshes[0]->mFaces[i].mIndices[0]) == vertexNormal.end())
+			vertexNormal[scene->mMeshes[0]->mFaces[i].mIndices[0]] = glm::vec3(0.0f, 0.0f, 0.0f);
+		if (vertexNormal.find(scene->mMeshes[0]->mFaces[i].mIndices[1]) == vertexNormal.end())
+			vertexNormal[scene->mMeshes[0]->mFaces[i].mIndices[1]] = glm::vec3(0.0f, 0.0f, 0.0f);
+		if (vertexNormal.find(scene->mMeshes[0]->mFaces[i].mIndices[2]) == vertexNormal.end())
+			vertexNormal[scene->mMeshes[0]->mFaces[i].mIndices[2]] = glm::vec3(0.0f, 0.0f, 0.0f);
+
+		vertexNormal[scene->mMeshes[0]->mFaces[i].mIndices[0]] += N;
+		vertexNormal[scene->mMeshes[0]->mFaces[i].mIndices[1]] += N;
+		vertexNormal[scene->mMeshes[0]->mFaces[i].mIndices[2]] += N;
+	}
+
+	//Normalize each vertex normal
+	for (map<int, glm::vec3>::iterator it = vertexNormal.begin(); it != vertexNormal.end(); ++it) {
+		it->second = glm::normalize(it->second);
+	}
+
+	//Save each vertex normal to its corresponding position inside vertices_normals
+	for (map<int, vector<int>>::iterator it = idToPos.begin(); it != idToPos.end(); ++it) {
+		for (vector<int>::iterator itv = it->second.begin(); itv != it->second.end(); ++itv) {
+			this->vertices_normals[*itv + 0] = vertexNormal[it->first].x * 0.5f + 0.5f;
+			this->vertices_normals[*itv + 1] = vertexNormal[it->first].y * 0.5f + 0.5f;
+			this->vertices_normals[*itv + 2] = vertexNormal[it->first].z * 0.5f + 0.5f;
 		}
 	}
 
