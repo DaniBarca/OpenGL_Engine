@@ -166,6 +166,14 @@ Engine* Engine::Terminate() {
 
 //Directly adapted from opengl-tutorial.com
 Engine* Engine::LoadShader(string vertex_path, string fragment_path, GLuint* out_shader_id) {
+	static map<string, GLuint> mem = map<string, GLuint>();
+	static map<string, GLuint>::iterator memit;
+
+	if ((memit = mem.find(vertex_path + fragment_path)) != mem.end()) {
+		*out_shader_id = memit->second;
+		return Instance;
+	}
+
 	const char* vertex_file_path = vertex_path.c_str();
 	const char* fragment_file_path = fragment_path.c_str();
 	
@@ -260,6 +268,8 @@ Engine* Engine::LoadShader(string vertex_path, string fragment_path, GLuint* out
 	glDeleteShader(FragmentShaderID);
 
 	*out_shader_id = ProgramID;
+
+	mem[vertex_path + fragment_path] = *out_shader_id;
 	
 	return Instance;
 }
