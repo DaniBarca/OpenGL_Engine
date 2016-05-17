@@ -174,6 +174,8 @@ bool MeshObject::Import3D(const string& path, bool invert_normals) {
 		}
 	}
 
+	//At this point you should be able to safely remove idToPos and vertexNormal if you're not going to use them
+
 	importer.FreeScene();
 	return true;
 }
