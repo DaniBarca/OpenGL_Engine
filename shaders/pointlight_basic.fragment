@@ -21,7 +21,7 @@ void main()
 
 	float a = get_angle(fragment_normal,light_position - fragment_position);
 
-	float incidence = 1.0f - (a/90.0f);
+	float incidence = 1.0f - (2.0f * a/PI);
 
 	color = material_color * incidence;
 }
