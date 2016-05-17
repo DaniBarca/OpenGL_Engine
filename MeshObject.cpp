@@ -4,7 +4,7 @@ MeshObject::MeshObject() {
 	idToPos = map<int, vector<int>>();
 	vertexNormal = map<int, glm::vec3>();
 
-	Engine::GetInstance()->LoadShader("shaders/basic_mesh_shader.vertex", "shaders/basic_mesh_shader.fragment", &shaderID);
+	Engine::GetInstance()->LoadShader("shaders/pointlight_basic.vertex", "shaders/pointlight_basic.fragment", &shaderID);
 	matrixID = glGetUniformLocation(shaderID, "PVM");
 }
 
