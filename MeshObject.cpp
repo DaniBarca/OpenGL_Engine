@@ -168,9 +168,9 @@ bool MeshObject::Import3D(const string& path, bool invert_normals) {
 	//Save each vertex normal to its corresponding position inside vertices_normals
 	for (map<int, vector<int>>::iterator it = idToPos.begin(); it != idToPos.end(); ++it) {
 		for (vector<int>::iterator itv = it->second.begin(); itv != it->second.end(); ++itv) {
-			this->vertices_normals[*itv + 0] = vertexNormal[it->first].x * 0.5f + 0.5f;
-			this->vertices_normals[*itv + 1] = vertexNormal[it->first].y * 0.5f + 0.5f;
-			this->vertices_normals[*itv + 2] = vertexNormal[it->first].z * 0.5f + 0.5f;
+			this->vertices_normals[*itv + 0] = vertexNormal[it->first].x;// *0.5f + 0.5f;
+			this->vertices_normals[*itv + 1] = vertexNormal[it->first].y;// *0.5f + 0.5f;
+			this->vertices_normals[*itv + 2] = vertexNormal[it->first].z;// *0.5f + 0.5f;
 		}
 	}
 
