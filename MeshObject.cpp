@@ -5,7 +5,10 @@ MeshObject::MeshObject() {
 	vertexNormal = map<int, glm::vec3>();
 
 	Engine::GetInstance()->LoadShader("shaders/pointlight_basic.vertex", "shaders/pointlight_basic.fragment", &shaderID);
-	matrixID = glGetUniformLocation(shaderID, "PVM");
+	matrixID    = glGetUniformLocation(shaderID, "PV");
+	transformID = glGetUniformLocation(shaderID, "M");
+
+	material.setDiffuseColor(glm::vec3(1.0f, 1.0f, 1.0f));
 }
 
 MeshObject::MeshObject(aiMesh* meshData) : MeshObject() {
@@ -44,7 +47,8 @@ void MeshObject::Draw(){
 
 	glUseProgram(shaderID);
 
-	glUniformMatrix4fv(matrixID, 1, GL_FALSE, &(Camera::getInstance()->getPV() * *transform)[0][0]);
+	glUniformMatrix4fv(matrixID, 1, GL_FALSE, &(Camera::getInstance()->getPV())[0][0]);
+	glUniformMatrix4fv(transformID, 1, GL_FALSE, &(*transform)[0][0]);
 
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);

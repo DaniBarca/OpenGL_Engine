@@ -4,6 +4,7 @@
 #include "Object3D.h"
 #include "Engine.h"
 #include "Camera.h"
+#include "Material.h"
 
 class MeshObject : public Object3D {
 	GLfloat* vertices;
@@ -13,14 +14,18 @@ class MeshObject : public Object3D {
 
 	GLuint shaderID;
 	GLuint matrixID;
+	GLuint transformID;
 
 	GLuint vertex_buffer;
 	GLuint normal_buffer;
 
 	map<int, vector<int>> idToPos;
 	map<int, glm::vec3> vertexNormal;
+
+	
 protected:
 	bool Import3D(const string& path, bool invert_normals = false);
+	Material material;
 
 public:	
 	MeshObject();

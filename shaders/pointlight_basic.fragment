@@ -6,22 +6,11 @@ in vec3 fragment_position;
 // Ouput data
 out vec3 color;
 
-// This code is assuming the material is mate white for diffuse lighting
-vec3 material_color = vec3(1.0f,1.0f,1.0f);
-
-const float PI = 3.1415926535897932384626433832795f;
-
-float get_angle(vec3 A, vec3 B){
-	return acos( dot( normalize(A), normalize(B) ) );
-}
+uniform vec3 light_position;
+uniform vec3 light_intensity;
 
 void main()
 {
-	vec3 light_position = vec3(50.0f,50.0f,50.0f);
-
-	float a = get_angle(fragment_normal,light_position - fragment_position);
-
-	float incidence = 1.0f - (2.0f * a/PI);
-
-	color = material_color * incidence;
+	float cosTheta = clamp(dot(fragment_normal,light_position - fragment_position),0.0f,1.0f);
+	color = vec3(1.0f,0.0f,0.0f) * vec3(1.0f,1.0f,1.0f) * cosTheta * light_intensity;
 }
