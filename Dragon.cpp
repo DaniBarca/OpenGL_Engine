@@ -8,7 +8,7 @@ Dragon::~Dragon()
 {}
 
 void Dragon::Init() {
-	Import3D("models/dragon.obj");
+	Import3D("models/dragon.obj", true);
 	MeshObject::Init();
 }
 
@@ -19,4 +19,3 @@ void Dragon::Update(double dt) {
 void Dragon::Draw() {
 	MeshObject::Draw();
 }
-
