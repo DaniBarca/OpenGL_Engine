@@ -25,6 +25,8 @@ void World::Init() {
 	glm::translate(*dragon->Transform(), V_RIGHT * 100.0f);
 
 	Camera::getInstance();
+
+	LightManager::GetInstance()->Push(new Light(Color(1.0f, 1.0f, 1.0f), 0.9f));
 }
 
 void World::Update(double dt) {

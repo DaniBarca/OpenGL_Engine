@@ -11,6 +11,9 @@
 #include "Teapot.h"
 #include "Dragon.h"
 
+#include "Color.h"
+#include "LightManager.h"
+
 class World
 {
 	World();
