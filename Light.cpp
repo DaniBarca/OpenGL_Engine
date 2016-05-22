@@ -1,6 +1,6 @@
 #include "Light.h"
 
-Light::Light(glm::vec3 _colour) : Object3D(), colour(_colour)
+Light::Light(Color _color, float _intensity) : Object3D(), color(_color), intensity(_intensity)
 {}
 
 Light::~Light()

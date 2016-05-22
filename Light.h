@@ -2,13 +2,15 @@
 
 #include "Header.h"
 #include "Object3D.h"
+#include "Color.h"
 
 class Light : public Object3D
 {
-	glm::vec3 colour;
+	Color color;
+	float intensity;
 	
 public:
-	Light(glm::vec3 _colour);
+	Light(Color _color, float _intensity = 1.0f);
 	~Light();
 
 	void Update(double dt);
