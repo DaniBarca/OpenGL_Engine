@@ -26,7 +26,7 @@ void World::Init() {
 
 	Camera::getInstance();
 
-	LightManager::GetInstance()->Push(new Light(Color(1.0f, 1.0f, 1.0f), 0.9f));
+	LightManager::GetInstance()->Push(new Light(Color(1.0f, 1.0f, 1.0f, 0.9f), glm::vec3(10.0f,10.0f,10.0f)));
 }
 
 void World::Update(double dt) {

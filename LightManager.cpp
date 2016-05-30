@@ -5,7 +5,7 @@ LightManager::LightManager()
 
 LightManager::~LightManager()
 {
-	for (unsigned int i = 0; i < lights.size; ++i) {
+	for (unsigned int i = 0; i < lights.size(); ++i) {
 		delete lights[i];
 	}
 }
@@ -25,7 +25,7 @@ Light* LightManager::GetLight(unsigned int pos){
 }
 
 void LightManager::Update(float dt) {
-	for (unsigned int i = 0; i < lights.size; ++i) {
+	for (unsigned int i = 0; i < lights.size(); ++i) {
 		lights[i]->Update(dt);
 	}
 }
