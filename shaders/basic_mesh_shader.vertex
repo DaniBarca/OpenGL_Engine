@@ -3,13 +3,14 @@
 layout(location = 0) in vec3 vertex_modelspace;
 layout(location = 1) in vec3 normal_modelspace;
 
-uniform mat4 PVM;
+uniform mat4 PV;
+uniform mat4 M;
 
 out vec3 fragmentColor;
 
 void main(){
 
-    gl_Position = PVM * vec4(vertex_modelspace,1);
+    gl_Position = PV * M * vec4(vertex_modelspace,1);
 
 	fragmentColor = normal_modelspace;
 

@@ -17,7 +17,7 @@ MeshObject::MeshObject() {
 	matrixID    = glGetUniformLocation(shaderID, "PV");
 	transformID = glGetUniformLocation(shaderID, "M");
 
-	material.setDiffuseColor(glm::vec3(1.0f, 1.0f, 1.0f));
+	//material.setDiffuseColor(glm::vec3(1.0f, 1.0f, 1.0f));
 }
 
 MeshObject::MeshObject(aiMesh* meshData) : MeshObject() {
