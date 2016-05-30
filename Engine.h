@@ -34,4 +34,5 @@ public:
 	Engine* Terminate();
 
 	Engine* LoadShader(string vertex_path, string fragment_path, GLuint* out_shader_id);
+	Engine* LoadShader(std::vector<std::string> paths, std::vector<GLenum> types, GLuint* out_shader_id);
 };
