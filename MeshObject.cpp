@@ -5,6 +5,15 @@ MeshObject::MeshObject() {
 	vertexNormal = map<int, glm::vec3>();
 
 	Engine::GetInstance()->LoadShader("shaders/pointlight_basic.vertex", "shaders/pointlight_basic.fragment", &shaderID);
+
+	/*Engine::GetInstance()->LoadShader(std::vector<std::string>({
+		"shaders/pointlight_basic.vertex",
+		"shaders/pointlight_basic.fragment"
+	}), std::vector<GLenum>({
+		GL_VERTEX_SHADER,
+		GL_FRAGMENT_SHADER
+	}), &shaderID);*/
+
 	matrixID    = glGetUniformLocation(shaderID, "PV");
 	transformID = glGetUniformLocation(shaderID, "M");
 
