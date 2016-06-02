@@ -68,6 +68,7 @@ constexpr float DEGTORAD(float d) { return d*(float)DEG2RAD; };
 constexpr float RADTODEG(float r) { return r*(float)RAD2DEG; };
 
 glm::mat4 getRotationMatrix(double radians, glm::vec3 axis);
+void replaceAll(std::string& str, const std::string& from, const std::string& to);
 
 /* Engine options */
 //#define PRINT_FPS

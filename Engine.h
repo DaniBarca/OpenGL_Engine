@@ -33,6 +33,6 @@ public:
 	Engine* Loop(function<void()>Init, function<void(double)> Update, function<void()> Draw);
 	Engine* Terminate();
 
-	Engine* LoadShader(string vertex_path, string fragment_path, GLuint* out_shader_id);
-	Engine* LoadShader(std::vector<std::string> paths, std::vector<GLenum> types, GLuint* out_shader_id);
+	Engine* LoadShader(string vertex_path, string fragment_path, std::map<string, string> parse_dict, GLuint* out_shader_id);
+	Engine* LoadShader(std::vector<std::string> paths, std::vector<GLenum> types, std::map<string,string> parse_dict, GLuint* out_shader_id);
 };

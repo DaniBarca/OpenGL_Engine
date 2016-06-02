@@ -6,13 +6,17 @@ MeshObject::MeshObject() {
 
 	//Engine::GetInstance()->LoadShader("shaders/pointlight_basic.vertex", "shaders/pointlight_basic.fragment", &shaderID);
 
+	parse_dict = {
+		{ "%N_LIGHTS%", to_string(LightManager::GetInstance()->GetNLights()) }
+	};
+
 	Engine::GetInstance()->LoadShader(std::vector<std::string>({
 		"shaders/pointlight_basic.vertex",
 		"shaders/pointlight_basic.fragment"
 	}), std::vector<GLenum>({
 		GL_VERTEX_SHADER,
 		GL_FRAGMENT_SHADER
-	}), &shaderID);
+	}), parse_dict, &shaderID);
 
 	matrixID    = glGetUniformLocation(shaderID, "PV");
 	transformID = glGetUniformLocation(shaderID, "M");

@@ -165,17 +165,17 @@ Engine* Engine::Terminate() {
 }
 
 //Directly adapted from opengl-tutorial.com
-Engine* Engine::LoadShader(string vertex_path, string fragment_path, GLuint* out_shader_id) {
+Engine* Engine::LoadShader(string vertex_path, string fragment_path, std::map<string,string> parse_dict, GLuint* out_shader_id) {
 	return LoadShader(std::vector<std::string>({
 		vertex_path,
 		fragment_path
 	}), std::vector<GLenum>({
 		GL_VERTEX_SHADER,
 		GL_FRAGMENT_SHADER
-	}), out_shader_id);
+	}), parse_dict, out_shader_id);
 }
 
-Engine* Engine::LoadShader(std::vector<std::string> paths, std::vector<GLenum> types, GLuint* out_shader_id) {
+Engine* Engine::LoadShader(std::vector<std::string> paths, std::vector<GLenum> types, std::map<string,string> parse_dict, GLuint* out_shader_id) {
 	if (paths.size() != types.size() || paths.size() < 1) {
 		std::cout << "ERROR: number of paths and number of types must be the same." << std::endl;
 		getchar();
@@ -218,6 +218,11 @@ Engine* Engine::LoadShader(std::vector<std::string> paths, std::vector<GLenum> t
 			printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", file_path);
 			getchar();
 			exit(-1);
+		}
+
+		// Parse shader
+		for (std::map<string, string>::iterator it = parse_dict.begin(); it != parse_dict.end(); ++it) {
+			replaceAll(ShaderCode, it->first, it->second);
 		}
 
 		// Compile Shader

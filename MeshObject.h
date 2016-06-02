@@ -5,8 +5,11 @@
 #include "Engine.h"
 #include "Camera.h"
 #include "Material.h"
+#include "LightManager.h"
 
 class MeshObject : public Object3D {
+	static std::map<string, string> parse_dict;
+
 	GLfloat* vertices;
 	GLfloat* polygon_normals;
 	GLfloat* vertices_normals;
