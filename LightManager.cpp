@@ -10,6 +10,11 @@ LightManager::~LightManager()
 	}
 }
 
+LightManager* LightManager::AllocLights(int n) {
+	GetInstance()->lights = vector<Light*>(n);
+	return GetInstance();
+}
+
 LightManager* LightManager::GetInstance(){
 	static LightManager* Instance = new LightManager();
 	return Instance;
@@ -22,6 +27,10 @@ LightManager* LightManager::Push(Light* l) {
 
 Light* LightManager::GetLight(unsigned int pos){
 	return lights[pos];
+}
+
+size_t LightManager::GetNLights() {
+	return lights.size();
 }
 
 void LightManager::Update(float dt) {
