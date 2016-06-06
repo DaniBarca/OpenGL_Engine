@@ -12,6 +12,7 @@ class LightManager
 
 	GLfloat* positions;
 	GLfloat* intensities;
+	GLfloat* colors;
 	
 	void Compile();
 
@@ -29,4 +30,5 @@ public:
 
 	GLfloat* GetPositions();
 	GLfloat* GetIntensities();
+	GLfloat* GetColors();
 };

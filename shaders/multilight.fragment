@@ -7,10 +7,11 @@ in vec3 fragment_position;
 out vec3 color;
 
 uniform vec3 light_position[%N_LIGHTS%];
+uniform vec3 light_color[%N_LIGHTS%];
 uniform float light_intensity[%N_LIGHTS%];
 
 vec3 getLight(int index){
-	return clamp(dot(fragment_normal,light_position[index] - fragment_position),0.0f,1.0f) * light_intensity[index] * vec3(1.0f,1.0f,1.0f);
+	return clamp(dot(fragment_normal,light_position[index] - fragment_position),0.0f,1.0f) * light_intensity[index] * light_color[index];
 }
 
 void main()

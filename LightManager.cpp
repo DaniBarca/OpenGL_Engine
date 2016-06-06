@@ -16,6 +16,7 @@ LightManager* LightManager::AllocLights(int n) {
 
 	positions = new GLfloat[n * 3];
 	intensities = new GLfloat[n];
+	colors = new GLfloat[n * 3];
 
 	return GetInstance();
 }
@@ -48,12 +49,18 @@ void LightManager::Update(double dt) {
 }
 
 void LightManager::Compile() {
+	glm::vec4 aux;
 	for (unsigned int i = 0; i < lights.size(); ++i) {
 		positions[i * 3 + 0] = lights[i]->GetPosition()[0];
 		positions[i * 3 + 1] = lights[i]->GetPosition()[1];
 		positions[i * 3 + 2] = lights[i]->GetPosition()[2];
 
 		intensities[i] = lights[i]->GetIntensity();
+
+		aux = clamp(lights[i]->GetColor());
+		colors[i * 3 + 0] = aux.r;
+		colors[i * 3 + 1] = aux.g;
+		colors[i * 3 + 2] = aux.b;
 	}
 }
 
@@ -63,4 +70,8 @@ GLfloat* LightManager::GetPositions() {
 
 GLfloat* LightManager::GetIntensities(){
 	return intensities;
+}
+
+GLfloat* LightManager::GetColors() {
+	return colors;
 }

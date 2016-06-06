@@ -36,3 +36,7 @@ void replaceAll(std::string& str, const std::string& from, const std::string& to
 		start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
 	}
 }
+
+glm::vec4 clamp(glm::vec4 v) {
+	return v*I_256;
+}

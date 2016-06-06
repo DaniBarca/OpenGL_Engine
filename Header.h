@@ -61,6 +61,8 @@ constexpr double TAU     = 2*PI;
 constexpr double DEG2RAD = 0.01745329251994329576923f;
 constexpr double RAD2DEG = 57.2957795130823208767981f;
 
+constexpr float I_256 = 1.0f / 256.0f;
+
 constexpr double DEGTORAD(double d) { return d*DEG2RAD; };
 constexpr double RADTODEG(double r) { return r*RAD2DEG; };
 
@@ -69,6 +71,7 @@ constexpr float RADTODEG(float r) { return r*(float)RAD2DEG; };
 
 glm::mat4 getRotationMatrix(double radians, glm::vec3 axis);
 void replaceAll(std::string& str, const std::string& from, const std::string& to);
+glm::vec4 clamp(glm::vec4 v);
 
 /* Engine options */
 //#define PRINT_FPS

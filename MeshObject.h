@@ -4,7 +4,6 @@
 #include "Object3D.h"
 #include "Engine.h"
 #include "Camera.h"
-#include "Material.h"
 #include "LightManager.h"
 
 class MeshObject : public Object3D {
@@ -20,6 +19,7 @@ class MeshObject : public Object3D {
 	GLuint transformID;
 	GLuint lightPosID;
 	GLuint lightIntensityID;
+	GLuint lightColorID;
 
 	GLuint vertex_buffer;
 	GLuint normal_buffer;
@@ -30,7 +30,6 @@ class MeshObject : public Object3D {
 	
 protected:
 	bool Import3D(const string& path, bool invert_normals = false);
-	Material material;
 
 public:	
 	MeshObject();

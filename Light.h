@@ -2,16 +2,15 @@
 
 #include "Header.h"
 #include "Object3D.h"
-#include "Color.h"
 
 class Light : public Object3D
 {
-	Color color;
+	glm::vec4 color;
 	float intensity;
 	bool alive;
 	
 public:
-	Light(Color _color, glm::vec3 position, float _intensity = 1.0f);
+	Light(glm::vec4 _color, glm::vec3 position, float _intensity = 1.0f);
 	~Light();
 
 	void Update(double dt);
@@ -20,4 +19,5 @@ public:
 	void Draw();
 
 	float GetIntensity();
+	glm::vec4 GetColor();
 };

@@ -7,6 +7,7 @@ uniform mat4 PV;
 uniform mat4 M;
 
 uniform vec3 light_position[%N_LIGHTS%];
+uniform vec3 light_color[%N_LIGHTS%];
 uniform float light_intensity[%N_LIGHTS%];
 
 out vec3 fragment_normal;

@@ -23,6 +23,7 @@ MeshObject::MeshObject() {
 	transformID = glGetUniformLocation(shaderID, "M");
 	lightPosID  = glGetUniformLocation(shaderID, "light_position");
 	lightIntensityID = glGetUniformLocation(shaderID, "light_intensity");
+	lightColorID = glGetUniformLocation(shaderID, "light_color");
 }
 
 MeshObject::MeshObject(aiMesh* meshData) : MeshObject() {
@@ -64,8 +65,10 @@ void MeshObject::Draw(){
 	glUniformMatrix4fv(matrixID, 1, GL_FALSE, &(Camera::getInstance()->getPV())[0][0]);
 	glUniformMatrix4fv(transformID, 1, GL_FALSE, &(*transform)[0][0]);
 
-	glUniform3fv(lightPosID, (GLsizei)LightManager::GetInstance()->GetNLights(), LightManager::GetInstance()->GetPositions());
-	glUniform1fv(lightIntensityID, (GLsizei)LightManager::GetInstance()->GetNLights(), LightManager::GetInstance()->GetIntensities());
+	GLsizei n_lights = (GLsizei)LightManager::GetInstance()->GetNLights();
+	glUniform3fv(lightPosID, n_lights, LightManager::GetInstance()->GetPositions());
+	glUniform1fv(lightIntensityID, n_lights, LightManager::GetInstance()->GetIntensities());
+	glUniform3fv(lightColorID, n_lights, LightManager::GetInstance()->GetColors());
 
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);

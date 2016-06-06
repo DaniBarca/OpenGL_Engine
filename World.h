@@ -11,7 +11,6 @@
 #include "Teapot.h"
 #include "Dragon.h"
 
-#include "Color.h"
 #include "RotatingLight.h"
 #include "LightManager.h"
 
