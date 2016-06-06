@@ -16,7 +16,7 @@ World* World::GetInstance() {
 
 void World::Init() {
 	LightManager::GetInstance()->AllocLights(2);
-	LightManager::GetInstance()->Push(new Light(Color(1.0f, 1.0f, 1.0f), glm::vec3(10.0f,10.0f,10.0f),0.9f));
+	LightManager::GetInstance()->Push(new RotatingLight(Color(1.0f, 1.0f, 1.0f), glm::vec3(10.0f,10.0f,10.0f),0.9f));
 	LightManager::GetInstance()->Push(new Light(Color(1.0f, 1.0f, 1.0f), glm::vec3(-10.0f, -10.0f, -10.0f), 0.2f));
 
 	teapot = new Teapot();

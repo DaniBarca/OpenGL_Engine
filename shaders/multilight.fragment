@@ -17,6 +17,6 @@ void main()
 {
 	color = vec3(0.0f);
 	for(int i = 0; i < %N_LIGHTS%; ++i){
-		color = clamp(color + getLight(i), 0.0f, 1.0f);
+		color = color + getLight(i);
 	}
 }

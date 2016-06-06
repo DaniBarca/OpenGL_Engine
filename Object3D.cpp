@@ -19,7 +19,9 @@ void Object3D::Update(double dt) {}
 void Object3D::Draw() {}
 
 void Object3D::SetPosition(glm::vec3 position) {
-	*transform = glm::translate(*transform, position);
+	(*transform)[3][0] = position.x;
+	(*transform)[3][1] = position.y;
+	(*transform)[3][2] = position.z;
 }
 
 glm::vec3 Object3D::GetPosition() {
