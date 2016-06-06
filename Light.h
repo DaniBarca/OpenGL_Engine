@@ -18,4 +18,6 @@ public:
 
 	void Init();
 	void Draw();
+
+	float GetIntensity();
 };

@@ -15,6 +15,10 @@ World* World::GetInstance() {
 }
 
 void World::Init() {
+	LightManager::GetInstance()->AllocLights(2);
+	LightManager::GetInstance()->Push(new Light(Color(1.0f, 1.0f, 1.0f), glm::vec3(10.0f,10.0f,10.0f),0.9f));
+	LightManager::GetInstance()->Push(new Light(Color(1.0f, 1.0f, 1.0f), glm::vec3(-10.0f, -10.0f, -10.0f), 0.2f));
+
 	teapot = new Teapot();
 	dragon = new Dragon();
 
@@ -25,11 +29,11 @@ void World::Init() {
 	glm::translate(*dragon->Transform(), V_RIGHT * 100.0f);
 
 	Camera::getInstance();
-
-	LightManager::GetInstance()->Push(new Light(Color(1.0f, 1.0f, 1.0f, 0.9f), glm::vec3(10.0f,10.0f,10.0f)));
 }
 
 void World::Update(double dt) {
+	LightManager::GetInstance()->Update(dt);
+
 	teapot->Update(dt);
 	//dragon->Update(dt);
 }

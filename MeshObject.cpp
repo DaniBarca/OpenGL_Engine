@@ -1,18 +1,19 @@
 #include "MeshObject.h"
 
+std::map<string, string> MeshObject::parse_dict;
+
 MeshObject::MeshObject() {
 	idToPos = map<int, vector<int>>();
 	vertexNormal = map<int, glm::vec3>();
 
-	//Engine::GetInstance()->LoadShader("shaders/pointlight_basic.vertex", "shaders/pointlight_basic.fragment", &shaderID);
-
-	parse_dict = {
-		{ "%N_LIGHTS%", to_string(LightManager::GetInstance()->GetNLights()) }
-	};
+	size_t n_lights = LightManager::GetInstance()->GetNLights();
+	parse_dict = std::map<string,string>({
+		{ "%N_LIGHTS%", to_string(n_lights > 0 ? n_lights : 1) }
+	});
 
 	Engine::GetInstance()->LoadShader(std::vector<std::string>({
-		"shaders/pointlight_basic.vertex",
-		"shaders/pointlight_basic.fragment"
+		"shaders/multilight.vertex",
+		"shaders/multilight.fragment"
 	}), std::vector<GLenum>({
 		GL_VERTEX_SHADER,
 		GL_FRAGMENT_SHADER
@@ -20,8 +21,8 @@ MeshObject::MeshObject() {
 
 	matrixID    = glGetUniformLocation(shaderID, "PV");
 	transformID = glGetUniformLocation(shaderID, "M");
-
-	//material.setDiffuseColor(glm::vec3(1.0f, 1.0f, 1.0f));
+	lightPosID  = glGetUniformLocation(shaderID, "light_position");
+	lightIntensityID = glGetUniformLocation(shaderID, "light_intensity");
 }
 
 MeshObject::MeshObject(aiMesh* meshData) : MeshObject() {
@@ -62,6 +63,9 @@ void MeshObject::Draw(){
 
 	glUniformMatrix4fv(matrixID, 1, GL_FALSE, &(Camera::getInstance()->getPV())[0][0]);
 	glUniformMatrix4fv(transformID, 1, GL_FALSE, &(*transform)[0][0]);
+
+	glUniform3fv(lightPosID, (GLsizei)LightManager::GetInstance()->GetNLights(), LightManager::GetInstance()->GetPositions());
+	glUniform1fv(lightIntensityID, (GLsizei)LightManager::GetInstance()->GetNLights(), LightManager::GetInstance()->GetIntensities());
 
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);

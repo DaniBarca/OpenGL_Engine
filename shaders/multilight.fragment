@@ -1,0 +1,22 @@
+#version 330 core
+
+in vec3 fragment_normal;
+in vec3 fragment_position;
+
+// Ouput data
+out vec3 color;
+
+uniform vec3 light_position[%N_LIGHTS%];
+uniform float light_intensity[%N_LIGHTS%];
+
+vec3 getLight(int index){
+	return clamp(dot(fragment_normal,light_position[index] - fragment_position),0.0f,1.0f) * light_intensity[index] * vec3(1.0f,1.0f,1.0f);
+}
+
+void main()
+{
+	color = vec3(0.0f);
+	for(int i = 0; i < %N_LIGHTS%; ++i){
+		color = clamp(color + getLight(i), 0.0f, 1.0f);
+	}
+}

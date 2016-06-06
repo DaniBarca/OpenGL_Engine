@@ -3,7 +3,7 @@
 Light::Light(Color _color, glm::vec3 _position, float _intensity) : Object3D(), color(_color), intensity(_intensity)
 {
 	alive = true;
-	glm::translate(*Transform(), _position);
+	SetPosition(_position);
 }
 
 Light::~Light()
@@ -15,3 +15,7 @@ void Light::Update(double dt) {
 
 void Light::Init() {}
 void Light::Draw() {}
+
+float Light::GetIntensity() {
+	return intensity;
+}

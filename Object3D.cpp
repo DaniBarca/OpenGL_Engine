@@ -17,3 +17,11 @@ void Object3D::Init() {}
 void Object3D::Update(double dt) {}
 
 void Object3D::Draw() {}
+
+void Object3D::SetPosition(glm::vec3 position) {
+	*transform = glm::translate(*transform, position);
+}
+
+glm::vec3 Object3D::GetPosition() {
+	return glm::vec3((*transform)[3]);
+}

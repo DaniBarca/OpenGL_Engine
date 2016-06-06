@@ -18,6 +18,8 @@ class MeshObject : public Object3D {
 	GLuint shaderID;
 	GLuint matrixID;
 	GLuint transformID;
+	GLuint lightPosID;
+	GLuint lightIntensityID;
 
 	GLuint vertex_buffer;
 	GLuint normal_buffer;

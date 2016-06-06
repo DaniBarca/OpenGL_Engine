@@ -10,14 +10,23 @@ class LightManager
 
 	vector<Light*> lights;
 
+	GLfloat* positions;
+	GLfloat* intensities;
+	
+	void Compile();
+
 public:
-	static LightManager* AllocLights(int n_lights);
 	static LightManager* GetInstance();
+	LightManager* AllocLights(int n_lights);
+
 	LightManager* Push(Light* l);
 
 	Light* GetLight(unsigned int pos);
 
 	size_t GetNLights();
 
-	void Update(float dt);
+	void Update(double dt);
+
+	GLfloat* GetPositions();
+	GLfloat* GetIntensities();
 };
