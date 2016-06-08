@@ -11,9 +11,13 @@ MeshObject::MeshObject() {
 		{ "%N_LIGHTS%", to_string(n_lights > 0 ? n_lights : 1) }
 	});
 
+	reflectivity_diffuse = 1.0f;
+	reflectivity_specular = 0.5f;
+	reflectivity_ambient = 0.2f;
+
 	Engine::GetInstance()->LoadShader(std::vector<std::string>({
-		"shaders/multilight.vertex",
-		"shaders/multilight.fragment"
+		"shaders/phong.vertex",
+		"shaders/phong.fragment"
 	}), std::vector<GLenum>({
 		GL_VERTEX_SHADER,
 		GL_FRAGMENT_SHADER
@@ -24,6 +28,15 @@ MeshObject::MeshObject() {
 	lightPosID  = glGetUniformLocation(shaderID, "light_position");
 	lightIntensityID = glGetUniformLocation(shaderID, "light_intensity");
 	lightColorID = glGetUniformLocation(shaderID, "light_color");
+
+	cameraPositionID = glGetUniformLocation(shaderID, "camera_position");
+
+	reflectivityDiffuseID  = glGetUniformLocation(shaderID, "reflectivity_diffuse");
+	reflectivitySpecularID = glGetUniformLocation(shaderID, "reflectivity_specular");
+	reflectivityAmbientID  = glGetUniformLocation(shaderID, "reflectivity_ambient");
+	
+	ambientIntensityID = glGetUniformLocation(shaderID, "ambient_intensity");
+	specularExponentID = glGetUniformLocation(shaderID, "specular_exponent");
 }
 
 MeshObject::MeshObject(aiMesh* meshData) : MeshObject() {
@@ -66,9 +79,16 @@ void MeshObject::Draw(){
 	glUniformMatrix4fv(transformID, 1, GL_FALSE, &(*transform)[0][0]);
 
 	GLsizei n_lights = (GLsizei)LightManager::GetInstance()->GetNLights();
-	glUniform3fv(lightPosID, n_lights, LightManager::GetInstance()->GetPositions());
+	glUniform3fv(lightPosID,       n_lights, LightManager::GetInstance()->GetPositions());
 	glUniform1fv(lightIntensityID, n_lights, LightManager::GetInstance()->GetIntensities());
-	glUniform3fv(lightColorID, n_lights, LightManager::GetInstance()->GetColors());
+	glUniform3fv(lightColorID,     n_lights, LightManager::GetInstance()->GetColors());
+
+	glUniform1fv(reflectivityDiffuseID,  1, &reflectivity_diffuse);
+	glUniform1fv(reflectivitySpecularID, 1, &reflectivity_specular);
+	glUniform1fv(reflectivityAmbientID,  1, &reflectivity_ambient);
+
+	glUniform1fv(ambientIntensityID, 1, LightManager::GetInstance()->GetAmbientItensity());
+	glUniform1fv(specularExponentID, 1, LightManager::GetInstance()->GetSpecularExponent());
 
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);

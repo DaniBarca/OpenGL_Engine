@@ -13,13 +13,13 @@ RotatingLight::RotatingLight(const RotatingLight & l) : Light(l)
 
 void RotatingLight::Update(double dt) {
 	static double t = 0;
-	t += dt * 3.0f;
+	t += dt * 1.5f;
 	if (t > TAU)
 		t = 0;
 
 	SetPosition(glm::vec3(
 		glm::sin(t) * 15.0f,
-		5.0f,
+		0.5f,
 		glm::cos(t) * 15.0f
 	));
 }

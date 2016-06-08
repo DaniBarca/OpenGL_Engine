@@ -1,7 +1,10 @@
 #include "LightManager.h"
 
 LightManager::LightManager()
-{}
+{
+	ambient_intensity = 0.0f;
+	specular_exponent = 1.0f;
+}
 
 LightManager::~LightManager()
 {
@@ -74,4 +77,26 @@ GLfloat* LightManager::GetIntensities(){
 
 GLfloat* LightManager::GetColors() {
 	return colors;
+}
+
+GLfloat * LightManager::GetAmbientItensity()
+{
+	return &ambient_intensity;
+}
+
+GLfloat * LightManager::GetSpecularExponent()
+{
+	return &specular_exponent;
+}
+
+LightManager * LightManager::SetAmbientItensity(float i)
+{
+	ambient_intensity = i;
+	return GetInstance();
+}
+
+LightManager * LightManager::SetSpecularExponent(float e)
+{
+	specular_exponent = e;
+	return GetInstance();
 }

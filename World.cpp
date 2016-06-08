@@ -15,15 +15,19 @@ World* World::GetInstance() {
 }
 
 void World::Init() {
-	LightManager::GetInstance()->AllocLights(2);
-	LightManager::GetInstance()->Push(new RotatingLight(glm::vec4(0.0f, 256.0f, 0.0f, 0.0f), glm::vec3(10.0f,10.0f,10.0f),1.0f));
-	LightManager::GetInstance()->Push(new Light(glm::vec4(256.0f, 0.0f, 0.0f, 0.0f), glm::vec3(-10.0f, -10.0f, -10.0f), 1.0f));
+	LightManager::GetInstance()
+		->AllocLights(2)
+		->SetAmbientItensity(0.0f)
+		->SetSpecularExponent(30.0f);
+
+	LightManager::GetInstance()->Push(new RotatingLight(glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), glm::vec3(5.0f,5.0f,5.0f),0.9f));
+	LightManager::GetInstance()->Push(new Light(glm::vec4(256.0f, 0.0f, 0.0f, 0.0f), glm::vec3(-10.0f, -10.0f, -10.0f), 0.2f));
 
 	teapot = new Teapot();
 	dragon = new Dragon();
 
-	teapot->Init();
-	//dragon->Init();
+	//teapot->Init();
+	dragon->Init();
 
 	glm::translate(*teapot->Transform(), V_LEFT * 100.0f);
 	glm::translate(*dragon->Transform(), V_RIGHT * 100.0f);
@@ -34,13 +38,13 @@ void World::Init() {
 void World::Update(double dt) {
 	LightManager::GetInstance()->Update(dt);
 
-	teapot->Update(dt);
-	//dragon->Update(dt);
+	//teapot->Update(dt);
+	dragon->Update(dt);
 }
 
 void World::Draw() {
-	teapot->Draw();
-	//dragon->Draw();
+	//teapot->Draw();
+	dragon->Draw();
 }
 
 void World::OnKeyPress(int key, int scancode, int action, int mods) {

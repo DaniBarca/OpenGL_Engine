@@ -13,6 +13,9 @@ class LightManager
 	GLfloat* positions;
 	GLfloat* intensities;
 	GLfloat* colors;
+
+	GLfloat ambient_intensity;
+	GLfloat specular_exponent;
 	
 	void Compile();
 
@@ -31,4 +34,10 @@ public:
 	GLfloat* GetPositions();
 	GLfloat* GetIntensities();
 	GLfloat* GetColors();
+
+	GLfloat* GetAmbientItensity();
+	GLfloat* GetSpecularExponent();
+	
+	LightManager* SetAmbientItensity(float i);
+	LightManager* SetSpecularExponent(float e);
 };

@@ -1,0 +1,49 @@
+#version 330 core
+
+in vec3 fragment_normal;
+in vec3 fragment_position;
+
+// Ouput data
+out vec3 color;
+
+uniform vec3 light_position[%N_LIGHTS%];
+uniform vec3 light_color[%N_LIGHTS%];
+uniform float light_intensity[%N_LIGHTS%];
+
+uniform float reflectivity_diffuse;
+uniform float reflectivity_specular;
+uniform float reflectivity_ambient;
+
+uniform float ambient_intensity;
+uniform float specular_exponent;
+
+uniform vec3 camera_position;
+
+vec3 reflect(vec3 v, vec3 N){
+	return normalize(v - 2 * dot(v,N) * N);
+}
+
+float diffuse(int index){
+	return light_intensity[index] * reflectivity_diffuse * clamp(dot(fragment_normal, normalize(light_position[index] - fragment_position)),0.0f,1.0f);
+}
+
+float specular(int index){
+	return light_intensity[index] * reflectivity_specular * clamp(pow( dot( reflect(light_position[index] - fragment_position, fragment_normal), normalize(camera_position - fragment_position) ) , specular_exponent), 0.0f,1.0f);
+	//clamp(pow(clamp(reflect(light_position[index] - fragment_position), fragment_normal), normalize(camera_position - fragment_position)), specular_exponent),0.0f,1.0f);
+}
+
+float ambient(){
+	return ambient_intensity * reflectivity_ambient;
+}
+
+vec3 getLight(int index){
+	return clamp(diffuse(index) + specular(index) + ambient(),0.0f,1.0f) * light_color[index];
+}
+
+void main()
+{
+	color = vec3(0.0f);
+	for(int i = 0; i < %N_LIGHTS%; ++i){
+		color = color + getLight(i);
+	}
+}

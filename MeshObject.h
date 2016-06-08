@@ -20,6 +20,12 @@ class MeshObject : public Object3D {
 	GLuint lightPosID;
 	GLuint lightIntensityID;
 	GLuint lightColorID;
+	GLuint cameraPositionID;
+	GLuint reflectivityDiffuseID;
+	GLuint reflectivitySpecularID;
+	GLuint reflectivityAmbientID;
+	GLuint ambientIntensityID;
+	GLuint specularExponentID;
 
 	GLuint vertex_buffer;
 	GLuint normal_buffer;
@@ -30,6 +36,10 @@ class MeshObject : public Object3D {
 	
 protected:
 	bool Import3D(const string& path, bool invert_normals = false);
+
+	GLfloat reflectivity_diffuse;
+	GLfloat reflectivity_specular;
+	GLfloat reflectivity_ambient;
 
 public:	
 	MeshObject();
