@@ -21,18 +21,22 @@ void World::Init() {
 		->SetSpecularExponent(30.0f);
 
 	LightManager::GetInstance()->Push(new RotatingLight(glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), glm::vec3(5.0f,5.0f,5.0f),0.9f));
-	LightManager::GetInstance()->Push(new Light(glm::vec4(256.0f, 0.0f, 0.0f, 0.0f), glm::vec3(-10.0f, -10.0f, -10.0f), 0.2f));
+	LightManager::GetInstance()->Push(new Light(glm::vec4(256.0f, 0.0f, 0.0f, 0.0f), glm::vec3(-10.0f, -10.0f, -10.0f), 0.4f));
 
-	teapot = new Teapot();
+	//teapot = new Teapot();
 	dragon = new Dragon();
+	dragon2 = new Dragon();
+	dragon3 = new Dragon();
+
+	dragon2->SetPosition(glm::vec3(1.0f, 0.0f, 0.0f));
+	dragon3->SetPosition(glm::vec3(-1.0f, 0.0f, 0.0f));
 
 	//teapot->Init();
 	dragon->Init();
+	dragon2->Init();
+	dragon3->Init();
 
-	glm::translate(*teapot->Transform(), V_LEFT * 100.0f);
-	glm::translate(*dragon->Transform(), V_RIGHT * 100.0f);
-
-	Camera::getInstance();
+	Camera::GetInstance();
 }
 
 void World::Update(double dt) {
@@ -40,11 +44,15 @@ void World::Update(double dt) {
 
 	//teapot->Update(dt);
 	dragon->Update(dt);
+	dragon2->Update(dt);
+	dragon3->Update(dt);
 }
 
 void World::Draw() {
 	//teapot->Draw();
 	dragon->Draw();
+	dragon2->Draw();
+	dragon3->Draw();
 }
 
 void World::OnKeyPress(int key, int scancode, int action, int mods) {
@@ -55,16 +63,16 @@ void World::OnKeyPress(int key, int scancode, int action, int mods) {
 
 	switch (key) {
 		case GLFW_KEY_UP:
-			Camera::getInstance()->ZoomIN();
+			Camera::GetInstance()->ZoomIN();
 			break;
 		case GLFW_KEY_DOWN:
-			Camera::getInstance()->ZoomOUT();
+			Camera::GetInstance()->ZoomOUT();
 			break;
 		case GLFW_KEY_RIGHT:
-			Camera::getInstance()->Beyond();
+			Camera::GetInstance()->Beyond();
 			break;
 		case GLFW_KEY_LEFT:
-			Camera::getInstance()->Closer();
+			Camera::GetInstance()->Closer();
 			break;
 	}
 }
@@ -75,6 +83,6 @@ void World::OnMousePress(int button, int action, int mods) {
 
 void World::OnMouseMove(double x, double y) {
 	if (clicking) {
-		Camera::getInstance()->Orbit(-x * 2.0f * PI * I_SCREEN_WIDTH, -PI * 0.5f + y * PI * I_SCREEN_HEIGHT);
+		Camera::GetInstance()->Orbit(-x * 2.0f * PI * I_SCREEN_WIDTH, -PI * 0.5f + y * PI * I_SCREEN_HEIGHT);
 	}
 }

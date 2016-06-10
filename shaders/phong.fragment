@@ -19,17 +19,18 @@ uniform float specular_exponent;
 
 uniform vec3 camera_position;
 
-vec3 reflect(vec3 v, vec3 N){
-	return normalize(v - 2 * dot(v,N) * N);
+vec3 N;
+
+vec3 reflect(vec3 v){
+	return -v + 2 * dot(v,N) * N;
 }
 
 float diffuse(int index){
-	return light_intensity[index] * reflectivity_diffuse * clamp(dot(fragment_normal, normalize(light_position[index] - fragment_position)),0.0f,1.0f);
+	return light_intensity[index] * reflectivity_diffuse * clamp(dot(N, normalize(light_position[index] - fragment_position)),0.0f,1.0f);
 }
 
 float specular(int index){
-	return light_intensity[index] * reflectivity_specular * clamp(pow( dot( reflect(light_position[index] - fragment_position, fragment_normal), normalize(camera_position - fragment_position) ) , specular_exponent), 0.0f,1.0f);
-	//clamp(pow(clamp(reflect(light_position[index] - fragment_position), fragment_normal), normalize(camera_position - fragment_position)), specular_exponent),0.0f,1.0f);
+	return light_intensity[index] * reflectivity_specular * clamp(pow( dot(reflect(normalize(light_position[index] - fragment_position)), normalize(camera_position - fragment_position) ), specular_exponent), 0.0f,1.0f);
 }
 
 float ambient(){
@@ -42,6 +43,7 @@ vec3 getLight(int index){
 
 void main()
 {
+	N = normalize(fragment_normal);
 	color = vec3(0.0f);
 	for(int i = 0; i < %N_LIGHTS%; ++i){
 		color = color + getLight(i);

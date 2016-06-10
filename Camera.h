@@ -7,6 +7,7 @@
 
 class Camera
 {
+	glm::vec3 position;
 	glm::mat4 projection;
 	glm::mat4 view;
 
@@ -23,7 +24,7 @@ class Camera
 	double HFactor, VFactor;
 
 public:
-	static Camera* getInstance();
+	static Camera* GetInstance();
 
 	//void SetProjection(glm::mat4);
 	void SetProjection();
@@ -36,6 +37,7 @@ public:
 
 	void setOrbitRadius(float);
 	
+	glm::vec3 GetPosition();
 
 	//void Update(double dt);
 

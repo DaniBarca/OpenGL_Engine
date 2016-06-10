@@ -18,8 +18,8 @@ void RotatingLight::Update(double dt) {
 		t = 0;
 
 	SetPosition(glm::vec3(
-		glm::sin(t) * 15.0f,
+		glm::sin(t) * 0.5f,
 		0.5f,
-		glm::cos(t) * 15.0f
+		glm::cos(t) * 0.5f
 	));
 }

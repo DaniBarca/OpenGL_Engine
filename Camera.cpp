@@ -15,13 +15,14 @@ Camera::Camera()
 	projection = glm::perspective(fov, aspect, near, far);
 	Orbit(0.0f, 0.0f);
 	
+	position = glm::vec3(projection[3][0], projection[3][1], projection[3][2]);
 }
 
 Camera::~Camera()
 {
 }
 
-Camera* Camera::getInstance(){
+Camera* Camera::GetInstance(){
 	static Camera* Instance = new Camera();
 	return Instance;
 }
@@ -66,6 +67,11 @@ void Camera::setOrbitRadius(float radius) {
 	orbit_radius = radius;
 }
 
+glm::vec3 Camera::GetPosition()
+{
+	return position;
+}
+
 void Camera::Orbit() {
 	this->Orbit(this->HFactor, this->VFactor);
 }
@@ -73,13 +79,16 @@ void Camera::Orbit() {
 void Camera::Orbit(double HFactor, double VFactor, glm::vec3 around) {
 	this->HFactor = HFactor;
 	this->VFactor = VFactor;
+	
+	this->position = glm::vec3(
+		2.0f * orbit_radius * glm::sin(HFactor),
+		2.0f * orbit_radius * glm::sin(VFactor),
+		2.0f * orbit_radius * glm::cos(HFactor)
+	);
+
 	SetView(
 		glm::lookAt(
-			glm::vec3(
-				2.0f * orbit_radius * glm::sin(HFactor),
-				2.0f * orbit_radius * glm::sin(VFactor),
-				2.0f * orbit_radius * glm::cos(HFactor)
-			),
+			position,
 			around,
 			V_UP
 		)

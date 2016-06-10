@@ -21,7 +21,7 @@ class World
 
 	aiScene asScene;
 	Teapot* teapot;
-	Dragon* dragon;
+	Dragon* dragon, *dragon2, *dragon3;
 
 	unsigned int pressed_keys;
 	bool clicking;
