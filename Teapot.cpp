@@ -7,7 +7,7 @@ Teapot::~Teapot()
 {}
 
 void Teapot::Init() {
-	Import3D("models/teapot.obj",true);
+	Import3D("models/teapot.obj");
 	MeshObject::Init();
 
 	reflectivity_diffuse = 1.0f;

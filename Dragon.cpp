@@ -8,7 +8,7 @@ Dragon::~Dragon()
 {}
 
 void Dragon::Init() {
-	Import3D("models/dragon.obj", true);
+	Import3D("models/dragon.obj");
 	MeshObject::Init();
 
 	reflectivity_diffuse = 0.5f;
