@@ -5,13 +5,13 @@
 #include "Engine.h"
 #include "Camera.h"
 #include "LightManager.h"
+#include "MeshManager.h"
 
 class MeshObject : public Object3D {
+private:
 	static std::map<string, string> parse_dict;
 
-	GLfloat* vertices;
-	GLfloat* vertices_normals;
-	unsigned int numVertices;
+	Mesh* mesh;
 
 	GLuint shaderID;
 	GLuint matrixID;

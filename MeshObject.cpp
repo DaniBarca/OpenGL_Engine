@@ -40,8 +40,8 @@ MeshObject::MeshObject(aiMesh* meshData) : MeshObject() {
 }
 
 void MeshObject::PrintVertices() {
-	for (GLuint i = 0; i < (const unsigned int)(numVertices * 3); ++i) {
-		cout << vertices[i];
+	for (GLuint i = 0; i < (const unsigned int)(mesh->numVertices * 3); ++i) {
+		cout << mesh->vertices[i];
 		if ((i + 1) % 3 == 0)
 			cout << endl;
 		else
@@ -55,12 +55,12 @@ void MeshObject::Init(){
 	/*BIND vertex buffer*/
 	glGenBuffers(1, &vertex_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*numVertices*VERTICES_PER_POL, vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*mesh->numVertices*VERTICES_PER_POL, mesh->vertices, GL_STATIC_DRAW);
 
 	/*BIND polygon_normals*/
 	glGenBuffers(1, &normal_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, normal_buffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*numVertices*VERTICES_PER_POL, vertices_normals, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*mesh->numVertices*VERTICES_PER_POL, mesh->vertices_normals, GL_STATIC_DRAW);
 }
 
 void MeshObject::Update(double dt){
@@ -111,73 +111,13 @@ void MeshObject::Draw(){
 		(void*)0
 	);
 
-	glDrawArrays(GL_TRIANGLES, 0, numVertices);
+	glDrawArrays(GL_TRIANGLES, 0, mesh->numVertices);
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 }
 
 bool MeshObject::Import3D(const string& path, bool invert_normals) {
-	int invert = invert_normals ? -1 : 1;
-
-	Assimp::Importer importer;
-
-	//Load model with assimp
-	const aiScene* scene = importer.ReadFile(path,
-		aiProcess_CalcTangentSpace |
-		aiProcess_Triangulate |
-		aiProcess_JoinIdenticalVertices |
-		aiProcess_SortByPType
-	);
-	
-	//Check successful result
-	if (!scene) {
-		cout << "Error while loading file: " << path << endl;
-		cout << importer.GetErrorString() << endl;
-		getchar();
-		exit(EXIT_FAILURE);
-	}
-	
-	//Get total number of vertices (each vertex is repeated each time it appears in a polygon)
-	this->numVertices = scene->mMeshes[0]->mNumFaces * VERTICES_PER_POL;
-
-	this->vertices         = new GLfloat[scene->mMeshes[0]->mNumFaces * VERTICES_PER_POL * DIMENSIONS];
-	this->vertices_normals = new GLfloat[scene->mMeshes[0]->mNumFaces * VERTICES_PER_POL * DIMENSIONS];
-	
-	glm::vec3 A, B, C, N, EA, EB, EC, VN;
-	for (GLuint i = 0; i < scene->mMeshes[0]->mNumFaces; ++i) {
-		if (scene->mMeshes[0]->mFaces[i].mNumIndices != 3) {
-			cout << "ERROR: some of the faces are not triangles" << endl;
-			getchar();
-			exit(-1);
-		}
-
-		this->vertices[i * 9 + 0] = scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mFaces[i].mIndices[0]].x;
-		this->vertices[i * 9 + 1] = scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mFaces[i].mIndices[0]].y;
-		this->vertices[i * 9 + 2] = scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mFaces[i].mIndices[0]].z;
-
-		this->vertices[i * 9 + 3] = scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mFaces[i].mIndices[1]].x;
-		this->vertices[i * 9 + 4] = scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mFaces[i].mIndices[1]].y;
-		this->vertices[i * 9 + 5] = scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mFaces[i].mIndices[1]].z;
-
-		this->vertices[i * 9 + 6] = scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mFaces[i].mIndices[2]].x;
-		this->vertices[i * 9 + 7] = scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mFaces[i].mIndices[2]].y;
-		this->vertices[i * 9 + 8] = scene->mMeshes[0]->mVertices[scene->mMeshes[0]->mFaces[i].mIndices[2]].z;
-
-		this->vertices_normals[i * 9 + 0] = scene->mMeshes[0]->mNormals[scene->mMeshes[0]->mFaces[i].mIndices[0]].x * invert;
-		this->vertices_normals[i * 9 + 1] = scene->mMeshes[0]->mNormals[scene->mMeshes[0]->mFaces[i].mIndices[0]].y * invert;
-		this->vertices_normals[i * 9 + 2] = scene->mMeshes[0]->mNormals[scene->mMeshes[0]->mFaces[i].mIndices[0]].z * invert;
-
-		this->vertices_normals[i * 9 + 3] = scene->mMeshes[0]->mNormals[scene->mMeshes[0]->mFaces[i].mIndices[1]].x * invert;
-		this->vertices_normals[i * 9 + 4] = scene->mMeshes[0]->mNormals[scene->mMeshes[0]->mFaces[i].mIndices[1]].y * invert;
-		this->vertices_normals[i * 9 + 5] = scene->mMeshes[0]->mNormals[scene->mMeshes[0]->mFaces[i].mIndices[1]].z * invert;
-
-		this->vertices_normals[i * 9 + 6] = scene->mMeshes[0]->mNormals[scene->mMeshes[0]->mFaces[i].mIndices[2]].x * invert;
-		this->vertices_normals[i * 9 + 7] = scene->mMeshes[0]->mNormals[scene->mMeshes[0]->mFaces[i].mIndices[2]].y * invert;
-		this->vertices_normals[i * 9 + 8] = scene->mMeshes[0]->mNormals[scene->mMeshes[0]->mFaces[i].mIndices[2]].z * invert;
-
-	}
-
-	importer.FreeScene();
+	this->mesh = MeshManager::GetInstance()->LoadMesh(path,invert_normals);
 	return true;
 }
