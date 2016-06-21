@@ -16,25 +16,24 @@ World* World::GetInstance() {
 
 void World::Init() {
 	LightManager::GetInstance()
-		->AllocLights(2)
-		->SetAmbientItensity(0.0f)
-		->SetSpecularExponent(30.0f);
+		//		->AllocLights(2)
+		->SetAmbientItensity(0.0f);
+	//	->SetSpecularExponent(30.0f);
 
 	LightManager::GetInstance()->Push(new RotatingLight(glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), glm::vec3(5.0f,5.0f,5.0f),0.9f));
-	LightManager::GetInstance()->Push(new Light(glm::vec4(256.0f, 0.0f, 0.0f, 0.0f), glm::vec3(-10.0f, -10.0f, -10.0f), 0.4f));
+	//LightManager::GetInstance()->Push(new Light(glm::vec4(256.0f, 0.0f, 0.0f, 0.0f), glm::vec3(-10.0f, -10.0f, -10.0f), 0.4f));
+
+	int n = 30;
+	dragons = std::vector<Dragon*>();
+
+	for (int i = 0; i < n; ++i) {
+		dragons.push_back(new Dragon());
+		dragons[i]->SetPosition(glm::vec3(i - (int)(n * 0.5), 0.0f, 0.0f));
+		dragons[i]->Init();
+	}
 
 	//teapot = new Teapot();
-	dragon = new Dragon();
-	dragon2 = new Dragon();
-	dragon3 = new Dragon();
-
-	dragon2->SetPosition(glm::vec3(1.0f, 0.0f, 0.0f));
-	dragon3->SetPosition(glm::vec3(-1.0f, 0.0f, 0.0f));
-
 	//teapot->Init();
-	dragon->Init();
-	dragon2->Init();
-	dragon3->Init();
 
 	Camera::GetInstance();
 }
@@ -43,16 +42,17 @@ void World::Update(double dt) {
 	LightManager::GetInstance()->Update(dt);
 
 	//teapot->Update(dt);
-	dragon->Update(dt);
-	dragon2->Update(dt);
-	dragon3->Update(dt);
+	
+	for (int i = 0; i < dragons.size(); ++i) {
+		dragons[i]->Update(dt);
+	}
 }
 
 void World::Draw() {
 	//teapot->Draw();
-	dragon->Draw();
-	dragon2->Draw();
-	dragon3->Draw();
+	for (int i = 0; i < dragons.size(); ++i) {
+		dragons[i]->Draw();
+	}
 }
 
 void World::OnKeyPress(int key, int scancode, int action, int mods) {
@@ -74,6 +74,8 @@ void World::OnKeyPress(int key, int scancode, int action, int mods) {
 		case GLFW_KEY_LEFT:
 			Camera::GetInstance()->Closer();
 			break;
+		case GLFW_KEY_L:
+			LightManager::GetInstance()->Push(new Light(glm::vec4(0.0f, 0.0f, 255.0f, 1.0f), glm::vec3(0.0f, 0.0f, -10.0f), 0.7f));
 	}
 }
 

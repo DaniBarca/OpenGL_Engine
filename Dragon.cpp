@@ -14,6 +14,8 @@ void Dragon::Init() {
 	reflectivity_diffuse = 0.5f;
 	reflectivity_specular = 0.8f;
 	reflectivity_ambient = 0.5f;
+
+	specular_exponent = 50.0f;
 }
 
 void Dragon::Update(double dt) {

@@ -21,7 +21,7 @@ class LightManager
 
 public:
 	static LightManager* GetInstance();
-	LightManager* AllocLights(int n_lights);
+	//LightManager* AllocLights(int n_lights);
 
 	LightManager* Push(Light* l);
 

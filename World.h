@@ -21,7 +21,7 @@ class World
 
 	aiScene asScene;
 	Teapot* teapot;
-	Dragon* dragon, *dragon2, *dragon3;
+	std::vector<Dragon*> dragons;
 
 	unsigned int pressed_keys;
 	bool clicking;

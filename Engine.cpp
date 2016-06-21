@@ -165,23 +165,23 @@ Engine* Engine::Terminate() {
 }
 
 //Directly adapted from opengl-tutorial.com
-Engine* Engine::LoadShader(string vertex_path, string fragment_path, std::map<string,string> parse_dict, GLuint* out_shader_id) {
+Engine* Engine::LoadShader(string vertex_path, string fragment_path, std::map<string,string> parse_dict, int n_lights, GLuint* out_shader_id) {
 	return LoadShader(std::vector<std::string>({
 		vertex_path,
 		fragment_path
 	}), std::vector<GLenum>({
 		GL_VERTEX_SHADER,
 		GL_FRAGMENT_SHADER
-	}), parse_dict, out_shader_id);
+	}), parse_dict, n_lights, out_shader_id);
 }
 
-Engine* Engine::LoadShader(std::vector<std::string> paths, std::vector<GLenum> types, std::map<string,string> parse_dict, GLuint* out_shader_id) {
+Engine* Engine::LoadShader(std::vector<std::string> paths, std::vector<GLenum> types, std::map<string,string> parse_dict, int n_lights, GLuint* out_shader_id) {
 	if (paths.size() != types.size() || paths.size() < 1) {
 		std::cout << "ERROR: number of paths and number of types must be the same." << std::endl;
 		getchar();
 		exit(-1);
 	}
-
+	
 	static map<string, GLuint> mem = map<string, GLuint>();
 	static map<string, GLuint>::iterator memit;
 
@@ -189,7 +189,7 @@ Engine* Engine::LoadShader(std::vector<std::string> paths, std::vector<GLenum> t
 	std::string memcode = "";
 	for (std::string i : paths)
 		memcode += i;
-	if ((memit = mem.find(memcode)) != mem.end()) {
+	if ((memit = mem.find(memcode + to_string(n_lights))) != mem.end()) {
 		*out_shader_id = memit->second;
 		return Instance;
 	}
@@ -219,6 +219,9 @@ Engine* Engine::LoadShader(std::vector<std::string> paths, std::vector<GLenum> t
 			getchar();
 			exit(-1);
 		}
+
+		// Parse light number
+		replaceAll(ShaderCode, "%N_LIGHTS%", to_string(n_lights));
 
 		// Parse shader
 		for (std::map<string, string>::iterator it = parse_dict.begin(); it != parse_dict.end(); ++it) {
@@ -273,7 +276,7 @@ Engine* Engine::LoadShader(std::vector<std::string> paths, std::vector<GLenum> t
 	//END
 	*out_shader_id = ProgramID;
 
-	mem[memcode] = *out_shader_id;
+	mem[memcode + to_string(n_lights)] = *out_shader_id;
 
 	return Instance;
 }

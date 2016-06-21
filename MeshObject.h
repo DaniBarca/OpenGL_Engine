@@ -29,12 +29,17 @@ private:
 	GLuint vertex_buffer;
 	GLuint normal_buffer;
 
+	std::vector<std::string> shader_paths;
+	std::vector<GLenum> shader_types;
+
 protected:
 	bool Import3D(const string& path, bool invert_normals = false);
 
 	GLfloat reflectivity_diffuse;
 	GLfloat reflectivity_specular;
 	GLfloat reflectivity_ambient;
+
+	GLfloat specular_exponent;
 
 public:	
 	MeshObject();
@@ -43,6 +48,7 @@ public:
 	void MeshObject::PrintVertices();
 
 	void Init();
+	void BindConstant();
 	void Update(double dt);
 	void Draw();
 };

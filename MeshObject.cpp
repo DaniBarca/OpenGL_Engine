@@ -4,21 +4,31 @@ std::map<string, string> MeshObject::parse_dict;
 
 MeshObject::MeshObject() {
 	size_t n_lights = LightManager::GetInstance()->GetNLights();
-	parse_dict = std::map<string,string>({
-		{ "%N_LIGHTS%", to_string(n_lights > 0 ? n_lights : 1) }
-	});
+	parse_dict = std::map<string,string>({});
 
 	reflectivity_diffuse = 1.0f;
 	reflectivity_specular = 0.5f;
 	reflectivity_ambient = 0.2f;
 
-	Engine::GetInstance()->LoadShader(std::vector<std::string>({
+	specular_exponent = 50.0f;
+
+	shader_paths = std::vector<std::string>({
 		"shaders/phong.vertex",
 		"shaders/phong.fragment"
-	}), std::vector<GLenum>({
+	});
+
+	shader_types = std::vector<GLenum>({
 		GL_VERTEX_SHADER,
 		GL_FRAGMENT_SHADER
-	}), parse_dict, &shaderID);
+	});
+
+	Engine::GetInstance()->LoadShader(
+		shader_paths, 
+		shader_types,
+		parse_dict,
+		(int)LightManager::GetInstance()->GetNLights(), 
+		&shaderID
+	);
 
 	matrixID    = glGetUniformLocation(shaderID, "PV");
 	transformID = glGetUniformLocation(shaderID, "M");
@@ -51,7 +61,10 @@ void MeshObject::PrintVertices() {
 
 void MeshObject::Init(){
 	Object3D::Init();
+	BindConstant();
+}
 
+void MeshObject::BindConstant() {
 	/*BIND vertex buffer*/
 	glGenBuffers(1, &vertex_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
@@ -68,14 +81,29 @@ void MeshObject::Update(double dt){
 }
 
 void MeshObject::Draw(){
+	static GLuint m;
 	Object3D::Draw();
+	
+	// Reload shader, since the number of lights could have changed
+	m = shaderID;
+	GLsizei n_lights = (GLsizei)LightManager::GetInstance()->GetNLights();
+	Engine::GetInstance()->LoadShader(
+		shader_paths,
+		shader_types,
+		parse_dict,
+		n_lights,
+		&shaderID
+	);
+
+	if (shaderID != m) {
+		BindConstant();
+	}
 
 	glUseProgram(shaderID);
 
 	glUniformMatrix4fv(matrixID, 1, GL_FALSE, &(Camera::GetInstance()->getPV())[0][0]);
 	glUniformMatrix4fv(transformID, 1, GL_FALSE, &(*transform)[0][0]);
 
-	GLsizei n_lights = (GLsizei)LightManager::GetInstance()->GetNLights();
 	glUniform3fv(lightPosID,       n_lights, LightManager::GetInstance()->GetPositions());
 	glUniform1fv(lightIntensityID, n_lights, LightManager::GetInstance()->GetIntensities());
 	glUniform3fv(lightColorID,     n_lights, LightManager::GetInstance()->GetColors());
@@ -85,7 +113,7 @@ void MeshObject::Draw(){
 	glUniform1fv(reflectivityAmbientID,  1, &reflectivity_ambient);
 
 	glUniform1fv(ambientIntensityID, 1, LightManager::GetInstance()->GetAmbientItensity());
-	glUniform1fv(specularExponentID, 1, LightManager::GetInstance()->GetSpecularExponent());
+	glUniform1fv(specularExponentID, 1, &specular_exponent);
 
 	glUniform3fv(cameraPositionID, 1, &Camera::GetInstance()->GetPosition()[0]);
 

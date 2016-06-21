@@ -13,7 +13,7 @@ LightManager::~LightManager()
 	}
 }
 
-LightManager* LightManager::AllocLights(int n) {
+/*LightManager* LightManager::AllocLights(int n) {
 	lights = vector<Light*>();
 	lights.resize(n);
 
@@ -22,7 +22,7 @@ LightManager* LightManager::AllocLights(int n) {
 	colors = new GLfloat[n * 3];
 
 	return GetInstance();
-}
+}*/
 
 LightManager* LightManager::GetInstance(){
 	static LightManager* Instance = new LightManager();
@@ -30,8 +30,16 @@ LightManager* LightManager::GetInstance(){
 }
 
 LightManager* LightManager::Push(Light* l) {
-	static int count = 0;
-	lights[count++] = l;
+	lights.push_back(l);
+
+	delete[] positions;
+	delete[] intensities;
+	delete[] colors;
+
+	positions = new GLfloat[lights.size() * 3];
+	intensities = new GLfloat[lights.size()];
+	colors = new GLfloat[lights.size() * 3];
+
 	return this;
 }
 
