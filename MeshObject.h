@@ -29,6 +29,9 @@ private:
 	GLuint vertex_buffer;
 	GLuint normal_buffer;
 
+	std::vector<std::string> shaderPaths;
+	std::vector<GLenum> shaderTypes;
+
 protected:
 	bool Import3D(const string& path, bool invert_normals = false);
 

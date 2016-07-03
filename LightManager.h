@@ -19,6 +19,8 @@ class LightManager
 	
 	void Compile();
 
+	int size;
+
 public:
 	static LightManager* GetInstance();
 	LightManager* AllocLights(int n_lights);

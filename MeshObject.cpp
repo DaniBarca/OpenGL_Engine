@@ -4,21 +4,25 @@ std::map<string, string> MeshObject::parse_dict;
 
 MeshObject::MeshObject() {
 	size_t n_lights = LightManager::GetInstance()->GetNLights();
-	parse_dict = std::map<string,string>({
-		{ "%N_LIGHTS%", to_string(n_lights > 0 ? n_lights : 1) }
-	});
+	parse_dict = std::map<string,string>({});
 
 	reflectivity_diffuse = 1.0f;
 	reflectivity_specular = 0.5f;
 	reflectivity_ambient = 0.2f;
 
-	Engine::GetInstance()->LoadShader(std::vector<std::string>({
+	shaderPaths = std::vector<std::string>({
 		"shaders/phong.vertex",
 		"shaders/phong.fragment"
-	}), std::vector<GLenum>({
+	});
+
+	shaderTypes = std::vector<GLenum>({
 		GL_VERTEX_SHADER,
 		GL_FRAGMENT_SHADER
-	}), parse_dict, &shaderID);
+	});
+
+	for (int i = 1; i <= 3; ++i) {
+		Engine::GetInstance()->LoadShader(shaderPaths, shaderTypes, i, parse_dict, &shaderID);
+	}
 
 	matrixID    = glGetUniformLocation(shaderID, "PV");
 	transformID = glGetUniformLocation(shaderID, "M");
@@ -69,6 +73,9 @@ void MeshObject::Update(double dt){
 
 void MeshObject::Draw(){
 	Object3D::Draw();
+
+	Engine::GetInstance()->LoadShader(shaderPaths, shaderTypes,
+		LightManager::GetInstance()->GetNLights(), parse_dict, &shaderID);
 
 	glUseProgram(shaderID);
 

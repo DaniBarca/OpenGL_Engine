@@ -4,6 +4,14 @@ LightManager::LightManager()
 {
 	ambient_intensity = 0.0f;
 	specular_exponent = 1.0f;
+
+	lights = vector<Light*>();
+
+	size = 0;
+
+	positions = new GLfloat[0];
+	intensities = new GLfloat[0];
+	colors = new GLfloat[0];
 }
 
 LightManager::~LightManager()
@@ -14,12 +22,29 @@ LightManager::~LightManager()
 }
 
 LightManager* LightManager::AllocLights(int n) {
-	lights = vector<Light*>();
+	// If new size is smaller we will delete all data after n
+	if (size > n)
+		size = n;
+
 	lights.resize(n);
 
-	positions = new GLfloat[n * 3];
-	intensities = new GLfloat[n];
-	colors = new GLfloat[n * 3];
+	GLfloat* newpos = new GLfloat[n * 3];
+	GLfloat* newint = new GLfloat[n];
+	GLfloat* newcol = new GLfloat[n * 3];
+
+	memcpy(newpos, positions,   size * 3 * sizeof(GLfloat));
+	memcpy(newint, intensities, size * sizeof(GLfloat));
+	memcpy(newcol, colors,      size * 3 * sizeof(GLfloat));
+
+	delete[] positions;
+	delete[] intensities;
+	delete[] colors;
+
+	positions = newpos;
+	intensities = newint;
+	colors = newcol;
+
+	size = n;
 
 	return GetInstance();
 }
@@ -31,7 +56,14 @@ LightManager* LightManager::GetInstance(){
 
 LightManager* LightManager::Push(Light* l) {
 	static int count = 0;
+
+	if (count == size) {
+		std::cout << "WARNING! Lights reallocation taking place" << std::endl;
+		AllocLights(size + 1);
+	}
+
 	lights[count++] = l;
+
 	return this;
 }
 
@@ -40,7 +72,7 @@ Light* LightManager::GetLight(unsigned int pos){
 }
 
 size_t LightManager::GetNLights() {
-	return lights.size();
+	return size;
 }
 
 void LightManager::Update(double dt) {
