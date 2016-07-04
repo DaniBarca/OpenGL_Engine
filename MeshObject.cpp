@@ -41,17 +41,18 @@ void MeshObject::PrintVertices() {
 }
 
 void MeshObject::LoadUniforms() {
-	matrixID = glGetUniformLocation(shaderID, "PV");
-	transformID = glGetUniformLocation(shaderID, "M");
-	lightPosID = glGetUniformLocation(shaderID, "light_position");
+	matrixID         = glGetUniformLocation(shaderID, "PV");
+	transformID      = glGetUniformLocation(shaderID, "M");
+	lightPosID       = glGetUniformLocation(shaderID, "light_position");
 	lightIntensityID = glGetUniformLocation(shaderID, "light_intensity");
-	lightColorID = glGetUniformLocation(shaderID, "light_color");
+	lightColorID     = glGetUniformLocation(shaderID, "light_color");
+	lightTypeID      = glGetUniformLocation(shaderID, "light_type");
 
 	cameraPositionID = glGetUniformLocation(shaderID, "camera_position");
 
-	reflectivityDiffuseID = glGetUniformLocation(shaderID, "reflectivity_diffuse");
+	reflectivityDiffuseID  = glGetUniformLocation(shaderID, "reflectivity_diffuse");
 	reflectivitySpecularID = glGetUniformLocation(shaderID, "reflectivity_specular");
-	reflectivityAmbientID = glGetUniformLocation(shaderID, "reflectivity_ambient");
+	reflectivityAmbientID  = glGetUniformLocation(shaderID, "reflectivity_ambient");
 
 	ambientIntensityID = glGetUniformLocation(shaderID, "ambient_intensity");
 	specularExponentID = glGetUniformLocation(shaderID, "specular_exponent");
@@ -81,7 +82,7 @@ void MeshObject::Draw(){
 
 	preShaderID = shaderID;
 	Engine::GetInstance()->LoadShader(shaderPaths, shaderTypes,
-		LightManager::GetInstance()->GetNLights(), parse_dict, &shaderID);
+		(int)LightManager::GetInstance()->GetNLights(), parse_dict, &shaderID);
 
 	if (preShaderID != shaderID) {
 		LoadUniforms();
@@ -96,6 +97,7 @@ void MeshObject::Draw(){
 	glUniform3fv(lightPosID,       n_lights, LightManager::GetInstance()->GetPositions());
 	glUniform1fv(lightIntensityID, n_lights, LightManager::GetInstance()->GetIntensities());
 	glUniform3fv(lightColorID,     n_lights, LightManager::GetInstance()->GetColors());
+	glUniform1iv(lightTypeID,      n_lights, LightManager::GetInstance()->GetTypes());
 
 	glUniform1fv(reflectivityDiffuseID,  1, &reflectivity_diffuse);
 	glUniform1fv(reflectivitySpecularID, 1, &reflectivity_specular);

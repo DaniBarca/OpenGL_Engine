@@ -24,6 +24,6 @@ void Object3D::SetPosition(glm::vec3 position) {
 	(*transform)[3][2] = position.z;
 }
 
-glm::vec3 Object3D::GetPosition() {
-	return glm::vec3((*transform)[3]);
+glm::vec4 Object3D::GetPosition() {
+	return glm::vec4((*transform)[3]);
 }

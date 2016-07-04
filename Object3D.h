@@ -18,6 +18,6 @@ public:
 	virtual void Draw() = 0;
 
 	void SetPosition(glm::vec3 position);
-	glm::vec3 GetPosition();
+	glm::vec4 GetPosition();
 };
 

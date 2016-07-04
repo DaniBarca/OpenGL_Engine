@@ -12,6 +12,7 @@ LightManager::LightManager()
 	positions = new GLfloat[0];
 	intensities = new GLfloat[0];
 	colors = new GLfloat[0];
+	types = new GLint[0];
 }
 
 LightManager::~LightManager()
@@ -28,21 +29,25 @@ LightManager* LightManager::AllocLights(int n) {
 
 	lights.resize(n);
 
-	GLfloat* newpos = new GLfloat[n * 3];
+	GLfloat* newpos = new GLfloat[n * N_AXIS];
 	GLfloat* newint = new GLfloat[n];
-	GLfloat* newcol = new GLfloat[n * 3];
+	GLfloat* newcol = new GLfloat[n * N_AXIS];
+	GLint*   newtyp = new GLint[n];
 
-	memcpy(newpos, positions,   size * 3 * sizeof(GLfloat));
+	memcpy(newpos, positions,   size * N_AXIS * sizeof(GLfloat));
 	memcpy(newint, intensities, size * sizeof(GLfloat));
-	memcpy(newcol, colors,      size * 3 * sizeof(GLfloat));
+	memcpy(newcol, colors,      size * N_AXIS * sizeof(GLfloat));
+	memcpy(newtyp, types,       size * sizeof(GLint));
 
 	delete[] positions;
 	delete[] intensities;
 	delete[] colors;
+	delete[] types;
 
 	positions = newpos;
 	intensities = newint;
 	colors = newcol;
+	types = newtyp;
 
 	size = n;
 
@@ -86,16 +91,18 @@ void LightManager::Update(double dt) {
 void LightManager::Compile() {
 	glm::vec4 aux;
 	for (unsigned int i = 0; i < lights.size(); ++i) {
-		positions[i * 3 + 0] = lights[i]->GetPosition()[0];
-		positions[i * 3 + 1] = lights[i]->GetPosition()[1];
-		positions[i * 3 + 2] = lights[i]->GetPosition()[2];
+		positions[i * N_AXIS + 0] = lights[i]->GetPosition()[0];
+		positions[i * N_AXIS + 1] = lights[i]->GetPosition()[1];
+		positions[i * N_AXIS + 2] = lights[i]->GetPosition()[2];
 
 		intensities[i] = lights[i]->GetIntensity();
 
 		aux = clamp(lights[i]->GetColor());
-		colors[i * 3 + 0] = aux.r;
-		colors[i * 3 + 1] = aux.g;
-		colors[i * 3 + 2] = aux.b;
+		colors[i * N_AXIS + 0] = aux.r;
+		colors[i * N_AXIS + 1] = aux.g;
+		colors[i * N_AXIS + 2] = aux.b;
+
+		types[i] = lights[i]->GetType();
 	}
 }
 
@@ -109,6 +116,10 @@ GLfloat* LightManager::GetIntensities(){
 
 GLfloat* LightManager::GetColors() {
 	return colors;
+}
+
+GLint* LightManager::GetTypes() {
+	return types;
 }
 
 GLfloat * LightManager::GetAmbientItensity()

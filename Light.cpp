@@ -1,8 +1,7 @@
 #include "Light.h"
 
-Light::Light(glm::vec4 _color, glm::vec3 _position, float _intensity) : Object3D(), color(_color), intensity(_intensity)
+Light::Light(glm::vec4 _color, glm::vec3 _position, float _intensity, LIGHT_TYPE _type) : Object3D(), color(_color), intensity(_intensity), type(_type)
 {
-	alive = true;
 	SetPosition(_position);
 }
 
@@ -22,4 +21,9 @@ float Light::GetIntensity() {
 
 glm::vec4 Light::GetColor(){
 	return color;
+}
+
+LIGHT_TYPE Light::GetType()
+{
+	return type;
 }

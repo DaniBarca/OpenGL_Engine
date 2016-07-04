@@ -19,6 +19,7 @@ private:
 	GLuint lightPosID;
 	GLuint lightIntensityID;
 	GLuint lightColorID;
+	GLuint lightTypeID;
 	GLuint cameraPositionID;
 	GLuint reflectivityDiffuseID;
 	GLuint reflectivitySpecularID;
