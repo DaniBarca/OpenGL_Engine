@@ -69,14 +69,15 @@ void World::OnKeyPress(int key, int scancode, int action, int mods) {
 			Camera::GetInstance()->ZoomOUT();
 			break;
 		case GLFW_KEY_RIGHT:
-			Camera::GetInstance()->Beyond();
-			break;
-		case GLFW_KEY_LEFT:
 			Camera::GetInstance()->Closer();
 			break;
+		case GLFW_KEY_LEFT:
+			Camera::GetInstance()->Beyond();
+			break;
 		case GLFW_KEY_L:
-			if(action == GLFW_RELEASE)
-				LightManager::GetInstance()->Push(new Light(glm::vec4(0.0f, 0.0f, 256.0f, 0.0f), glm::vec3(-6.0f, 2.0f, 0.0f), 0.9f));
+			if (action == GLFW_RELEASE) {
+				LightManager::GetInstance()->Push(new Light(glm::vec4(0.0f, 0.0f, 256.0f, 0.0f), glm::vec3(-10.0f, -2.0f + 10.0f, 0.0f), 0.3f));
+			}
 			break;
 	}
 }
