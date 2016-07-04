@@ -75,7 +75,8 @@ void World::OnKeyPress(int key, int scancode, int action, int mods) {
 			Camera::GetInstance()->Closer();
 			break;
 		case GLFW_KEY_L:
-			LightManager::GetInstance()->Push(new Light(glm::vec4(0.0f, 0.0f, 0.0f, 256.0f), glm::vec3(0.0f, 0.0f, -10.0f), 0.4f));
+			if(action == GLFW_RELEASE)
+				LightManager::GetInstance()->Push(new Light(glm::vec4(0.0f, 0.0f, 256.0f, 0.0f), glm::vec3(-6.0f, 2.0f, 0.0f), 0.9f));
 			break;
 	}
 }

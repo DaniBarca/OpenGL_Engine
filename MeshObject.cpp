@@ -24,20 +24,7 @@ MeshObject::MeshObject() {
 		Engine::GetInstance()->LoadShader(shaderPaths, shaderTypes, i, parse_dict, &shaderID);
 	}
 
-	matrixID    = glGetUniformLocation(shaderID, "PV");
-	transformID = glGetUniformLocation(shaderID, "M");
-	lightPosID  = glGetUniformLocation(shaderID, "light_position");
-	lightIntensityID = glGetUniformLocation(shaderID, "light_intensity");
-	lightColorID = glGetUniformLocation(shaderID, "light_color");
-
-	cameraPositionID = glGetUniformLocation(shaderID, "camera_position");
-
-	reflectivityDiffuseID  = glGetUniformLocation(shaderID, "reflectivity_diffuse");
-	reflectivitySpecularID = glGetUniformLocation(shaderID, "reflectivity_specular");
-	reflectivityAmbientID  = glGetUniformLocation(shaderID, "reflectivity_ambient");
-	
-	ambientIntensityID = glGetUniformLocation(shaderID, "ambient_intensity");
-	specularExponentID = glGetUniformLocation(shaderID, "specular_exponent");
+	LoadUniforms();
 }
 
 MeshObject::MeshObject(aiMesh* meshData) : MeshObject() {
@@ -51,6 +38,23 @@ void MeshObject::PrintVertices() {
 		else
 			cout << " -- ";
 	}
+}
+
+void MeshObject::LoadUniforms() {
+	matrixID = glGetUniformLocation(shaderID, "PV");
+	transformID = glGetUniformLocation(shaderID, "M");
+	lightPosID = glGetUniformLocation(shaderID, "light_position");
+	lightIntensityID = glGetUniformLocation(shaderID, "light_intensity");
+	lightColorID = glGetUniformLocation(shaderID, "light_color");
+
+	cameraPositionID = glGetUniformLocation(shaderID, "camera_position");
+
+	reflectivityDiffuseID = glGetUniformLocation(shaderID, "reflectivity_diffuse");
+	reflectivitySpecularID = glGetUniformLocation(shaderID, "reflectivity_specular");
+	reflectivityAmbientID = glGetUniformLocation(shaderID, "reflectivity_ambient");
+
+	ambientIntensityID = glGetUniformLocation(shaderID, "ambient_intensity");
+	specularExponentID = glGetUniformLocation(shaderID, "specular_exponent");
 }
 
 void MeshObject::Init(){
@@ -72,10 +76,16 @@ void MeshObject::Update(double dt){
 }
 
 void MeshObject::Draw(){
+	static int preShaderID;
 	Object3D::Draw();
 
+	preShaderID = shaderID;
 	Engine::GetInstance()->LoadShader(shaderPaths, shaderTypes,
 		LightManager::GetInstance()->GetNLights(), parse_dict, &shaderID);
+
+	if (preShaderID != shaderID) {
+		LoadUniforms();
+	}
 
 	glUseProgram(shaderID);
 

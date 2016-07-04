@@ -45,6 +45,8 @@ public:
 
 	void MeshObject::PrintVertices();
 
+	void LoadUniforms();
+
 	void Init();
 	void Update(double dt);
 	void Draw();
