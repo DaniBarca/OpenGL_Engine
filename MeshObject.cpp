@@ -94,10 +94,9 @@ void MeshObject::Draw(){
 	glUniformMatrix4fv(transformID, 1, GL_FALSE, &(*transform)[0][0]);
 
 	GLsizei n_lights = (GLsizei)LightManager::GetInstance()->GetNLights();
-	glUniform3fv(lightPosID,       n_lights, LightManager::GetInstance()->GetPositions());
-	glUniform1fv(lightIntensityID, n_lights, LightManager::GetInstance()->GetIntensities());
-	glUniform3fv(lightColorID,     n_lights, LightManager::GetInstance()->GetColors());
-	glUniform1iv(lightTypeID,      n_lights, LightManager::GetInstance()->GetTypes());
+	glUniform3fv(lightPosID,       n_lights, LightManager::GetInstance()->GetPointPositions());
+	glUniform1fv(lightIntensityID, n_lights, LightManager::GetInstance()->GetPointIntensities());
+	glUniform3fv(lightColorID,     n_lights, LightManager::GetInstance()->GetPointColors());
 
 	glUniform1fv(reflectivityDiffuseID,  1, &reflectivity_diffuse);
 	glUniform1fv(reflectivitySpecularID, 1, &reflectivity_specular);
