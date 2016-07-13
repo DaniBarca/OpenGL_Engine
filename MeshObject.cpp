@@ -3,7 +3,6 @@
 std::map<string, string> MeshObject::parse_dict;
 
 MeshObject::MeshObject() {
-	size_t n_lights = LightManager::GetInstance()->GetNLights();
 	parse_dict = std::map<string,string>({});
 
 	reflectivity_diffuse = 1.0f;

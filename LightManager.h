@@ -10,11 +10,26 @@ class LightManager
 
 	vector<Light*> point_lights, spot_lights, directional_lights;
 
+	/**
+	       Point Light
+               \|/
+              --*--   <(o)>
+               /|\  N  /
+			  / | \ | /
+	            ____.____
+	 * */
 	GLfloat* point_positions;
 	GLfloat* point_intensities;
 	GLfloat* point_colors;
-	GLfloat* point_shinyness;
+	GLfloat* point_shinyness;		//Exponent for specular lighting
 
+	/**
+	       Spot Light
+                *     <(o)>
+               /|\  N  /
+			  / | \ | /
+	            ____.____
+	 * */
 	GLfloat* spot_positions;
 	GLfloat* spot_intensities;
 	GLfloat* spot_colors;
@@ -22,6 +37,15 @@ class LightManager
 	GLfloat* spot_directions;
 	GLfloat* spot_angles;
 
+    /*
+	         Directional Light
+				*********
+                |||||||||
+                ||||||<(o)>
+                |||||||/|
+			    vvvvvv/vv
+	            ____.____
+	* */
 	GLfloat* directional_positions;
 	GLfloat* directional_intensities;
 	GLfloat* directional_colors;
@@ -68,5 +92,4 @@ public:
 	GLfloat* GetAmbientItensity();
 	
 	LightManager* SetAmbientItensity(float i);
-	LightManager* SetSpecularExponent(float e);
 };

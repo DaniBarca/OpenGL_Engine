@@ -46,15 +46,20 @@ constexpr unsigned int VERTICES_PER_POL = 3;
 constexpr unsigned int DIMENSIONS = 3;			//Which is obvious but I don't like magic numbers
 constexpr unsigned int N_AXIS = 4;
 
+//Default number of lights
+constexpr unsigned int DEFAULT_N_POINT_LIGHTS = 10;
+constexpr unsigned int DEFAULT_N_SPOT_LIGHTS = 10;
+constexpr unsigned int DEFAULT_N_DIRECTIONAL_LIGHTS = 10;
+
 //Standard vector value for each direction
-#define V_UP glm::vec3(0,1,0)
+#define V_UP   glm::vec3(0,1,0)
 #define V_DOWN glm::vec3(0,-1,0)
 
 #define V_RIGHT glm::vec3(1,0,0)
-#define V_LEFT glm::vec3(-1,0,0)
+#define V_LEFT  glm::vec3(-1,0,0)
 
 #define V_FRONT glm::vec3(0,0,1)
-#define V_BACK glm::vec3(0,0,-1)
+#define V_BACK  glm::vec3(0,0,-1)
 
 //Mathematical constants and usual operations
 constexpr double PI	     = 3.14159265358979323846f;

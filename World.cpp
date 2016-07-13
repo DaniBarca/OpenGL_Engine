@@ -17,8 +17,7 @@ World* World::GetInstance() {
 void World::Init() {
 	LightManager::GetInstance()
 		->AllocLights(2)
-		->SetAmbientItensity(0.0f)
-		->SetSpecularExponent(30.0f);
+		->SetAmbientItensity(0.0f);
 
 	LightManager::GetInstance()->Push(new RotatingLight(glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), glm::vec3(5.0f,5.0f,5.0f),0.9f));
 	LightManager::GetInstance()->Push(new Light(glm::vec4(256.0f, 0.0f, 0.0f, 0.0f), glm::vec3(-10.0f, -10.0f, -10.0f), 0.4f));

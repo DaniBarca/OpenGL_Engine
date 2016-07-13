@@ -73,7 +73,6 @@ LightManager* LightManager::AllocLights(int point_n, int spot_n, int dir_n) {
 	/***********/
 	if (point_size < point_n){
 		point_lights.resize(point_n);
-
 		
 		newpos = new GLfloat[point_n * N_AXIS];
 		newint = new GLfloat[point_n];
@@ -360,11 +359,5 @@ GLfloat * LightManager::GetAmbientItensity()
 LightManager * LightManager::SetAmbientItensity(float i)
 {
 	ambient_intensity = i;
-	return GetInstance();
-}
-
-LightManager * LightManager::SetSpecularExponent(float e)
-{
-	specular_exponent = e;
 	return GetInstance();
 }
