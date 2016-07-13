@@ -165,17 +165,17 @@ Engine* Engine::Terminate() {
 }
 
 //Directly adapted from opengl-tutorial.com
-Engine* Engine::LoadShader(string vertex_path, string fragment_path, int lights_num, std::map<string,string> parse_dict, GLuint* out_shader_id) {
+Engine* Engine::LoadShader(string vertex_path, string fragment_path, int point_num, int spot_num, int dir_num, std::map<string,string> parse_dict, GLuint* out_shader_id) {
 	return LoadShader(std::vector<std::string>({
 		vertex_path,
 		fragment_path
 	}), std::vector<GLenum>({
 		GL_VERTEX_SHADER,
 		GL_FRAGMENT_SHADER
-	}), lights_num, parse_dict, out_shader_id);
+	}), point_num, spot_num, dir_num, parse_dict, out_shader_id);
 }
 
-Engine* Engine::LoadShader(std::vector<std::string> paths, std::vector<GLenum> types, int lights_num, std::map<string,string> parse_dict, GLuint* out_shader_id) {
+Engine* Engine::LoadShader(std::vector<std::string> paths, std::vector<GLenum> types, int point_num, int spot_num, int dir_num, std::map<string,string> parse_dict, GLuint* out_shader_id) {
 	if (paths.size() != types.size() || paths.size() < 1) {
 		std::cout << "ERROR: number of paths and number of types must be the same." << std::endl;
 		getchar();
@@ -189,7 +189,9 @@ Engine* Engine::LoadShader(std::vector<std::string> paths, std::vector<GLenum> t
 	std::string memcode = "";
 	for (std::string i : paths)
 		memcode += i;
-	memcode += lights_num;
+	memcode += "P" + point_num;
+	memcode += "S" + spot_num;
+	memcode += "D" + dir_num;
 	if ((memit = mem.find(memcode)) != mem.end()) {
 		*out_shader_id = memit->second;
 		return Instance;
@@ -222,7 +224,9 @@ Engine* Engine::LoadShader(std::vector<std::string> paths, std::vector<GLenum> t
 		}
 
 		// Parse lights num
-		replaceAll(ShaderCode, "%N_LIGHTS%", std::to_string(lights_num));
+		replaceAll(ShaderCode, "%N_POINT_LIGHTS%", std::to_string(point_num));
+		replaceAll(ShaderCode, "%N_SPOT_LIGHTS%", std::to_string(spot_num));
+		replaceAll(ShaderCode, "%N_DIRECTIONAL_LIGHTS%", std::to_string(dir_num));
 
 		// Parse shader
 		for (std::map<string, string>::iterator it = parse_dict.begin(); it != parse_dict.end(); ++it) {

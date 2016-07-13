@@ -19,8 +19,12 @@ MeshObject::MeshObject() {
 		GL_FRAGMENT_SHADER
 	});
 
-	for (int i = 1; i <= 3; ++i) {
-		Engine::GetInstance()->LoadShader(shaderPaths, shaderTypes, i, parse_dict, &shaderID);
+	for (int p = 0; p <= DEFAULT_N_POINT_LIGHTS; ++p) {
+		for (int s = 0; s <= DEFAULT_N_SPOT_LIGHTS; ++s) {
+			for (int d = 0; d <= DEFAULT_N_DIRECTIONAL_LIGHTS; ++d) {
+				Engine::GetInstance()->LoadShader(shaderPaths, shaderTypes, p, s, d, parse_dict, &shaderID);
+			}
+		}
 	}
 
 	LoadUniforms();
@@ -80,8 +84,15 @@ void MeshObject::Draw(){
 	Object3D::Draw();
 
 	preShaderID = shaderID;
-	Engine::GetInstance()->LoadShader(shaderPaths, shaderTypes,
-		(int)LightManager::GetInstance()->GetNLights(), parse_dict, &shaderID);
+	Engine::GetInstance()->LoadShader(
+		shaderPaths, 
+		shaderTypes,
+		(int)LightManager::GetInstance()->GetNPointLights(),
+		(int)LightManager::GetInstance()->GetNSpotLights(),
+		(int)LightManager::GetInstance()->GetNDirectionalLights(),
+		parse_dict, 
+		&shaderID
+	);
 
 	if (preShaderID != shaderID) {
 		LoadUniforms();
@@ -92,17 +103,17 @@ void MeshObject::Draw(){
 	glUniformMatrix4fv(matrixID, 1, GL_FALSE, &(Camera::GetInstance()->getPV())[0][0]);
 	glUniformMatrix4fv(transformID, 1, GL_FALSE, &(*transform)[0][0]);
 
-	GLsizei n_lights = (GLsizei)LightManager::GetInstance()->GetNLights();
-	glUniform3fv(lightPosID,       n_lights, LightManager::GetInstance()->GetPointPositions());
-	glUniform1fv(lightIntensityID, n_lights, LightManager::GetInstance()->GetPointIntensities());
-	glUniform3fv(lightColorID,     n_lights, LightManager::GetInstance()->GetPointColors());
+	GLsizei n_point_lights = (GLsizei)LightManager::GetInstance()->GetNPointLights();
+	glUniform3fv(lightPosID,        n_point_lights, LightManager::GetInstance()->GetPointPositions());
+	glUniform1fv(lightIntensityID,  n_point_lights, LightManager::GetInstance()->GetPointIntensities());
+	glUniform3fv(lightColorID,      n_point_lights, LightManager::GetInstance()->GetPointColors());
+	glUniform1fv(specularExponentID,n_point_lights, LightManager::GetInstance()->GetPointShinyness());
 
 	glUniform1fv(reflectivityDiffuseID,  1, &reflectivity_diffuse);
 	glUniform1fv(reflectivitySpecularID, 1, &reflectivity_specular);
 	glUniform1fv(reflectivityAmbientID,  1, &reflectivity_ambient);
 
 	glUniform1fv(ambientIntensityID, 1, LightManager::GetInstance()->GetAmbientItensity());
-	glUniform1fv(specularExponentID, 1, LightManager::GetInstance()->GetSpecularExponent());
 
 	glUniform3fv(cameraPositionID, 1, &Camera::GetInstance()->GetPosition()[0]);
 
