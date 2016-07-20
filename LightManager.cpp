@@ -13,19 +13,19 @@ LightManager::LightManager()
 	point_positions   = new GLfloat[0];
 	point_intensities = new GLfloat[0];
 	point_colors      = new GLfloat[0];
-	point_shinyness   = new GLfloat[0];
+	point_shininess   = new GLfloat[0];
 
 	spot_positions   = new GLfloat[0];
 	spot_intensities = new GLfloat[0];
 	spot_colors      = new GLfloat[0];
-	spot_shinyness   = new GLfloat[0];
+	spot_shininess   = new GLfloat[0];
 	spot_directions  = new GLfloat[0];
 	spot_angles      = new GLfloat[0];
 
 	directional_positions   = new GLfloat[0];
 	directional_intensities = new GLfloat[0];
 	directional_colors      = new GLfloat[0];
-	directional_shinyness   = new GLfloat[0];
+	directional_shininess   = new GLfloat[0];
 	directional_directions  = new GLfloat[0];
 }
 
@@ -44,19 +44,19 @@ LightManager::~LightManager()
 	delete[] point_positions;
 	delete[] point_intensities;
 	delete[] point_colors;
-	delete[] point_shinyness;
+	delete[] point_shininess;
 
 	delete[] spot_positions;
 	delete[] spot_intensities;
 	delete[] spot_colors;
-	delete[] spot_shinyness;
+	delete[] spot_shininess;
 	delete[] spot_directions;
 	delete[] spot_angles;
 
 	delete[] directional_positions;
 	delete[] directional_intensities;
 	delete[] directional_colors;
-	delete[] directional_shinyness;
+	delete[] directional_shininess;
 	delete[] directional_directions;
 }
 
@@ -82,17 +82,17 @@ LightManager* LightManager::AllocLights(int point_n, int spot_n, int dir_n) {
 		memcpy(newpos, point_positions,   point_size * N_AXIS * sizeof(GLfloat));
 		memcpy(newint, point_intensities, point_size * sizeof(GLfloat));
 		memcpy(newcol, point_colors,      point_size * N_AXIS * sizeof(GLfloat));
-		memcpy(newshy, point_shinyness,   point_size * sizeof(GLfloat));
+		memcpy(newshy, point_shininess,   point_size * sizeof(GLfloat));
 
 		delete[] point_positions;
 		delete[] point_intensities;
 		delete[] point_colors;
-		delete[] point_shinyness;
+		delete[] point_shininess;
 
 		point_positions   = newpos;
 		point_intensities = newint;
 		point_colors      = newcol;
-		point_shinyness   = newshy;
+		point_shininess   = newshy;
 	}
 
 	point_size = point_n;
@@ -113,21 +113,21 @@ LightManager* LightManager::AllocLights(int point_n, int spot_n, int dir_n) {
 		memcpy(newpos, spot_positions,   spot_size * N_AXIS * sizeof(GLfloat));
 		memcpy(newint, spot_intensities, spot_size * sizeof(GLfloat));
 		memcpy(newcol, spot_colors,      spot_size * N_AXIS * sizeof(GLfloat));
-		memcpy(newshy, spot_shinyness,   spot_size * sizeof(GLfloat));
+		memcpy(newshy, spot_shininess,   spot_size * sizeof(GLfloat));
 		memcpy(newdir, spot_directions,  spot_size * N_AXIS * sizeof(GLfloat));
 		memcpy(newang, spot_angles,      spot_size * sizeof(GLfloat));
 
 		delete [] spot_positions;
 		delete [] spot_intensities;
 		delete [] spot_colors;
-		delete [] spot_shinyness;
+		delete [] spot_shininess;
 		delete [] spot_directions;
 		delete [] spot_angles;
 
 		spot_positions   = newpos;
 		spot_intensities = newint;
 		spot_colors      = newcol;
-		spot_shinyness   = newshy;
+		spot_shininess   = newshy;
 		spot_directions  = newdir;
 		spot_angles      = newang;
 	}
@@ -149,19 +149,19 @@ LightManager* LightManager::AllocLights(int point_n, int spot_n, int dir_n) {
 		memcpy(newpos, directional_positions,   directional_size * N_AXIS * sizeof(GLfloat));
 		memcpy(newint, directional_intensities, directional_size * sizeof(GLfloat));
 		memcpy(newcol, directional_colors,      directional_size * N_AXIS * sizeof(GLfloat));
-		memcpy(newshy, directional_shinyness,   directional_size * sizeof(GLfloat));
+		memcpy(newshy, directional_shininess,   directional_size * sizeof(GLfloat));
 		memcpy(newdir, directional_directions,  directional_size * N_AXIS * sizeof(GLfloat));
 
 		delete [] directional_positions;
 		delete [] directional_intensities;
 		delete [] directional_colors;
-		delete [] directional_shinyness;
+		delete [] directional_shininess;
 		delete [] directional_directions;
 
 		directional_positions   = newpos;
 		directional_intensities = newint;
 		directional_colors      = newcol;
-		directional_shinyness   = newshy;
+		directional_shininess   = newshy;
 		directional_directions  = newdir;
 	}
 
@@ -243,7 +243,7 @@ void LightManager::Compile() {
 		point_colors[i * N_AXIS + 1] = aux.g;
 		point_colors[i * N_AXIS + 2] = aux.b;
 
-		point_shinyness[i] = point_lights[i]->GetShinyness();
+		point_shininess[i] = point_lights[i]->GetShininess();
 	}
 
 	for (unsigned int i = 0; i < spot_size; ++i) {
@@ -258,7 +258,7 @@ void LightManager::Compile() {
 		spot_colors[i * N_AXIS + 1] = aux.g;
 		spot_colors[i * N_AXIS + 2] = aux.b;
 
-		spot_shinyness[i] = spot_lights[i]->GetShinyness();
+		spot_shininess[i] = spot_lights[i]->GetShininess();
 
 		spot_directions[i] = ((SpotLight)spot_lights[i])->GetDirection();
 		spot_angles[i]     = ((SpotLight)spot_lights[i])->GetAngle();
@@ -276,7 +276,7 @@ void LightManager::Compile() {
 		directional_colors[i * N_AXIS + 1] = aux.g;
 		directional_colors[i * N_AXIS + 2] = aux.b;
 
-		directional_shinyness[i] = directional_lights[i]->GetShinyness();
+		directional_shininess[i] = directional_lights[i]->GetShininess();
 		
 		directional_directions = ((DirectionalLight)spot_lights[i])->GetDirection();
 	}
@@ -297,8 +297,8 @@ GLfloat* LightManager::GetPointColors() {
 	return point_colors;
 }
 
-GLfloat * LightManager::GetPointShinyness() {
-	return point_shinyness;
+GLfloat * LightManager::GetPointShininess() {
+	return point_shininess;
 }
 
 /**
@@ -316,8 +316,8 @@ GLfloat* LightManager::GetSpotColors() {
 	return spot_colors;
 }
 
-GLfloat * LightManager::GetSpotShinyness() {
-	return spot_shinyness;
+GLfloat * LightManager::GetSpotShininess() {
+	return spot_shininess;
 }
 
 GLfloat * LightManager::GetSpotDirections() {
@@ -343,8 +343,8 @@ GLfloat* LightManager::GetDirectionalColors() {
 	return point_colors;
 }
 
-GLfloat * LightManager::GetDirectionalShinyness() {
-	return point_shinyness;
+GLfloat * LightManager::GetDirectionalShininess() {
+	return point_shininess;
 }
 
 GLfloat * LightManager::GetDirectionalDirections() { //Such lovely redundancy

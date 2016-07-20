@@ -21,7 +21,7 @@ class LightManager
 	GLfloat* point_positions;
 	GLfloat* point_intensities;
 	GLfloat* point_colors;
-	GLfloat* point_shinyness;		//Exponent for specular lighting
+	GLfloat* point_shininess;		//Exponent for specular lighting
 
 	/**
 	       Spot Light
@@ -33,7 +33,7 @@ class LightManager
 	GLfloat* spot_positions;
 	GLfloat* spot_intensities;
 	GLfloat* spot_colors;
-	GLfloat* spot_shinyness;
+	GLfloat* spot_shininess;
 	GLfloat* spot_directions;
 	GLfloat* spot_angles;
 
@@ -49,7 +49,7 @@ class LightManager
 	GLfloat* directional_positions;
 	GLfloat* directional_intensities;
 	GLfloat* directional_colors;
-	GLfloat* directional_shinyness;
+	GLfloat* directional_shininess;
 	GLfloat* directional_directions;
 
 	GLfloat ambient_intensity;
@@ -74,19 +74,19 @@ public:
 	GLfloat* GetPointPositions();
 	GLfloat* GetPointIntensities();
 	GLfloat* GetPointColors();
-	GLfloat* GetPointShinyness();
+	GLfloat* GetPointShininess();
 
 	GLfloat* GetSpotPositions();
 	GLfloat* GetSpotIntensities();
 	GLfloat* GetSpotColors();
-	GLfloat* GetSpotShinyness();
+	GLfloat* GetSpotShininess();
 	GLfloat* GetSpotDirections();
 	GLfloat* GetSpotAngles();
 
 	GLfloat* GetDirectionalPositions();
 	GLfloat* GetDirectionalIntensities();
 	GLfloat* GetDirectionalColors();
-	GLfloat* GetDirectionalShinyness();
+	GLfloat* GetDirectionalShininess();
 	GLfloat* GetDirectionalDirections();
 
 	GLfloat* GetAmbientItensity();
