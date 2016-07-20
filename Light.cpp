@@ -19,6 +19,7 @@ float Light::GetIntensity() {
 	return intensity;
 }
 
+float Light::GetShininess()
 {
 	return shininess;
 }
