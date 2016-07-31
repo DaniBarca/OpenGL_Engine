@@ -2,6 +2,8 @@
 
 #include "Header.h"
 #include "Light.h"
+#include "DirectionalLight.h"
+#include "SpotLight.h"
 
 class LightManager
 {
