@@ -16,7 +16,7 @@ World* World::GetInstance() {
 
 void World::Init() {
 	LightManager::GetInstance()
-		->AllocLights(2)
+		->AllocLights(2,2,2)
 		->SetAmbientItensity(0.0f);
 
 	LightManager::GetInstance()->Push(new RotatingLight(glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), glm::vec3(5.0f,5.0f,5.0f),0.9f));

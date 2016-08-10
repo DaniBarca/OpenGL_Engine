@@ -260,8 +260,13 @@ void LightManager::Compile() {
 
 		spot_shininess[i] = spot_lights[i]->GetShininess();
 
-		spot_directions[i] = ((SpotLight *)spot_lights[i])->GetDirection();
-		spot_angles[i]     = ((SpotLight *)spot_lights[i])->GetAngle();
+		spot_directions[i * N_AXIS + 0] = ((SpotLight *)spot_lights[i])->GetDirection()[0];
+		spot_directions[i * N_AXIS + 1] = ((SpotLight *)spot_lights[i])->GetDirection()[1];
+		spot_directions[i * N_AXIS + 2] = ((SpotLight *)spot_lights[i])->GetDirection()[2];
+
+		spot_angles[i * N_AXIS + 0] = ((SpotLight *)spot_lights[i])->GetAngle()[0];
+		spot_angles[i * N_AXIS + 1] = ((SpotLight *)spot_lights[i])->GetAngle()[1];
+		spot_angles[i * N_AXIS + 2] = ((SpotLight *)spot_lights[i])->GetAngle()[2];
 	}
 
 	for (unsigned int i = 0; i < directional_size; ++i) {
@@ -278,7 +283,9 @@ void LightManager::Compile() {
 
 		directional_shininess[i] = directional_lights[i]->GetShininess();
 		
-		directional_directions = ((DirectionalLight *)directional_lights[i])->GetDirection();
+		directional_directions[i * N_AXIS + 0] = ((DirectionalLight *)directional_lights[i])->GetDirection()[0];
+		directional_directions[i * N_AXIS + 1] = ((DirectionalLight *)directional_lights[i])->GetDirection()[1];
+		directional_directions[i * N_AXIS + 2] = ((DirectionalLight *)directional_lights[i])->GetDirection()[2];
 	}
 }
 
