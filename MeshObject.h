@@ -16,16 +16,32 @@ private:
 	GLuint shaderID;
 	GLuint matrixID;
 	GLuint transformID;
-	GLuint lightPosID;
-	GLuint lightIntensityID;
-	GLuint lightColorID;
-	GLuint lightTypeID;
+	
+	GLuint point_positionsID;
+	GLuint point_colorsID;
+	GLuint point_intensitiesID;
+	GLuint point_shininessID;
+
+	GLuint spot_positionsID;
+	GLuint spot_colorsID;
+	GLuint spot_directionsID;
+	GLuint spot_intensitiesID;
+	GLuint spot_shininessID;
+	GLuint spot_anglesID;
+
+	GLuint directional_positionsID;
+	GLuint directional_colorsID;
+	GLuint directional_directionsID;
+	GLuint directional_intensitiesID;
+	GLuint directional_shininessID;
+
 	GLuint cameraPositionID;
 	GLuint reflectivityDiffuseID;
 	GLuint reflectivitySpecularID;
 	GLuint reflectivityAmbientID;
+
+	GLuint ambientColorID;
 	GLuint ambientIntensityID;
-	GLuint specularExponentID;
 
 	GLuint vertex_buffer;
 	GLuint normal_buffer;

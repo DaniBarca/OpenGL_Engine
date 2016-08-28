@@ -4,10 +4,10 @@
 #include "Object3D.h"
 
 typedef enum LIGHT_TYPE {
+	UNDEFINED = -1,
 	POINT = 0,
 	DIRECTIONAL,
-	SPOT,
-	AREA
+	SPOT
 } LIGHT_TYPE;
 
 class Light : public Object3D

@@ -189,9 +189,9 @@ Engine* Engine::LoadShader(std::vector<std::string> paths, std::vector<GLenum> t
 	std::string memcode = "";
 	for (std::string i : paths)
 		memcode += i;
-	memcode += "P" + point_num;
-	memcode += "S" + spot_num;
-	memcode += "D" + dir_num;
+	memcode += "P" + std::to_string(point_num);
+	memcode += "S" + std::to_string(spot_num);
+	memcode += "D" + std::to_string(dir_num);
 	if ((memit = mem.find(memcode)) != mem.end()) {
 		*out_shader_id = memit->second;
 		return Instance;
@@ -222,6 +222,11 @@ Engine* Engine::LoadShader(std::vector<std::string> paths, std::vector<GLenum> t
 			getchar();
 			exit(-1);
 		}
+
+		// GLSL won't allow less than 1 dimensions for a uniform
+		point_num = point_num > 0 ? point_num : 1;
+		spot_num = spot_num > 0 ? spot_num : 1;
+		dir_num = dir_num > 0 ? dir_num : 1;
 
 		// Parse lights num
 		replaceAll(ShaderCode, "%N_POINT_LIGHTS%", std::to_string(point_num));

@@ -44,12 +44,12 @@ constexpr double I_SCREEN_HEIGHT = 1.0 / ((double)SCREEN_HEIGHT);
 //Number of vertices of a polygon and dimensions
 constexpr unsigned int VERTICES_PER_POL = 3;
 constexpr unsigned int DIMENSIONS = 3;			//Which is obvious but I don't like magic numbers
-constexpr unsigned int N_AXIS = 4;
+constexpr unsigned int N_AXIS = 3;
 
 //Default number of lights
-constexpr unsigned int DEFAULT_N_POINT_LIGHTS = 10;
-constexpr unsigned int DEFAULT_N_SPOT_LIGHTS = 10;
-constexpr unsigned int DEFAULT_N_DIRECTIONAL_LIGHTS = 10;
+constexpr unsigned int DEFAULT_N_POINT_LIGHTS = 3;
+constexpr unsigned int DEFAULT_N_SPOT_LIGHTS = 3;
+constexpr unsigned int DEFAULT_N_DIRECTIONAL_LIGHTS = 3;
 
 //Standard vector value for each direction
 #define V_UP   glm::vec3(0,1,0)

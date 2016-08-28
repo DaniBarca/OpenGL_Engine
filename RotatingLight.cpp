@@ -1,6 +1,6 @@
 #include "RotatingLight.h"
 
-RotatingLight::RotatingLight(glm::vec4 _color, glm::vec3 position, float _intensity) : Light(_color, position, _intensity)
+RotatingLight::RotatingLight(glm::vec4 _color, glm::vec3 position, float _shininess, float _intensity) : Light(_color, position, _shininess, _intensity)
 {
 }
 

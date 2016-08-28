@@ -1,6 +1,6 @@
 #include "Light.h"
 
-Light::Light(glm::vec4 _color, glm::vec3 _position, float _intensity, float _shininess, LIGHT_TYPE _type) : Object3D(), color(_color), intensity(_intensity), shininess(_shininess), type(_type)
+Light::Light(glm::vec4 _color, glm::vec3 _position, float _shininess, float _intensity, LIGHT_TYPE _type) : Object3D(), color(_color), intensity(_intensity), shininess(_shininess), type(_type)
 {
 	SetPosition(_position);
 }

@@ -54,18 +54,19 @@ class LightManager
 	GLfloat* directional_shininess;
 	GLfloat* directional_directions;
 
+	GLfloat* ambient_color;
 	GLfloat ambient_intensity;
 	GLfloat specular_exponent;
 	
 	void Compile();
 
-	int point_size, spot_size, directional_size;
+	int point_size, spot_size, directional_size, point_count, spot_count, directional_count;
 
 public:
 	static LightManager* GetInstance();
 	LightManager* AllocLights(int point_n, int spot_n, int dir_n);
 
-	LightManager* Push(Light* l, LIGHT_TYPE type = LIGHT_TYPE::POINT);
+	LightManager* Push(Light* l, LIGHT_TYPE type = LIGHT_TYPE::UNDEFINED);
 
 	size_t GetNPointLights();
 	size_t GetNSpotLights(); 
@@ -91,7 +92,9 @@ public:
 	GLfloat* GetDirectionalShininess();
 	GLfloat* GetDirectionalDirections();
 
+	GLfloat* GetAmbientColor();
 	GLfloat* GetAmbientItensity();
 	
+	LightManager* SetAmbientColor(glm::vec3 color);
 	LightManager* SetAmbientItensity(float i);
 };
