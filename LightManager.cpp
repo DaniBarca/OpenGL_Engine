@@ -357,19 +357,19 @@ GLfloat * LightManager::GetSpotAngles() {
  * Get Directional Data
  * */
 GLfloat* LightManager::GetDirectionalPositions() {
-	return point_positions;
+	return directional_positions;
 }
 
 GLfloat* LightManager::GetDirectionalIntensities() {
-	return point_intensities;
+	return directional_intensities;
 }
 
 GLfloat* LightManager::GetDirectionalColors() {
-	return point_colors;
+	return directional_colors;
 }
 
 GLfloat * LightManager::GetDirectionalShininess() {
-	return point_shininess;
+	return directional_shininess;
 }
 
 GLfloat * LightManager::GetDirectionalDirections() { //Such lovely redundancy

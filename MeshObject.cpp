@@ -19,13 +19,20 @@ MeshObject::MeshObject() {
 		GL_FRAGMENT_SHADER
 	});
 
-	for (int p = 1; p <= DEFAULT_N_POINT_LIGHTS; ++p) {
+	/*for (int p = 1; p <= DEFAULT_N_POINT_LIGHTS; ++p) {
 		for (int s = 1; s <= DEFAULT_N_SPOT_LIGHTS; ++s) {
 			for (int d = 1; d <= DEFAULT_N_DIRECTIONAL_LIGHTS; ++d) {
 				Engine::GetInstance()->LoadShader(shaderPaths, shaderTypes, p, s, d, parse_dict, &shaderID);
 			}
 		}
-	}
+	}*/
+
+	Engine::GetInstance()->LoadShader(shaderPaths, shaderTypes, 
+		LightManager::GetInstance()->GetNPointLights(), 
+		LightManager::GetInstance()->GetNSpotLights(), 
+		LightManager::GetInstance()->GetNDirectionalLights(), 
+		parse_dict, &shaderID
+	);
 
 	LoadUniforms();
 }
@@ -132,7 +139,7 @@ void MeshObject::Draw(){
 	glUniform1fv(spot_anglesID,     n_spot_lights, LightManager::GetInstance()->GetSpotAngles());
 
 	GLsizei n_directional_lights = (GLsizei)LightManager::GetInstance()->GetNDirectionalLights();
-	glUniform3fv(directional_positionsID,  n_directional_lights, LightManager::GetInstance()->GetDirectionalPositions());
+ 	glUniform3fv(directional_positionsID,  n_directional_lights, LightManager::GetInstance()->GetDirectionalPositions());
 	glUniform3fv(directional_colorsID,     n_directional_lights, LightManager::GetInstance()->GetDirectionalColors());
 	glUniform3fv(directional_directionsID, n_directional_lights, LightManager::GetInstance()->GetDirectionalDirections());
 	glUniform1fv(directional_intensitiesID,n_directional_lights, LightManager::GetInstance()->GetDirectionalIntensities());

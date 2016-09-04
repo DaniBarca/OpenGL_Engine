@@ -6,6 +6,7 @@
 
 #include <glm.hpp>
 #include <gtc\matrix_transform.hpp>
+#include <gtx\transform.hpp>
 
 /*Assimp (for 3D model load)*/
 #pragma comment(lib, "assimp-vc130-mt.lib") 

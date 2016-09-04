@@ -19,5 +19,8 @@ public:
 
 	void SetPosition(glm::vec3 position);
 	glm::vec4 GetPosition();
+
+	void SetRotation(float angle, glm::vec3 axis);
+	void Rotate(float angle, glm::vec3 axis);
 };
 

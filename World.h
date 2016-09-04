@@ -10,6 +10,7 @@
 
 #include "Teapot.h"
 #include "Dragon.h"
+#include "FlatPlane.h"
 
 #include "RotatingLight.h"
 #include "LightManager.h"
@@ -22,6 +23,7 @@ class World
 	aiScene asScene;
 	Teapot* teapot;
 	Dragon* dragon, *dragon2, *dragon3;
+	FlatPlane* plane;
 
 	unsigned int pressed_keys;
 	bool clicking;

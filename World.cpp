@@ -16,11 +16,11 @@ World* World::GetInstance() {
 
 void World::Init() {
 	LightManager::GetInstance()
-		->AllocLights(0, 0, 1)
+		->AllocLights(0, 1, 0)
 		->SetAmbientColor(glm::vec3(256.0f,256.0f,256.0f))
-		->SetAmbientItensity(0.05f);
+		->SetAmbientItensity(0.07f);
 
-	LightManager::GetInstance()->Push(new DirectionalLight(glm::vec4(256.0f, 0.0f, 0.0f, 0.0f), glm::vec3(-10.0f, -10.0f, -10.0f), 0.7f, 1.0f, glm::vec3(1.0f, 0.0f, 0.0f)));// , (float)PI * 0.01f));
+	LightManager::GetInstance()->Push(new SpotLight(glm::vec4(256.0f, 0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 10.0f), 0.5f, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f) , (float)PI * 0.01f));
 	//LightManager::GetInstance()->Push(new Light(glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), glm::vec3(5.0f,5.0f,5.0f),0.5f));
 
 	//teapot = new Teapot();
@@ -35,6 +35,12 @@ void World::Init() {
 	dragon->Init();
 	dragon2->Init();
 	dragon3->Init();
+
+	plane = new FlatPlane();
+	plane->Init();
+
+	plane->SetRotation(90.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+	plane->SetPosition(glm::vec3(-1.0f, 0.0f, 0.0f));
 
 	Camera::GetInstance();
 }

@@ -27,3 +27,12 @@ void Object3D::SetPosition(glm::vec3 position) {
 glm::vec4 Object3D::GetPosition() {
 	return glm::vec4((*transform)[3]);
 }
+
+void Object3D::SetRotation(float angle, glm::vec3 axis)
+{
+	*transform = glm::rotate(angle, axis);
+}
+
+void Object3D::Rotate(float angle, glm::vec3 axis){
+	*transform = glm::rotate(*transform, angle, axis);
+}
