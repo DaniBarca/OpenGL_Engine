@@ -16,12 +16,12 @@ World* World::GetInstance() {
 
 void World::Init() {
 	LightManager::GetInstance()
-		->AllocLights(0, 1, 0)
+		->AllocLights(1, 1, 0)
 		->SetAmbientColor(glm::vec3(256.0f,256.0f,256.0f))
-		->SetAmbientItensity(0.07f);
+		->SetAmbientItensity(0.14f);
 
-	LightManager::GetInstance()->Push(new SpotLight(glm::vec4(256.0f, 0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 10.0f), 0.5f, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f) , (float)PI * 0.01f));
-	//LightManager::GetInstance()->Push(new Light(glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), glm::vec3(5.0f,5.0f,5.0f),0.5f));
+	LightManager::GetInstance()->Push(new SpotLight(glm::vec4(256.0f, 100.0f, 0.0f, 0.0f), glm::vec3(1.0f, 5.0f, 0.0f), 0.5f, 0.5f, glm::vec3(0.0f, -1.0f, 0.0f) , 0.1f)); 
+	LightManager::GetInstance()->Push(new Light(glm::vec4(256.0f, 256.0f, 0.0f, 0.0f), glm::vec3(10.0f,0.0f,0.0f),10.0f, 0.5f));
 
 	//teapot = new Teapot();
 	dragon = new Dragon();
@@ -39,8 +39,8 @@ void World::Init() {
 	plane = new FlatPlane();
 	plane->Init();
 
-	plane->SetRotation(90.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-	plane->SetPosition(glm::vec3(-1.0f, 0.0f, 0.0f));
+	//plane->SetRotation(90.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+	plane->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	Camera::GetInstance();
 }
@@ -52,13 +52,17 @@ void World::Update(double dt) {
 	dragon->Update(dt);
 	//dragon2->Update(dt);
 	//dragon3->Update(dt);
+
+	plane->Update(dt);
 }
 
 void World::Draw() {
 	//teapot->Draw();
-	dragon->Draw();
+	//dragon->Draw();
 	//dragon2->Draw();
 	//dragon3->Draw();
+
+	plane->Draw();
 }
 
 void World::OnKeyPress(int key, int scancode, int action, int mods) {

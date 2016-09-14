@@ -9,7 +9,7 @@ FlatPlane::~FlatPlane()
 }
 
 void FlatPlane::Init() {
-	Import3D("models/flat.obj");
+	Import3D("models/cosmic_ball.obj");
 	MeshObject::Init();
 
 	reflectivity_diffuse = 0.9f;
