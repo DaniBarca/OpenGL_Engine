@@ -3,15 +3,16 @@
 #include "Header.h"
 #include "MeshObject.h"
 
-class FlatPlane : public MeshObject
+class BasicMesh : public MeshObject
 {
+	string path;
+
 public:
-	FlatPlane();
-	~FlatPlane();
+	BasicMesh(string _path);
+	~BasicMesh();
 
 	void Init();
 	void Update(double dt);
 	void Draw();
 
 };
-

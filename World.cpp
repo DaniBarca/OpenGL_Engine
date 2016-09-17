@@ -36,11 +36,11 @@ void World::Init() {
 	dragon2->Init();
 	dragon3->Init();
 
-	plane = new FlatPlane();
-	plane->Init();
+	testmesh = new BasicMesh("models/cosmic_ball.obj");
+	testmesh->Init();
 
 	//plane->SetRotation(90.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-	plane->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	testmesh->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	Camera::GetInstance();
 }
@@ -53,7 +53,7 @@ void World::Update(double dt) {
 	//dragon2->Update(dt);
 	//dragon3->Update(dt);
 
-	plane->Update(dt);
+	testmesh->Update(dt);
 }
 
 void World::Draw() {
@@ -62,7 +62,7 @@ void World::Draw() {
 	//dragon2->Draw();
 	//dragon3->Draw();
 
-	plane->Draw();
+	testmesh->Draw();
 }
 
 void World::OnKeyPress(int key, int scancode, int action, int mods) {
