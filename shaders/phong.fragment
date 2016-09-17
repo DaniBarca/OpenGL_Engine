@@ -80,7 +80,7 @@ float spot_diffuse(int index){
 }
 
 float spot_specular(int index){
-	return 0.0f;// spot_intensities[index] * reflectivity_specular * clamp(pow( dot(reflect(normalize(spot_positions[index] - fragment_position)), normalize(camera_position - fragment_position) ), spot_shininess[index]), 0.0f,1.0f);
+	return spot_intensities[index] * reflectivity_specular * clamp(pow( dot(reflect(normalize(spot_positions[index] - fragment_position)), normalize(camera_position - fragment_position) ), spot_shininess[index]), 0.0f,1.0f);
 }
 
 //
@@ -93,7 +93,7 @@ float directional_diffuse(int index){
 }
 
 float directional_specular(int index){
-	return 0.0f; //directional_intensities[index] * reflectivity_specular * clamp(pow( dot(reflect(normalize(directional_positions[index] - fragment_position)), normalize(camera_position - fragment_position) ), point_shininess[index]), 0.0f,1.0f);
+	return directional_intensities[index] * reflectivity_specular * clamp(pow( dot(reflect(normalize(directional_positions[index] - fragment_position)), normalize(camera_position - fragment_position) ), directional_shininess[index]), 0.0f,1.0f);
 }
 
 //

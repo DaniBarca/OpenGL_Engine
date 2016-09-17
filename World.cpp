@@ -20,7 +20,7 @@ void World::Init() {
 		->SetAmbientColor(glm::vec3(256.0f,256.0f,256.0f))
 		->SetAmbientItensity(0.14f);
 
-	LightManager::GetInstance()->Push(new SpotLight(glm::vec4(256.0f, 100.0f, 0.0f, 0.0f), glm::vec3(1.0f, 5.0f, 0.0f), 0.5f, 0.5f, glm::vec3(0.0f, -1.0f, 0.0f) , 0.1f)); 
+	LightManager::GetInstance()->Push(new SpotLight(glm::vec4(256.0f, 100.0f, 0.0f, 0.0f), glm::vec3(1.0f, 5.0f, 0.0f), 10.0f, 0.5f, glm::vec3(0.0f, -1.0f, 0.0f) , 0.1f)); 
 	LightManager::GetInstance()->Push(new Light(glm::vec4(256.0f, 256.0f, 0.0f, 0.0f), glm::vec3(10.0f,0.0f,0.0f),10.0f, 0.5f));
 
 	//teapot = new Teapot();
