@@ -3,6 +3,9 @@
 in vec3 fragment_normal;
 in vec3 fragment_position;
 
+vec3 right;
+vec3 up;
+
 // Ouput data
 out vec3 color;
 
@@ -17,6 +20,7 @@ uniform vec3 spot_directions   [%N_SPOT_LIGHTS%];
 uniform float spot_intensities [%N_SPOT_LIGHTS%];
 uniform float spot_shininess   [%N_SPOT_LIGHTS%];
 uniform float spot_angles      [%N_SPOT_LIGHTS%];
+uniform float spot_sampling_offset;
 
 uniform vec3 directional_positions    [%N_DIRECTIONAL_LIGHTS%];
 uniform vec3 directional_colors       [%N_DIRECTIONAL_LIGHTS%];
@@ -36,11 +40,11 @@ uniform vec3 camera_position;
 vec3 N;
 
 vec3 reflect(vec3 v){
-	return -v + 2 * dot(v,N) * N;
+    return -v + 2 * dot(v,N) * N;
 }
 
 float ambient(){
-	return ambient_intensity * reflectivity_ambient;
+    return ambient_intensity * reflectivity_ambient;
 }
 
 // I  -> Intensity
@@ -57,12 +61,12 @@ float ambient(){
 
 // Diff = I * r * ( usl . N )
 float point_diffuse(int index){
-	return point_intensities[index] * reflectivity_diffuse * clamp(dot(N, normalize(point_positions[index] - fragment_position)),0.0f,1.0f);
+    return point_intensities[index] * reflectivity_diffuse * clamp(dot(N, normalize(point_positions[index] - fragment_position)),0.0f,1.0f);
 }
 
 // Spec = I * r * (ur . usc) ^ shi
 float point_specular(int index){
-	return point_intensities[index] * reflectivity_specular * clamp(pow( dot(reflect(normalize(point_positions[index] - fragment_position)), normalize(camera_position - fragment_position) ), point_shininess[index]), 0.0f,1.0f);
+    return point_intensities[index] * reflectivity_specular * clamp(pow( dot(reflect(normalize(point_positions[index] - fragment_position)), normalize(camera_position - fragment_position) ), point_shininess[index]), 0.0f,1.0f);
 }
 
 //
@@ -70,17 +74,29 @@ float point_specular(int index){
 //
 
 float spot_diffuse(int index){
-	float angle = cos(spot_angles[index] * 0.5f);
+    float angle = cos(spot_angles[index] * 0.5f);
 
-	vec3 light_frag = normalize(fragment_position - spot_positions[index]);
+    float offset = 0.0015f * clamp(length(camera_position - fragment_position),0.001f,2.0f);
 
-	float visible = step(angle - dot(light_frag,spot_directions[index]), 0.01);
-	
-	return visible * spot_intensities[index] * reflectivity_diffuse * clamp(dot(N, normalize(spot_positions[index] - fragment_position)),0.0f,1.0f);
+    vec3 sample_pos;
+    float sum = 0.0f;
+    for(float i = -1.0f; i <= 1.0f; i+=2.0f){
+        for(float j = -1.0f; j <= 1.0f; j+=2.0f){
+            sample_pos = fragment_position + up * i * offset + right * j * offset;
+
+            vec3 light_frag = normalize(sample_pos - spot_positions[index]);
+
+            float visible = step(abs(angle - dot(light_frag,spot_directions[index])), 0.01);
+            
+            sum += visible * spot_intensities[index] * reflectivity_diffuse * clamp(dot(N, normalize(spot_positions[index] - sample_pos)),0.0f,1.0f);
+        }
+    }
+
+    return sum * 0.25f;
 }
 
 float spot_specular(int index){
-	return spot_intensities[index] * reflectivity_specular * clamp(pow( dot(reflect(normalize(spot_positions[index] - fragment_position)), normalize(camera_position - fragment_position) ), spot_shininess[index]), 0.0f,1.0f);
+    return spot_intensities[index] * reflectivity_specular * clamp(pow( dot(reflect(normalize(spot_positions[index] - fragment_position)), normalize(camera_position - fragment_position) ), spot_shininess[index]), 0.0f,1.0f);
 }
 
 //
@@ -89,41 +105,50 @@ float spot_specular(int index){
 
 // Directional light behaves the same as point light, but surface to light (usl) will always be (-direction)
 float directional_diffuse(int index){
-	return directional_intensities[index] * reflectivity_diffuse * clamp(dot(N, normalize(-directional_directions[index])),0.0f,1.0f);
+    return directional_intensities[index] * reflectivity_diffuse * clamp(dot(N, normalize(-directional_directions[index])),0.0f,1.0f);
 }
 
 float directional_specular(int index){
-	return directional_intensities[index] * reflectivity_specular * clamp(pow( dot(reflect(normalize(directional_positions[index] - fragment_position)), normalize(camera_position - fragment_position) ), directional_shininess[index]), 0.0f,1.0f);
+    return directional_intensities[index] * reflectivity_specular * clamp(pow( dot(reflect(normalize(directional_positions[index] - fragment_position)), normalize(camera_position - fragment_position) ), directional_shininess[index]), 0.0f,1.0f);
 }
 
 //
 
 vec3 getPointLight(int index){
-	return clamp(point_diffuse(index) + point_specular(index),0.0f,1.0f) * point_colors[index];
+    return clamp(point_diffuse(index) + point_specular(index),0.0f,1.0f) * point_colors[index];
 }
 
 vec3 getSpotLight(int index){
-	return clamp(spot_diffuse(index) + spot_specular(index),0.0f,1.0f) * spot_colors[index];
+    return clamp(spot_diffuse(index) + spot_specular(index),0.0f,1.0f) * spot_colors[index];
 }
 
 vec3 getDirectionalLight(int index){
-	return clamp(directional_diffuse(index) + directional_specular(index),0.0f,1.0f) * directional_colors[index];
+    return clamp(directional_diffuse(index) + directional_specular(index),0.0f,1.0f) * directional_colors[index];
 }
 
 void main()
 {
-	N = normalize(fragment_normal);
-	color = ambient_color * ambient();
+    N = normalize(fragment_normal);
 
-	for(int i = 0; i < %N_POINT_LIGHTS%; ++i){
-		color = color + getPointLight(i);
-	}
+    vec3 tocross = vec3(
+        float(abs(N.x - 0.0f) < 0.01f && abs(N.y - 1.0f) < 0.01f && abs(N.z - 0.0f) < 0.01f),
+        float(!(abs(N.x - 0.0f) < 0.01f && abs(N.y - 1.0f) < 0.01f && abs(N.z - 0.0f) < 0.01f)),
+        0.0f
+    );
 
-	for(int i = 0; i < %N_SPOT_LIGHTS%; ++i){
-		color = color + getSpotLight(i);
-	}
+    right = normalize(cross(N, tocross));
+    up = normalize(cross(N,right));
 
-	for(int i = 0; i < %N_DIRECTIONAL_LIGHTS%; ++i){
-		color = color + getDirectionalLight(i);
-	}
+    color = ambient_color * ambient();
+    for(int i = 0; i < %N_POINT_LIGHTS%; ++i){
+        color = color + getPointLight(i);
+    }
+
+    for(int i = 0; i < %N_SPOT_LIGHTS%; ++i){
+        color = color + getSpotLight(i);
+    }
+
+    for(int i = 0; i < %N_DIRECTIONAL_LIGHTS%; ++i){
+        color = color + getDirectionalLight(i);
+    }
 }

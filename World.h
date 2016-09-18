@@ -24,6 +24,7 @@ class World
 	Teapot* teapot;
 	Dragon* dragon, *dragon2, *dragon3;
 	BasicMesh* testmesh;
+	BasicMesh* testmeshB;
 
 	unsigned int pressed_keys;
 	bool clicking;

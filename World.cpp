@@ -20,27 +20,29 @@ void World::Init() {
 		->SetAmbientColor(glm::vec3(256.0f,256.0f,256.0f))
 		->SetAmbientItensity(0.14f);
 
-	LightManager::GetInstance()->Push(new SpotLight(glm::vec4(256.0f, 100.0f, 0.0f, 0.0f), glm::vec3(1.0f, 5.0f, 0.0f), 10.0f, 0.5f, glm::vec3(0.0f, -1.0f, 0.0f) , 0.1f)); 
-	LightManager::GetInstance()->Push(new Light(glm::vec4(256.0f, 256.0f, 0.0f, 0.0f), glm::vec3(10.0f,0.0f,0.0f),10.0f, 0.5f));
+	LightManager::GetInstance()->Push(new SpotLight(glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), glm::vec3(0.75f, 3.0f, 0.0f), 10.0f, 0.6f, glm::vec3(0.0f, -1.0f, 0.0f) , 0.1f));
+	LightManager::GetInstance()->Push(new Light(glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), glm::vec3(-10.0f,3.0f,0.0f),10.0f, 0.1f));
 
 	//teapot = new Teapot();
-	dragon = new Dragon();
-	dragon2 = new Dragon();
-	dragon3 = new Dragon();
+	//dragon = new Dragon();
+	//dragon2 = new Dragon();
+	//dragon3 = new Dragon();
 
-	dragon2->SetPosition(glm::vec3(1.0f, 0.0f, 0.0f));
-	dragon3->SetPosition(glm::vec3(-1.0f, 0.0f, 0.0f));
+	//dragon2->SetPosition(glm::vec3(1.0f, 0.0f, 0.0f));
+	//dragon3->SetPosition(glm::vec3(-1.0f, 0.0f, 0.0f));
 
 	//teapot->Init();
-	dragon->Init();
-	dragon2->Init();
-	dragon3->Init();
+	//dragon->Init();
+	//dragon2->Init();
+	//dragon3->Init();
 
-	testmesh = new BasicMesh("models/cosmic_ball.obj");
+	testmesh = new BasicMesh("models/BOLLOFLAT.obj");
+	testmeshB = new BasicMesh("models/cosmic_ball.obj");
 	testmesh->Init();
+	testmeshB->Init();
 
 	//plane->SetRotation(90.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-	testmesh->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	testmesh->SetPosition(glm::vec3(0.0f, 0.25f, 0.0f));
 
 	Camera::GetInstance();
 }
@@ -49,11 +51,12 @@ void World::Update(double dt) {
 	LightManager::GetInstance()->Update(dt);
 
 	//teapot->Update(dt);
-	dragon->Update(dt);
+	//dragon->Update(dt);
 	//dragon2->Update(dt);
 	//dragon3->Update(dt);
 
 	testmesh->Update(dt);
+	testmeshB->Update(dt);
 }
 
 void World::Draw() {
@@ -63,6 +66,7 @@ void World::Draw() {
 	//dragon3->Draw();
 
 	testmesh->Draw();
+	testmeshB->Draw();
 }
 
 void World::OnKeyPress(int key, int scancode, int action, int mods) {
