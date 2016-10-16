@@ -5,6 +5,11 @@
 #include "DirectionalLight.h"
 #include "SpotLight.h"
 
+/*
+ * It's been a design decision to repeat code for every type of light.
+ * Considering we're not expecting to have more than 3 types of light, this design gives the code better readability.
+ */
+
 class LightManager
 {
 	LightManager();
@@ -60,11 +65,11 @@ class LightManager
 	
 	void Compile();
 
-	int point_size, spot_size, directional_size, point_count, spot_count, directional_count;
+	unsigned int point_size, spot_size, directional_size, point_count, spot_count, directional_count;
 
 public:
 	static LightManager* GetInstance();
-	LightManager* AllocLights(int point_n, int spot_n, int dir_n);
+	LightManager* AllocLights(unsigned int point_n, unsigned int spot_n, unsigned int dir_n);
 
 	LightManager* Push(Light* l, LIGHT_TYPE type = LIGHT_TYPE::UNDEFINED);
 

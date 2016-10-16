@@ -33,11 +33,6 @@ void Engine::reshape(GLFWwindow* window, int width, int height) {
 	glTranslatef(0.0, 0.0, -20.0);
 }
 
-/********************************************************************************************/
-/* I would like us to stop for a moment to reflect on how much I hate SteelSeries keyboards.*/
-/* Thank you,  Daniel                                                                       */
-/********************************************************************************************/
-
 void Engine::Key(GLFWwindow* window, int k, int s, int action, int mods) {
 	GetInstance()->OnKeyPress(k, s, action, mods);
 }
@@ -218,7 +213,7 @@ Engine* Engine::LoadShader(std::vector<std::string> paths, std::vector<GLenum> t
 			ShaderStream.close();
 		}
 		else {
-			printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", file_path);
+			printf("Impossible to open %s.\n", file_path);
 			getchar();
 			exit(-1);
 		}

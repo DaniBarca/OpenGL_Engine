@@ -64,7 +64,11 @@ LightManager::~LightManager()
 	delete[] directional_directions;
 }
 
-LightManager* LightManager::AllocLights(int point_n, int spot_n, int directional_n) {
+// If the new size is higher than the old one, we need to reallocate and free the old memory space.
+// On the other hand, if the new size is smaller, we can just ignore the "extra" allocated space.
+// If the space increases again we are reallocating it anyway. SO @TODO:
+// Save the actual allocated space, and don't reallocate if the (new size <= actual allocated size)
+LightManager* LightManager::AllocLights(unsigned int point_n, unsigned int spot_n, unsigned int directional_n) {
 	GLfloat* newpos;
 	GLfloat* newint;
 	GLfloat* newcol;
@@ -99,7 +103,7 @@ LightManager* LightManager::AllocLights(int point_n, int spot_n, int directional
 		point_shininess   = newshi;
 	}
 
-	for (int i = point_size; i < point_n; ++i) {
+	for (unsigned int i = point_size; i < point_n; ++i) {
 		point_lights[i] = new Light(glm::vec4(0.0f), glm::vec3(0.0f), 0.0f, 0.0f, LIGHT_TYPE::POINT);
 	}
 
@@ -140,7 +144,7 @@ LightManager* LightManager::AllocLights(int point_n, int spot_n, int directional
 		spot_angles      = newang;
 	}
 
-	for (int i = spot_size; i < spot_n; ++i) {
+	for (unsigned int i = spot_size; i < spot_n; ++i) {
 		spot_lights[i] = new SpotLight(glm::vec4(0.0f), glm::vec3(0.0f), 0.0f, 0.0f,glm::vec3(0.0f),0.0f);
 	}
 
@@ -177,7 +181,7 @@ LightManager* LightManager::AllocLights(int point_n, int spot_n, int directional
 		directional_directions  = newdir;
 	}
 
-	for (int i = directional_size; i < directional_n; ++i) {
+	for (unsigned int i = directional_size; i < directional_n; ++i) {
 		directional_lights[i] = new DirectionalLight(glm::vec4(0.0f), glm::vec3(0.0f), 0.0f, 0.0f, glm::vec3(0.0f));
 	}
 

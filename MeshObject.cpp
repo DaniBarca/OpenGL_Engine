@@ -28,9 +28,9 @@ MeshObject::MeshObject() {
 	}*/
 
 	Engine::GetInstance()->LoadShader(shaderPaths, shaderTypes, 
-		LightManager::GetInstance()->GetNPointLights(), 
-		LightManager::GetInstance()->GetNSpotLights(), 
-		LightManager::GetInstance()->GetNDirectionalLights(), 
+		(int)LightManager::GetInstance()->GetNPointLights(), 
+		(int)LightManager::GetInstance()->GetNSpotLights(), 
+		(int)LightManager::GetInstance()->GetNDirectionalLights(), 
 		parse_dict, &shaderID
 	);
 
