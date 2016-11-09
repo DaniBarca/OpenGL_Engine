@@ -14,6 +14,7 @@ private:
 public:
 	static MeshManager* GetInstance();
 
-	Mesh* LoadMesh(const string& path, bool invert_normals);
+	Mesh* LoadOBJ(const char * path);
+	Mesh* LoadMesh(const string& path);
 };
 

@@ -2,7 +2,7 @@
 
 
 
-Mesh::Mesh(GLfloat* _vertices, GLfloat* _vertices_normals, unsigned int _numVertices) : vertices(_vertices), vertices_normals(_vertices_normals), numVertices(_numVertices)
+Mesh::Mesh(GLfloat* _vertices, GLfloat* _normals, GLfloat* _uvs, uint _numVertices, uint _numNormals, uint _numUvs) : vertices(_vertices), normals(_normals), uvs(_uvs), numVertices(_numVertices), numNormals(_numNormals), numUvs(_numUvs)
 {}
 
 

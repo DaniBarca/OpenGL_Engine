@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <map>
 
+typedef unsigned int uint; //Sorry, I consider unsigned int too verbose
 using namespace std;
 using namespace std::placeholders;
 
@@ -34,8 +35,8 @@ using namespace std::placeholders;
 /***************/
 
 //Screen size
-constexpr unsigned int SCREEN_WIDTH = 1024;
-constexpr unsigned int SCREEN_HEIGHT = 768;
+constexpr uint SCREEN_WIDTH = 1024;
+constexpr uint SCREEN_HEIGHT = 768;
 
 //Inverse screen size (better performance for some operations)
 //Could mean a difference if you use this data intensively
@@ -43,14 +44,14 @@ constexpr double I_SCREEN_WIDTH  = 1.0 / ((double)SCREEN_WIDTH);
 constexpr double I_SCREEN_HEIGHT = 1.0 / ((double)SCREEN_HEIGHT);
 
 //Number of vertices of a polygon and dimensions
-constexpr unsigned int VERTICES_PER_POL = 3;
-constexpr unsigned int DIMENSIONS = 3;			//Which is obvious but I don't like magic numbers
-constexpr unsigned int N_AXIS = 3;
+constexpr uint VERTICES_PER_POL = 3;
+constexpr uint DIMENSIONS = 3;			//Which is obvious but I don't like magic numbers
+constexpr uint N_AXIS = 3;
 
 //Default number of lights
-constexpr unsigned int DEFAULT_N_POINT_LIGHTS = 3;
-constexpr unsigned int DEFAULT_N_SPOT_LIGHTS = 3;
-constexpr unsigned int DEFAULT_N_DIRECTIONAL_LIGHTS = 3;
+constexpr uint DEFAULT_N_POINT_LIGHTS = 3;
+constexpr uint DEFAULT_N_SPOT_LIGHTS = 3;
+constexpr uint DEFAULT_N_DIRECTIONAL_LIGHTS = 3;
 
 //Standard vector value for each direction
 #define V_UP   glm::vec3(0,1,0)

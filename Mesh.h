@@ -7,13 +7,18 @@ class Mesh
 	friend class MeshManager;
 
 private:
-	Mesh(GLfloat* _vertices, GLfloat* _vertices_normals, unsigned int _numVertices);
+	Mesh(GLfloat* _vertices, GLfloat* _normals, GLfloat* _uvs, uint _numVertices, uint _numNormals, uint numUvs);
 	~Mesh();
 
 public:
 	GLfloat* vertices;
-	GLfloat* vertices_normals;
-	unsigned int numVertices;
+	GLfloat* normals;
+	GLfloat* uvs;
+	
+	uint numVertices;
+	uint numNormals;
+	uint numUvs;
+
 	bool inverted_normals;
 };
 
