@@ -3,16 +3,6 @@
 #include "Header.h"
 #include "LightManager.h"
 
-typedef enum MAP_SIDE {
-	FRONT = 0,
-	LEFT,
-	BACK,
-	RIGHT,
-	UP,
-	DOWN,
-	NUM_SIDES
-} MAP_SIDE;
-
 class ShadowMapper
 {
 	GLuint framebuffer_point, framebuffer_spot, framebuffer_directional;
@@ -30,4 +20,5 @@ public:
 	~ShadowMapper();
 
 	void GenerateBuffer(unsigned int n_point, unsigned int n_spot, unsigned int n_directional);
+	void GenerateMVPs(vector<Light*> point_lights, vector<Light*> spot_lights, vector<Light*> directional_lights);
 };

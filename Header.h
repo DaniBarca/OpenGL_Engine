@@ -62,6 +62,20 @@ constexpr unsigned int DEFAULT_N_DIRECTIONAL_LIGHTS = 3;
 #define V_FRONT glm::vec3(0,0,1)
 #define V_BACK  glm::vec3(0,0,-1)
 
+typedef enum DIRECTION {
+	FRONT = 0,
+	LEFT,
+	BACK,
+	RIGHT,
+	UP,
+	DOWN,
+	NUM_DIRS
+} DIRECTION;
+
+glm::vec3 DIRECTION_V[DIRECTION::NUM_DIRS] = {
+	V_FRONT, V_LEFT, V_BACK, V_RIGHT, V_UP, V_DOWN
+};
+
 //Mathematical constants and usual operations
 constexpr double PI	     = 3.14159265358979323846f;
 constexpr double TAU     = 2*PI;
