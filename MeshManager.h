@@ -9,12 +9,14 @@ private:
 	MeshManager();
 	~MeshManager();
 
-	std::map<string, Mesh*> meshList;
+	std::unordered_map<string, Mesh*> meshList;
 
 public:
 	static MeshManager* GetInstance();
 
 	Mesh* LoadOBJ(const char * path);
-	Mesh* LoadMesh(const string& path);
+	void GenerateBin(const char* path, Mesh* m);
+	Mesh* LoadMesh_OBJ(const char * path);
+	Mesh* LoadMesh_BIN(const char* path);
 };
 

@@ -28,9 +28,9 @@ MeshObject::MeshObject() {
 	}*/
 
 	Engine::GetInstance()->LoadShader(shaderPaths, shaderTypes, 
-		LightManager::GetInstance()->GetNPointLights(), 
-		LightManager::GetInstance()->GetNSpotLights(), 
-		LightManager::GetInstance()->GetNDirectionalLights(), 
+		(int)LightManager::GetInstance()->GetNPointLights(), 
+		(int)LightManager::GetInstance()->GetNSpotLights(), 
+		(int)LightManager::GetInstance()->GetNDirectionalLights(), 
 		parse_dict, &shaderID
 	);
 
@@ -93,7 +93,7 @@ void MeshObject::Init(){
 	/*BIND polygon_normals*/
 	glGenBuffers(1, &normal_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, normal_buffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*mesh->numVertices*VERTICES_PER_POL, mesh->vertices_normals, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*mesh->numVertices*VERTICES_PER_POL, mesh->normals, GL_STATIC_DRAW);
 }
 
 void MeshObject::Update(double dt){
@@ -183,6 +183,6 @@ void MeshObject::Draw(){
 }
 
 bool MeshObject::Import3D(const string& path, bool invert_normals) {
-	this->mesh = MeshManager::GetInstance()->LoadMesh(path,invert_normals);
+	this->mesh = MeshManager::GetInstance()->LoadMesh_OBJ(path.c_str());
 	return true;
 }

@@ -2,7 +2,7 @@
 
 MeshManager::MeshManager()
 {
-	meshList = std::map<string, Mesh*>();
+	meshList = std::unordered_map<string, Mesh*>();
 }
 
 MeshManager::~MeshManager()
@@ -14,16 +14,6 @@ MeshManager* MeshManager::GetInstance()
 	static MeshManager* Instance = new MeshManager();
 	return Instance;
 }
-
-// Very, VERY simple OBJ loader.
-// Here is a short list of features a real function would provide : 
-// - Binary files. Reading a model should be just a few memcpy's away, not parsing a file at runtime. In short : OBJ is not very great.
-// - Animations & bones (includes bones weights)
-// - Multiple UVs
-// - All attributes should be optional, not "forced"
-// - More stable. Change a line in the OBJ file and it crashes.
-// - More secure. Change another line and you can inject code.
-// - Loading from memory, stream, etc
 
 Mesh * MeshManager::LoadOBJ(
 	const char * path
@@ -51,11 +41,7 @@ Mesh * MeshManager::LoadOBJ(
 		// read the first word of the line
 		//fscanf();
 
-#ifdef EMSCRIPTEN
-		int res = fscanf(file, "%s", lineHeader);
-#else
-		int res = fscanf(file, "%s", lineHeader, 128);
-#endif
+		int res = fscanf_s(file, "%s", lineHeader, 128);
 
 		if (res == EOF)
 			break; // EOF = End Of File. Quit the loop.
@@ -114,10 +100,6 @@ Mesh * MeshManager::LoadOBJ(
 
 		// Get the attributes thanks to the index
 		glm::vec3 vertex = temp_vertices[vertexIndex - 1];
-		
-		vertex.x *= invert;
-		vertex.y *= invert;
-		vertex.z *= invert;
 
 		glm::vec2 uv = temp_uvs[uvIndex - 1];
 		glm::vec3 normal = temp_normals[normalIndex - 1];
@@ -129,32 +111,81 @@ Mesh * MeshManager::LoadOBJ(
 
 	}
 
-	return new Mesh(&out_vertices[0][0], &out_normals[0][0], &out_uvs[0][0], (uint)out_vertices.size(), (uint)out_normals.size(), (uint)out_uvs.size());
+	return new Mesh(&out_vertices[0][0], &out_normals[0][0], &out_uvs[0][0], (unsigned int)out_vertices.size(), (unsigned int)out_normals.size(), (unsigned int)out_uvs.size());
 }
 
-Mesh * MeshManager::LoadMesh(const string & path)
+void MeshManager::GenerateBin(const char* path, Mesh* m) {
+	FILE* fp;
+	fopen_s(&fp, path, "ab+");
+
+	fwrite((void*)m->numVertices, sizeof(unsigned int), 1, fp);
+	fwrite((void*)m->numNormals, sizeof(unsigned int), 1, fp);
+	fwrite((void*)m->numUvs, sizeof(unsigned int), 1, fp);
+	
+	fwrite((void*)m->vertices, sizeof(GLfloat*) * m->numVertices, 1, fp);
+	fwrite((void*)m->normals, sizeof(GLfloat*) * m->numNormals, 1, fp);
+	fwrite((void*)m->uvs, sizeof(GLfloat*) * m->numUvs, 1, fp);
+
+	fclose(fp);
+}
+
+Mesh * MeshManager::LoadMesh_OBJ(const char* path)
 {
-	string bin_path = path + ".bin";
-
-	//@TODO Check if bin exists
-	bool exists_bin = false;
-
 	//Check cache
-	static std::map<string, Mesh*>::iterator memit;
-	if ((memit = meshList.find(path)) != meshList.end()) {
+	static std::unordered_map<string, Mesh*>::iterator memit;
+	if ((memit = meshList.find(string(path))) != meshList.end()) {
 		return memit->second;
 	}
 
 	Mesh* m;
-	if (exists_bin) {
-		m = LoadBin(bin_path);
-	}
-	else {
-		m = LoadOBJ(path.c_str());
-		GenerateBin(bin_path.c_str())
-	}
+	m = LoadOBJ(path);
+	GenerateBin(path, m);
 
 	meshList[path] = m;
 
+	// We generate a .bin equivalent file to be loaded with LoadMesh_BIN
+	string pathbin = string(path);
+	pathbin += ".bin";
+	GenerateBin(pathbin.c_str(), m);
+
+	return m;
+}
+
+Mesh * MeshManager::LoadMesh_BIN(const char* path) {
+	static std::unordered_map<string, Mesh*>::iterator memit;
+	if ((memit = meshList.find(path)) != meshList.end()) {
+		return memit->second;
+	}
+
+	FILE* fp;
+	fopen_s(&fp, path, "rb");
+	fseek(fp, 0, SEEK_END);
+	long file_size = ftell(fp);
+	rewind(fp);
+
+	char* buffer;
+	buffer = new char[file_size];
+	fread(buffer, file_size, 1, fp);
+	fclose(fp);
+
+	int n_vertices, n_normals, n_uvs;
+	GLfloat* vertices;
+	GLfloat* normals;
+	GLfloat* uvs;
+
+	memcpy(&n_vertices, buffer, sizeof(unsigned int));
+	memcpy(&n_normals, buffer + sizeof(unsigned int), sizeof(unsigned int));
+	memcpy(&n_uvs, buffer + sizeof(unsigned int) * 2, sizeof(unsigned int));
+
+	size_t size_ver = sizeof(GLfloat) * n_vertices;
+	size_t size_nor = sizeof(GLfloat) * n_normals;
+	size_t size_uvs = sizeof(GLfloat) * n_uvs;
+
+	memcpy(vertices, buffer + sizeof(unsigned int) * 3, size_ver);
+	memcpy(normals, buffer + sizeof(unsigned int) * 3 + size_ver, size_nor);
+	memcpy(uvs, buffer + sizeof(unsigned int) * 3 + size_ver + size_nor, size_uvs);
+
+	Mesh * m = new Mesh(vertices, normals, uvs, n_vertices, n_normals, n_uvs);
+	meshList[path] = m;
 	return m;
 }
