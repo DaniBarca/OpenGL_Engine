@@ -5,10 +5,10 @@
 
 class BasicMesh : public MeshObject
 {
-	string path;
+	string path, texture_path;
 
 public:
-	BasicMesh(string _path);
+	BasicMesh(string _path, string _texture_path);
 	~BasicMesh();
 
 	void Init();

@@ -1,8 +1,9 @@
 #include "BasicMesh.h"
 
-BasicMesh::BasicMesh(string _path)
+BasicMesh::BasicMesh(string _path, string _texture_path)
 {
 	this->path = _path;
+	this->texture_path = _texture_path;
 }
 
 BasicMesh::~BasicMesh()
@@ -11,6 +12,8 @@ BasicMesh::~BasicMesh()
 
 void BasicMesh::Init() {
 	Import3D(path);
+	ImportTexture(texture_path);
+
 	MeshObject::Init();
 
 	reflectivity_diffuse = 0.9f;

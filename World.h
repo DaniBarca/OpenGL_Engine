@@ -26,7 +26,7 @@ class World
 	BasicMesh* testmesh;
 	BasicMesh* testmeshB;
 
-	unsigned int pressed_keys;
+	uint pressed_keys;
 	bool clicking;
 
 public:

@@ -1,4 +1,9 @@
 #include "MeshObject.h"
+#include "TextureManager.h"
+#include "LightManager.h"
+#include "MeshManager.h"
+#include "Camera.h"
+#include "Engine.h"
 
 std::map<string, string> MeshObject::parse_dict;
 
@@ -41,7 +46,7 @@ MeshObject::MeshObject(aiMesh* meshData) : MeshObject() {
 }
 
 void MeshObject::PrintVertices() {
-	for (GLuint i = 0; i < (const unsigned int)(mesh->numVertices * 3); ++i) {
+	for (GLuint i = 0; i < (const uint)(mesh->numVertices * 3); ++i) {
 		cout << mesh->vertices[i];
 		if ((i + 1) % 3 == 0)
 			cout << endl;
@@ -80,6 +85,8 @@ void MeshObject::LoadUniforms() {
 
 	ambientColorID = glGetUniformLocation(shaderID, "ambient_color");
 	ambientIntensityID = glGetUniformLocation(shaderID, "ambient_intensity");
+
+	textureID = glGetUniformLocation(shaderID, "texture");
 }
 
 void MeshObject::Init(){
@@ -93,7 +100,12 @@ void MeshObject::Init(){
 	/*BIND polygon_normals*/
 	glGenBuffers(1, &normal_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, normal_buffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*mesh->numVertices*VERTICES_PER_POL, mesh->normals, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*mesh->numNormals*VERTICES_PER_POL, mesh->normals, GL_STATIC_DRAW);
+
+	/*BIND uvs*/
+	glGenBuffers(1, &uvs_buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, uvs_buffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*mesh->numUvs * 2, mesh->uvs, GL_STATIC_DRAW);
 }
 
 void MeshObject::Update(double dt){
@@ -123,6 +135,11 @@ void MeshObject::Draw(){
 
 	glUniformMatrix4fv(matrixID, 1, GL_FALSE, &(Camera::GetInstance()->getPV())[0][0]);
 	glUniformMatrix4fv(transformID, 1, GL_FALSE, &(*transform)[0][0]);
+
+	//Load Texture
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture_buffer);
+	glUniform1i(textureID, 0);
 
 	GLsizei n_point_lights = (GLsizei)LightManager::GetInstance()->GetNPointLights();
 	glUniform3fv(point_positionsID,  n_point_lights, LightManager::GetInstance()->GetPointPositions());
@@ -176,13 +193,49 @@ void MeshObject::Draw(){
 		(void*)0
 	);
 
+	glEnableVertexAttribArray(2);
+	glBindBuffer(GL_ARRAY_BUFFER, uvs_buffer);
+	glVertexAttribPointer(
+		0,
+		2,
+		GL_FLOAT,
+		GL_FALSE,
+		0,
+		(void*)0
+	);
+
 	glDrawArrays(GL_TRIANGLES, 0, mesh->numVertices);
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 }
 
-bool MeshObject::Import3D(const string& path, bool invert_normals) {
-	this->mesh = MeshManager::GetInstance()->LoadMesh_OBJ(path.c_str());
+bool MeshObject::Import3D(const string& path) {
+	this->mesh = MeshManager::GetInstance()->LoadMesh_BIN(path.c_str());
+	return true;
+}
+
+bool MeshObject::ImportTexture(const string & path)
+{
+	size_t file_size;
+	char* file_data;
+
+	char* fpath = (char*)path.c_str();
+
+	FILE* fp;
+	fopen_s(&fp, fpath, "rb");
+
+	string str = "";
+	fseek(fp, 0, SEEK_END);
+	file_size = ftell(fp);
+	fseek(fp, 0, SEEK_SET);
+
+	file_data = new char[file_size];
+	fread(file_data, sizeof(char), file_size, fp);
+
+	fclose(fp);
+
+	TextureManager::GetInstance()->LoadImage(&texture_buffer, file_data, (uint)file_size);
+
 	return true;
 }

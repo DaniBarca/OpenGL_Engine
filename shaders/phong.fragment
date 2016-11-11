@@ -2,6 +2,7 @@
 
 in vec3 fragment_normal;
 in vec3 fragment_position;
+in vec2 UV;
 
 vec3 right;
 vec3 up;
@@ -36,6 +37,8 @@ uniform vec3 ambient_color;
 uniform float ambient_intensity;
 
 uniform vec3 camera_position;
+
+uniform sampler2D texture;
 
 vec3 N;
 
@@ -128,6 +131,9 @@ vec3 getDirectionalLight(int index){
 
 void main()
 {
+
+    color = texture( texture, UV ).rgb;
+
     N = normalize(fragment_normal);
 
     vec3 tocross = vec3(

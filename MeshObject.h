@@ -2,10 +2,7 @@
 
 #include "Header.h"
 #include "Object3D.h"
-#include "Engine.h"
-#include "Camera.h"
-#include "LightManager.h"
-#include "MeshManager.h"
+#include "Mesh.h"
 
 class MeshObject : public Object3D {
 private:
@@ -43,14 +40,20 @@ private:
 	GLuint ambientColorID;
 	GLuint ambientIntensityID;
 
+	GLuint textureID;
+
 	GLuint vertex_buffer;
 	GLuint normal_buffer;
+	GLuint uvs_buffer;
+
+	GLuint texture_buffer;
 
 	std::vector<std::string> shaderPaths;
 	std::vector<GLenum> shaderTypes;
 
 protected:
-	bool Import3D(const string& path, bool invert_normals = false);
+	bool Import3D(const string& path);
+	bool ImportTexture(const string& path);
 
 	GLfloat reflectivity_diffuse;
 	GLfloat reflectivity_specular;

@@ -22,7 +22,7 @@ Mesh * MeshManager::LoadOBJ(
 	std::vector<glm::vec2> out_uvs;
 	std::vector<glm::vec3> out_normals;
 
-	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
+	std::vector<uint> vertexIndices, uvIndices, normalIndices;
 	std::vector<glm::vec3> temp_vertices;
 	std::vector<glm::vec2> temp_uvs;
 	std::vector<glm::vec3> temp_normals;
@@ -66,7 +66,7 @@ Mesh * MeshManager::LoadOBJ(
 		}
 		else if (strcmp(lineHeader, "f") == 0) {
 			std::string vertex1, vertex2, vertex3;
-			unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
+			uint vertexIndex[3], uvIndex[3], normalIndex[3];
 			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
 			if (matches != 9) {
 				printf("File can't be read by our simple parser :-( Try exporting with other options\n");
@@ -91,12 +91,12 @@ Mesh * MeshManager::LoadOBJ(
 	}
 
 	// For each vertex of each triangle
-	for (unsigned int i = 0; i<vertexIndices.size(); i++) {
+	for (uint i = 0; i<vertexIndices.size(); i++) {
 
 		// Get the indices of its attributes
-		unsigned int vertexIndex = vertexIndices[i];
-		unsigned int uvIndex = uvIndices[i];
-		unsigned int normalIndex = normalIndices[i];
+		uint vertexIndex = vertexIndices[i];
+		uint uvIndex = uvIndices[i];
+		uint normalIndex = normalIndices[i];
 
 		// Get the attributes thanks to the index
 		glm::vec3 vertex = temp_vertices[vertexIndex - 1];
@@ -111,16 +111,16 @@ Mesh * MeshManager::LoadOBJ(
 
 	}
 
-	return new Mesh(&out_vertices[0][0], &out_normals[0][0], &out_uvs[0][0], (unsigned int)out_vertices.size(), (unsigned int)out_normals.size(), (unsigned int)out_uvs.size());
+	return new Mesh(&out_vertices[0][0], &out_normals[0][0], &out_uvs[0][0], (uint)out_vertices.size(), (uint)out_normals.size(), (uint)out_uvs.size());
 }
 
 void MeshManager::GenerateBin(const char* path, Mesh* m) {
 	FILE* fp;
 	fopen_s(&fp, path, "ab+");
 
-	fwrite((void*)m->numVertices, sizeof(unsigned int), 1, fp);
-	fwrite((void*)m->numNormals, sizeof(unsigned int), 1, fp);
-	fwrite((void*)m->numUvs, sizeof(unsigned int), 1, fp);
+	fwrite((void*)&(m->numVertices), sizeof(uint), 1, fp);
+	fwrite((void*)&(m->numNormals), sizeof(uint), 1, fp);
+	fwrite((void*)&(m->numUvs), sizeof(uint), 1, fp);
 	
 	fwrite((void*)m->vertices, sizeof(GLfloat*) * m->numVertices, 1, fp);
 	fwrite((void*)m->normals, sizeof(GLfloat*) * m->numNormals, 1, fp);
@@ -173,17 +173,21 @@ Mesh * MeshManager::LoadMesh_BIN(const char* path) {
 	GLfloat* normals;
 	GLfloat* uvs;
 
-	memcpy(&n_vertices, buffer, sizeof(unsigned int));
-	memcpy(&n_normals, buffer + sizeof(unsigned int), sizeof(unsigned int));
-	memcpy(&n_uvs, buffer + sizeof(unsigned int) * 2, sizeof(unsigned int));
+	memcpy(&n_vertices, buffer, sizeof(uint));
+	memcpy(&n_normals, buffer + sizeof(uint), sizeof(uint));
+	memcpy(&n_uvs, buffer + sizeof(uint) * 2, sizeof(uint));
 
 	size_t size_ver = sizeof(GLfloat) * n_vertices;
 	size_t size_nor = sizeof(GLfloat) * n_normals;
 	size_t size_uvs = sizeof(GLfloat) * n_uvs;
 
-	memcpy(vertices, buffer + sizeof(unsigned int) * 3, size_ver);
-	memcpy(normals, buffer + sizeof(unsigned int) * 3 + size_ver, size_nor);
-	memcpy(uvs, buffer + sizeof(unsigned int) * 3 + size_ver + size_nor, size_uvs);
+	vertices = new GLfloat[n_vertices * 3];
+	normals = new GLfloat[n_normals * 3];
+	uvs = new GLfloat[n_uvs * 2];
+
+	memcpy(vertices, buffer + sizeof(uint) * 3, size_ver);
+	memcpy(normals, buffer + sizeof(uint) * 3 + size_ver, size_nor);
+	memcpy(uvs, buffer + sizeof(uint) * 3 + size_ver + size_nor, size_uvs);
 
 	Mesh * m = new Mesh(vertices, normals, uvs, n_vertices, n_normals, n_uvs);
 	meshList[path] = m;

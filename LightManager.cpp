@@ -35,13 +35,13 @@ LightManager::LightManager()
 
 LightManager::~LightManager()
 {
-	for (unsigned int i = 0; i < point_lights.size(); ++i) {
+	for (uint i = 0; i < point_lights.size(); ++i) {
 		delete point_lights[i];
 	}
-	for (unsigned int i = 0; i < spot_lights.size(); ++i) {
+	for (uint i = 0; i < spot_lights.size(); ++i) {
 		delete spot_lights[i];
 	}
-	for (unsigned int i = 0; i < directional_lights.size(); ++i) {
+	for (uint i = 0; i < directional_lights.size(); ++i) {
 		delete directional_lights[i];
 	}
 
@@ -64,7 +64,7 @@ LightManager::~LightManager()
 	delete[] directional_directions;
 }
 
-LightManager* LightManager::AllocLights(int point_n, int spot_n, int directional_n) {
+LightManager* LightManager::AllocLights(uint point_n, uint spot_n, uint directional_n) {
 	GLfloat* newpos;
 	GLfloat* newint;
 	GLfloat* newcol;
@@ -99,7 +99,7 @@ LightManager* LightManager::AllocLights(int point_n, int spot_n, int directional
 		point_shininess   = newshi;
 	}
 
-	for (int i = point_size; i < point_n; ++i) {
+	for (uint i = point_size; i < point_n; ++i) {
 		point_lights[i] = new Light(glm::vec4(0.0f), glm::vec3(0.0f), 0.0f, 0.0f, LIGHT_TYPE::POINT);
 	}
 
@@ -140,7 +140,7 @@ LightManager* LightManager::AllocLights(int point_n, int spot_n, int directional
 		spot_angles      = newang;
 	}
 
-	for (int i = spot_size; i < spot_n; ++i) {
+	for (uint i = spot_size; i < spot_n; ++i) {
 		spot_lights[i] = new SpotLight(glm::vec4(0.0f), glm::vec3(0.0f), 0.0f, 0.0f,glm::vec3(0.0f),0.0f);
 	}
 
@@ -177,7 +177,7 @@ LightManager* LightManager::AllocLights(int point_n, int spot_n, int directional
 		directional_directions  = newdir;
 	}
 
-	for (int i = directional_size; i < directional_n; ++i) {
+	for (uint i = directional_size; i < directional_n; ++i) {
 		directional_lights[i] = new DirectionalLight(glm::vec4(0.0f), glm::vec3(0.0f), 0.0f, 0.0f, glm::vec3(0.0f));
 	}
 
@@ -236,13 +236,13 @@ size_t LightManager::GetNDirectionalLights() {
 }
 
 void LightManager::Update(double dt) {
-	for (unsigned int i = 0; i < point_count; ++i) {
+	for (uint i = 0; i < point_count; ++i) {
 		point_lights[i]->Update(dt);
 	}
-	for (unsigned int i = 0; i < spot_count; ++i) {
+	for (uint i = 0; i < spot_count; ++i) {
 		spot_lights[i]->Update(dt);
 	}
-	for (unsigned int i = 0; i < directional_count; ++i) {
+	for (uint i = 0; i < directional_count; ++i) {
 		directional_lights[i]->Update(dt);
 	}
 
@@ -251,7 +251,7 @@ void LightManager::Update(double dt) {
 
 void LightManager::Compile() {
 	glm::vec4 aux;
-	for (unsigned int i = 0; i < point_size; ++i) {
+	for (uint i = 0; i < point_size; ++i) {
 		point_positions[i * N_AXIS + 0] = point_lights[i]->GetPosition()[0];
 		point_positions[i * N_AXIS + 1] = point_lights[i]->GetPosition()[1];
 		point_positions[i * N_AXIS + 2] = point_lights[i]->GetPosition()[2];
@@ -266,7 +266,7 @@ void LightManager::Compile() {
 		point_shininess[i] = point_lights[i]->GetShininess();
 	}
 
-	for (unsigned int i = 0; i < spot_size; ++i) {
+	for (uint i = 0; i < spot_size; ++i) {
 		spot_positions[i * N_AXIS + 0] = spot_lights[i]->GetPosition()[0];
 		spot_positions[i * N_AXIS + 1] = spot_lights[i]->GetPosition()[1];
 		spot_positions[i * N_AXIS + 2] = spot_lights[i]->GetPosition()[2];
@@ -287,7 +287,7 @@ void LightManager::Compile() {
 		spot_angles[i] = ((SpotLight *)spot_lights[i])->GetAngle();
 	}
 
-	for (unsigned int i = 0; i < directional_size; ++i) {
+	for (uint i = 0; i < directional_size; ++i) {
 		directional_positions[i * N_AXIS + 0] = directional_lights[i]->GetPosition()[0];
 		directional_positions[i * N_AXIS + 1] = directional_lights[i]->GetPosition()[1];
 		directional_positions[i * N_AXIS + 2] = directional_lights[i]->GetPosition()[2];

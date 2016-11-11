@@ -60,11 +60,11 @@ class LightManager
 	
 	void Compile();
 
-	int point_size, spot_size, directional_size, point_count, spot_count, directional_count;
+	uint point_size, spot_size, directional_size, point_count, spot_count, directional_count;
 
 public:
 	static LightManager* GetInstance();
-	LightManager* AllocLights(int point_n, int spot_n, int dir_n);
+	LightManager* AllocLights(uint point_n, uint spot_n, uint dir_n);
 
 	LightManager* Push(Light* l, LIGHT_TYPE type = LIGHT_TYPE::UNDEFINED);
 
