@@ -56,8 +56,9 @@ void MeshObject::PrintVertices() {
 }
 
 void MeshObject::LoadUniforms() {
-	matrixID         = glGetUniformLocation(shaderID, "PV");
-	transformID      = glGetUniformLocation(shaderID, "M");
+	projectionID = glGetUniformLocation(shaderID, "P");
+	viewID       = glGetUniformLocation(shaderID, "V");
+	transformID  = glGetUniformLocation(shaderID, "M");
 
 	point_positionsID   = glGetUniformLocation(shaderID, "point_positions");
 	point_colorsID      = glGetUniformLocation(shaderID, "point_colors");
@@ -86,7 +87,7 @@ void MeshObject::LoadUniforms() {
 	ambientColorID = glGetUniformLocation(shaderID, "ambient_color");
 	ambientIntensityID = glGetUniformLocation(shaderID, "ambient_intensity");
 
-	textureID = glGetUniformLocation(shaderID, "texture");
+	textureID = glGetUniformLocation(shaderID, "albedo");
 }
 
 void MeshObject::Init(){
@@ -133,7 +134,8 @@ void MeshObject::Draw(){
 
 	glUseProgram(shaderID);
 
-	glUniformMatrix4fv(matrixID, 1, GL_FALSE, &(Camera::GetInstance()->getPV())[0][0]);
+	glUniformMatrix4fv(projectionID, 1, GL_FALSE, &(Camera::GetInstance()->getP())[0][0]);
+	glUniformMatrix4fv(viewID, 1, GL_FALSE, &(Camera::GetInstance()->getV())[0][0]);
 	glUniformMatrix4fv(transformID, 1, GL_FALSE, &(*transform)[0][0]);
 
 	//Load Texture
@@ -211,7 +213,8 @@ void MeshObject::Draw(){
 }
 
 bool MeshObject::Import3D(const string& path) {
-	this->mesh = MeshManager::GetInstance()->LoadMesh_BIN(path.c_str());
+	this->mesh = MeshManager::GetInstance()->LoadMesh_OBJ(path.c_str());
+	//this->mesh = MeshManager::GetInstance()->LoadMesh_BIN(path.c_str());
 	return true;
 }
 

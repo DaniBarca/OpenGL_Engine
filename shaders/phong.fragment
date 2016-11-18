@@ -38,7 +38,7 @@ uniform float ambient_intensity;
 
 uniform vec3 camera_position;
 
-uniform sampler2D texture;
+uniform sampler2D albedo;
 
 vec3 N;
 
@@ -132,7 +132,7 @@ vec3 getDirectionalLight(int index){
 void main()
 {
 
-    color = texture( texture, UV ).rgb;
+    color = texture( albedo, UV ).rgb;
 
     N = normalize(fragment_normal);
 

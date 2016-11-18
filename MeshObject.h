@@ -11,7 +11,8 @@ private:
 	Mesh* mesh;
 
 	GLuint shaderID;
-	GLuint matrixID;
+	GLuint projectionID;
+	GLuint viewID;
 	GLuint transformID;
 	
 	GLuint point_positionsID;

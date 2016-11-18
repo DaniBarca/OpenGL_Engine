@@ -115,16 +115,17 @@ Mesh * MeshManager::LoadOBJ(
 }
 
 void MeshManager::GenerateBin(const char* path, Mesh* m) {
+	string binpath = string(path);// +".bin";
 	FILE* fp;
-	fopen_s(&fp, path, "ab+");
+	fopen_s(&fp, binpath.c_str(), "ab+");
 
-	fwrite((void*)&(m->numVertices), sizeof(uint), 1, fp);
-	fwrite((void*)&(m->numNormals), sizeof(uint), 1, fp);
-	fwrite((void*)&(m->numUvs), sizeof(uint), 1, fp);
+	fwrite(&m->numVertices, sizeof(uint), 1, fp);
+	fwrite(&m->numNormals, sizeof(uint), 1, fp);
+	fwrite(&m->numUvs, sizeof(uint), 1, fp);
 	
-	fwrite((void*)m->vertices, sizeof(GLfloat*) * m->numVertices, 1, fp);
-	fwrite((void*)m->normals, sizeof(GLfloat*) * m->numNormals, 1, fp);
-	fwrite((void*)m->uvs, sizeof(GLfloat*) * m->numUvs, 1, fp);
+	fwrite(&m->vertices[0], sizeof(GLfloat) * m->numVertices, 1, fp);
+	fwrite(&m->normals[0], sizeof(GLfloat) * m->numNormals, 1, fp);
+	fwrite(&m->uvs[0], sizeof(GLfloat) * m->numUvs, 1, fp);
 
 	fclose(fp);
 }
@@ -139,13 +140,11 @@ Mesh * MeshManager::LoadMesh_OBJ(const char* path)
 
 	Mesh* m;
 	m = LoadOBJ(path);
-	GenerateBin(path, m);
 
 	meshList[path] = m;
 
 	// We generate a .bin equivalent file to be loaded with LoadMesh_BIN
-	string pathbin = string(path);
-	pathbin += ".bin";
+	string pathbin = string(path) + ".bin";
 	GenerateBin(pathbin.c_str(), m);
 
 	return m;

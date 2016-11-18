@@ -12,8 +12,6 @@ private:
 	glm::mat4 projection;
 	glm::mat4 view;
 
-	glm::mat4 PV;
-
 	Camera();
 	~Camera();
 
@@ -45,6 +43,7 @@ public:
 	void Orbit();
 	void Orbit(double HFactor, double VFactor, glm::vec3 around = glm::vec3(0, 0, 0));
 
-	glm::mat4 getPV();
+	glm::mat4 getP();
+	glm::mat4 getV();
 };
 

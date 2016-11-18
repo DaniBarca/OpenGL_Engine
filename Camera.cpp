@@ -34,12 +34,10 @@ Camera* Camera::GetInstance(){
 
 void Camera::SetProjection() {
 	projection = glm::perspective(fov, aspect, near, far);
-	PV = projection * view;
 }
 
 void Camera::SetView(glm::mat4 v) {
 	view = v;
-	PV = projection * view;
 }
 
 void Camera::ZoomIN() {
@@ -95,6 +93,10 @@ void Camera::Orbit(double HFactor, double VFactor, glm::vec3 around) {
 	);
 }
 
-glm::mat4 Camera::getPV() {
-	return PV;
+glm::mat4 Camera::getP() {
+	return projection;
+}
+
+glm::mat4 Camera::getV() {
+	return view;
 }
