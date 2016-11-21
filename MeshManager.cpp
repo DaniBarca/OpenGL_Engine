@@ -18,9 +18,9 @@ MeshManager* MeshManager::GetInstance()
 Mesh * MeshManager::LoadOBJ(
 	const char * path
 ) {
-	std::vector<glm::vec3> out_vertices;
-	std::vector<glm::vec2> out_uvs;
-	std::vector<glm::vec3> out_normals;
+	std::vector<glm::vec3>* out_vertices = new std::vector<glm::vec3>();
+	std::vector<glm::vec2>* out_uvs = new std::vector<glm::vec2>();
+	std::vector<glm::vec3>* out_normals = new std::vector<glm::vec3>();
 
 	std::vector<uint> vertexIndices, uvIndices, normalIndices;
 	std::vector<glm::vec3> temp_vertices;
@@ -105,27 +105,30 @@ Mesh * MeshManager::LoadOBJ(
 		glm::vec3 normal = temp_normals[normalIndex - 1];
 
 		// Put the attributes in buffers
-		out_vertices.push_back(vertex);
-		out_uvs.push_back(uv);
-		out_normals.push_back(normal);
+		out_vertices->push_back(vertex);
+		out_uvs->push_back(uv);
+		out_normals->push_back(normal);
 
 	}
 
-	return new Mesh(&out_vertices[0][0], &out_normals[0][0], &out_uvs[0][0], (uint)out_vertices.size(), (uint)out_normals.size(), (uint)out_uvs.size());
+	return new Mesh((GLfloat*)&(*out_vertices)[0][0], (GLfloat*)&(*out_normals)[0][0], (GLfloat*)&(*out_uvs)[0][0], (uint)out_vertices->size(), (uint)out_normals->size(), (uint)out_uvs->size());
 }
 
 void MeshManager::GenerateBin(const char* path, Mesh* m) {
 	string binpath = string(path);// +".bin";
 	FILE* fp;
-	fopen_s(&fp, binpath.c_str(), "ab+");
+	fopen_s(&fp, binpath.c_str(), "wb+");
 
 	fwrite(&m->numVertices, sizeof(uint), 1, fp);
 	fwrite(&m->numNormals, sizeof(uint), 1, fp);
 	fwrite(&m->numUvs, sizeof(uint), 1, fp);
+
+	cout << (uint)sizeof(uint) << endl;
+	cout << (uint)sizeof(GLfloat) << endl;
 	
-	fwrite(&m->vertices[0], sizeof(GLfloat) * m->numVertices, 1, fp);
-	fwrite(&m->normals[0], sizeof(GLfloat) * m->numNormals, 1, fp);
-	fwrite(&m->uvs[0], sizeof(GLfloat) * m->numUvs, 1, fp);
+	fwrite(m->vertices, sizeof(GLfloat) * 3 * m->numVertices, 1, fp);
+	fwrite(m->normals, sizeof(GLfloat) * 3 * m->numNormals, 1, fp);
+	fwrite(m->uvs, sizeof(GLfloat) * 2 * m->numUvs, 1, fp);
 
 	fclose(fp);
 }
@@ -173,20 +176,20 @@ Mesh * MeshManager::LoadMesh_BIN(const char* path) {
 	GLfloat* uvs;
 
 	memcpy(&n_vertices, buffer, sizeof(uint));
-	memcpy(&n_normals, buffer + sizeof(uint), sizeof(uint));
-	memcpy(&n_uvs, buffer + sizeof(uint) * 2, sizeof(uint));
+	memcpy(&n_normals, buffer += sizeof(uint), sizeof(uint));
+	memcpy(&n_uvs, buffer += sizeof(uint), sizeof(uint));
 
-	size_t size_ver = sizeof(GLfloat) * n_vertices;
-	size_t size_nor = sizeof(GLfloat) * n_normals;
-	size_t size_uvs = sizeof(GLfloat) * n_uvs;
+	size_t size_ver = sizeof(GLfloat) * 3 * n_vertices;
+	size_t size_nor = sizeof(GLfloat) * 3 * n_normals;
+	size_t size_uvs = sizeof(GLfloat) * 2 * n_uvs;
 
 	vertices = new GLfloat[n_vertices * 3];
 	normals = new GLfloat[n_normals * 3];
 	uvs = new GLfloat[n_uvs * 2];
 
-	memcpy(vertices, buffer + sizeof(uint) * 3, size_ver);
-	memcpy(normals, buffer + sizeof(uint) * 3 + size_ver, size_nor);
-	memcpy(uvs, buffer + sizeof(uint) * 3 + size_ver + size_nor, size_uvs);
+	memcpy(vertices, buffer += sizeof(uint), size_ver);
+	memcpy(normals, buffer += size_ver, size_nor);
+	memcpy(uvs, buffer += size_nor, size_uvs);
 
 	Mesh * m = new Mesh(vertices, normals, uvs, n_vertices, n_normals, n_uvs);
 	meshList[path] = m;

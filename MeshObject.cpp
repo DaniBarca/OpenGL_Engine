@@ -198,7 +198,7 @@ void MeshObject::Draw(){
 	glEnableVertexAttribArray(2);
 	glBindBuffer(GL_ARRAY_BUFFER, uvs_buffer);
 	glVertexAttribPointer(
-		0,
+		2,
 		2,
 		GL_FLOAT,
 		GL_FALSE,
@@ -213,8 +213,8 @@ void MeshObject::Draw(){
 }
 
 bool MeshObject::Import3D(const string& path) {
-	this->mesh = MeshManager::GetInstance()->LoadMesh_OBJ(path.c_str());
-	//this->mesh = MeshManager::GetInstance()->LoadMesh_BIN(path.c_str());
+	//this->mesh = MeshManager::GetInstance()->LoadMesh_OBJ(path.c_str());
+	this->mesh = MeshManager::GetInstance()->LoadMesh_BIN(path.c_str());
 	return true;
 }
 

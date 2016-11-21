@@ -36,7 +36,7 @@ void World::Init() {
 	//dragon2->Init();
 	//dragon3->Init();
 
-	testmesh = new BasicMesh("models/suzanne.obj","models/monaco.bmp");
+	testmesh = new BasicMesh("models/suzanne.obj.bin","models/monaco.bmp");
 	//testmeshB = new BasicMesh("models/cosmic_ball.obj");
 	testmesh->Init();
 	//testmeshB->Init();
