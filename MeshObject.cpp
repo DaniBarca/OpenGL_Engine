@@ -88,6 +88,7 @@ void MeshObject::LoadUniforms() {
 	ambientIntensityID = glGetUniformLocation(shaderID, "ambient_intensity");
 
 	textureID = glGetUniformLocation(shaderID, "albedo");
+
 }
 
 void MeshObject::Init(){

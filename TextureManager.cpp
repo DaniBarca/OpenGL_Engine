@@ -3,15 +3,15 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-TextureManager* TextureManager::LoadImage(GLuint* textureID, char* bytes, unsigned int length) {
+TextureManager* TextureManager::LoadImage(GLuint* texture_buffer, char* bytes, unsigned int length) {
 	unsigned char *image;
 	int width = 0;
 	int height = 0;
 	int comp = 0;
 	image = stbi_load_from_memory((stbi_uc*)bytes, (int)length, &width, &height, &comp, STBI_rgb);
 
-	glGenTextures(1, textureID);
-	glBindTexture(GL_TEXTURE_2D, *textureID);
+	glGenTextures(1, texture_buffer);
+	glBindTexture(GL_TEXTURE_2D, *texture_buffer);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
