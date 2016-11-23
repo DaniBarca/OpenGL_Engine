@@ -18,10 +18,27 @@ void World::Init() {
 	LightManager::GetInstance()
 		->AllocLights(1, 1, 0)
 		->SetAmbientColor(glm::vec3(256.0f,256.0f,256.0f))
-		->SetAmbientItensity(0.14f);
+		->SetAmbientItensity(0.3f);
 
-	LightManager::GetInstance()->Push(new SpotLight(glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), glm::vec3(0.75f, 3.0f, 0.0f), 10.0f, 0.6f, glm::vec3(0.0f, -1.0f, 0.0f) , 0.1f));
-	LightManager::GetInstance()->Push(new Light(glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), glm::vec3(-10.0f,3.0f,0.0f),10.0f, 0.1f));
+	LightManager::GetInstance()->Push(
+		new SpotLight(
+			glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), 
+			glm::vec3(0.0f, 3.0f, 0.0f), 
+			10.0f, 
+			0.3f, 
+			glm::vec3(0.0f, -1.0f, 0.0f), 
+			0.1f
+		)
+	);
+
+	LightManager::GetInstance()->Push(
+		new Light(
+			glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), 
+			glm::vec3(-10.0f,3.0f,0.0f),
+			10.0f, 
+			0.3f
+		)
+	);
 
 	//teapot = new Teapot();
 	//dragon = new Dragon();
