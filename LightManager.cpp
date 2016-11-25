@@ -116,14 +116,14 @@ LightManager* LightManager::AllocLights(uint point_n, uint spot_n, uint directio
 		newcol = new GLfloat[spot_n * N_AXIS];
 		newshi = new GLfloat[spot_n];
 		newdir = new GLfloat[spot_n * N_AXIS];
-		newang = new GLfloat[spot_n];
+		newang = new GLfloat[spot_n * 2];
 
 		memcpy(newpos, spot_positions,   spot_size * N_AXIS * sizeof(GLfloat));
 		memcpy(newint, spot_intensities, spot_size * sizeof(GLfloat));
 		memcpy(newcol, spot_colors,      spot_size * N_AXIS * sizeof(GLfloat));
 		memcpy(newshi, spot_shininess,   spot_size * sizeof(GLfloat));
 		memcpy(newdir, spot_directions,  spot_size * N_AXIS * sizeof(GLfloat));
-		memcpy(newang, spot_angles,      spot_size * sizeof(GLfloat));
+		memcpy(newang, spot_angles,      spot_size * sizeof(GLfloat) * 2);
 
 		delete [] spot_positions;
 		delete [] spot_intensities;
@@ -284,7 +284,8 @@ void LightManager::Compile() {
 		spot_directions[i * N_AXIS + 1] = ((SpotLight *)spot_lights[i])->GetDirection()[1];
 		spot_directions[i * N_AXIS + 2] = ((SpotLight *)spot_lights[i])->GetDirection()[2];
 
-		spot_angles[i] = ((SpotLight *)spot_lights[i])->GetAngle();
+		spot_angles[i * 2 + 0] = ((SpotLight *)spot_lights[i])->GetAngle();
+		spot_angles[i * 2 + 1] = ((SpotLight *)spot_lights[i])->GetAngleSoft();
 	}
 
 	for (uint i = 0; i < directional_size; ++i) {
