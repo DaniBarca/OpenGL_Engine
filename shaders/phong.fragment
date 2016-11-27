@@ -20,7 +20,7 @@ uniform vec3 spot_colors       [%N_SPOT_LIGHTS%];
 uniform vec3 spot_directions   [%N_SPOT_LIGHTS%];
 uniform float spot_intensities [%N_SPOT_LIGHTS%];
 uniform float spot_shininess   [%N_SPOT_LIGHTS%];
-uniform float spot_angles      [%N_SPOT_LIGHTS%];
+uniform vec2 spot_angles       [%N_SPOT_LIGHTS%];
 uniform float spot_sampling_offset;
 
 uniform vec3 directional_positions    [%N_DIRECTIONAL_LIGHTS%];
@@ -77,7 +77,8 @@ float point_specular(int index){
 //
 
 float spot_diffuse(int index){
-    float angle = cos(spot_angles[index] * 0.5f);
+    float angle = cos(spot_angles[index].x * 0.5f);
+    float angle_soft = cos(spot_angles[index].y * 0.5f);
 
     float offset = 0.0015f * clamp(length(camera_position - fragment_position),0.001f,2.0f);
 
@@ -89,7 +90,15 @@ float spot_diffuse(int index){
 
             vec3 light_frag = normalize(sample_pos - spot_positions[index]);
 
-            float visible = step(abs(angle - dot(light_frag,spot_directions[index])), 0.01);
+            float light_frag_dir = dot(light_frag,spot_directions[index]);
+
+            float visible = step(abs(angle - light_frag_dir), 0.01);
+            float visible_soft = abs(step(abs(angle_soft - light_frag_dir), 0.01) - visible);
+
+            float diffuse = spot_intensities[index] * reflectivity_diffuse * clamp(dot(N, normalize(spot_positions[index] - sample_pos)),0.0f,1.0f);
+
+            float direct_light = visible * diffuse;
+            float soft_light = visible_soft *
             
             sum += visible * spot_intensities[index] * reflectivity_diffuse * clamp(dot(N, normalize(spot_positions[index] - sample_pos)),0.0f,1.0f);
         }

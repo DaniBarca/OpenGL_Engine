@@ -155,7 +155,7 @@ void MeshObject::Draw(){
 	glUniform3fv(spot_directionsID, n_spot_lights, LightManager::GetInstance()->GetSpotDirections());
 	glUniform1fv(spot_intensitiesID,n_spot_lights, LightManager::GetInstance()->GetSpotIntensities());
 	glUniform1fv(spot_shininessID,  n_spot_lights, LightManager::GetInstance()->GetSpotShininess());
-	glUniform1fv(spot_anglesID,     n_spot_lights, LightManager::GetInstance()->GetSpotAngles());
+	glUniform2fv(spot_anglesID,     n_spot_lights, LightManager::GetInstance()->GetSpotAngles());
 
 	GLsizei n_directional_lights = (GLsizei)LightManager::GetInstance()->GetNDirectionalLights();
  	glUniform3fv(directional_positionsID,  n_directional_lights, LightManager::GetInstance()->GetDirectionalPositions());

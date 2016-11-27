@@ -26,7 +26,7 @@ class LightManager
 	GLfloat* point_shininess;		//Exponent for specular lighting
 
 	/**
-	       Spot Light
+	        Spot Light
                 *     <(o)>
                /|\  N  /
 			  / | \ | /
