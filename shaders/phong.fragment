@@ -89,7 +89,9 @@ float point_specular(int index){
 // | f(x) = 1 from 0 to A
 // | f(x) = (1 - ((x - A)/(B - A)) ) from A to B
 // | f(x) = 0 elsewhere
-float lineal_A_to_B(float x, float A, float B){
+
+// This function determines visibility and intensity of the spot light
+float sl_I_byangle(float x, float A, float B){
     bool in_A = x < A;
     bool in_B = x < B;
 
@@ -107,16 +109,7 @@ float spot_diffuse(int index){
     
     float angle = 1.0 - dot(light_to_frag, spot_directions[index]);
 
-    //float hard = step(abs(angle - A), 0.01);
-    //float soft = step(abs(angle - B), 0.01);
-
-    //float hard_visible = floor((hard + soft) * 0.5);
-    //float soft_visible = soft - hard;
-
-    //float hard_diffuse = spot_intensities[index] * reflectivity_diffuse * clamp(dot(N, normalize(spot_positions[index] - sample_pos)),0.0f,1.0f);
-    //float soft_diffuse = hard_diffuse *
-
-    return lineal_A_to_B(angle, A, B) * spot_intensities[index] * reflectivity_diffuse * clamp(dot(N, normalize(spot_positions[index] - fragment_position)),0.0f,1.0f);
+    return sl_I_byangle(angle, A, B) * spot_intensities[index] * reflectivity_diffuse * clamp(dot(N, normalize(spot_positions[index] - fragment_position)),0.0f,1.0f);
 }
 
 float spot_specular(int index){
