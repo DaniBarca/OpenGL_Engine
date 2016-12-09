@@ -76,35 +76,47 @@ float point_specular(int index){
 // SPOT LIGHT
 //
 
+//
+// Given a value x this function returns:
+//
+// 1|------- 
+//  |       \
+//  |        \
+// 0+-----------
+//         A  B
+
+// Which is:
+// | f(x) = 1 from 0 to A
+// | f(x) = (1 - ((x - A)/(B - A)) ) from A to B
+// | f(x) = 0 elsewhere
+float lineal_A_to_B(float x, float A, float B){
+    bool in_A = x < A;
+    bool in_B = x < B;
+
+    float visible_hard = float(in_A);
+    float visible_soft = float(!in_A && in_B);
+    
+    return visible_hard + visible_soft * ( 1.0 - ((x - A)/(B - A)) );
+}
+
 float spot_diffuse(int index){
-    float angle = cos(spot_angles[index].x * 0.5f);
-    float angle_soft = cos(spot_angles[index].y * 0.5f);
+    float A = 1.0 - cos(spot_angles[index].x * 0.5f);
+    float B = 1.0 - cos(spot_angles[index].y * 0.5f);
 
-    float offset = 0.0015f * clamp(length(camera_position - fragment_position),0.001f,2.0f);
+    vec3 light_to_frag = normalize(fragment_position - spot_positions[index]);
+    
+    float angle = 1.0 - dot(light_to_frag, spot_directions[index]);
 
-    vec3 sample_pos;
-    float sum = 0.0f;
-    for(float i = -1.0f; i <= 1.0f; i+=2.0f){
-        for(float j = -1.0f; j <= 1.0f; j+=2.0f){
-            sample_pos = fragment_position + up * i * offset + right * j * offset;
+    //float hard = step(abs(angle - A), 0.01);
+    //float soft = step(abs(angle - B), 0.01);
 
-            vec3 light_frag = normalize(sample_pos - spot_positions[index]);
+    //float hard_visible = floor((hard + soft) * 0.5);
+    //float soft_visible = soft - hard;
 
-            float light_frag_dir = dot(light_frag,spot_directions[index]);
+    //float hard_diffuse = spot_intensities[index] * reflectivity_diffuse * clamp(dot(N, normalize(spot_positions[index] - sample_pos)),0.0f,1.0f);
+    //float soft_diffuse = hard_diffuse *
 
-            float visible = step(abs(angle - light_frag_dir), 0.01);
-            float visible_soft = abs(step(abs(angle_soft - light_frag_dir), 0.01) - visible);
-
-            float diffuse = spot_intensities[index] * reflectivity_diffuse * clamp(dot(N, normalize(spot_positions[index] - sample_pos)),0.0f,1.0f);
-
-            float direct_light = visible * diffuse;
-            float soft_light = visible_soft *
-            
-            sum += visible * spot_intensities[index] * reflectivity_diffuse * clamp(dot(N, normalize(spot_positions[index] - sample_pos)),0.0f,1.0f);
-        }
-    }
-
-    return sum * 0.25f;
+    return lineal_A_to_B(angle, A, B) * spot_intensities[index] * reflectivity_diffuse * clamp(dot(N, normalize(spot_positions[index] - fragment_position)),0.0f,1.0f);
 }
 
 float spot_specular(int index){
