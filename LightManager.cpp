@@ -116,14 +116,14 @@ LightManager* LightManager::AllocLights(uint point_n, uint spot_n, uint directio
 		newcol = new GLfloat[spot_n * N_AXIS];
 		newshi = new GLfloat[spot_n];
 		newdir = new GLfloat[spot_n * N_AXIS];
-		newang = new GLfloat[spot_n];
+		newang = new GLfloat[spot_n * 2];
 
 		memcpy(newpos, spot_positions,   spot_size * N_AXIS * sizeof(GLfloat));
 		memcpy(newint, spot_intensities, spot_size * sizeof(GLfloat));
 		memcpy(newcol, spot_colors,      spot_size * N_AXIS * sizeof(GLfloat));
 		memcpy(newshi, spot_shininess,   spot_size * sizeof(GLfloat));
 		memcpy(newdir, spot_directions,  spot_size * N_AXIS * sizeof(GLfloat));
-		memcpy(newang, spot_angles,      spot_size * sizeof(GLfloat));
+		memcpy(newang, spot_angles,      spot_size * sizeof(GLfloat) * 2);
 
 		delete [] spot_positions;
 		delete [] spot_intensities;
@@ -141,7 +141,7 @@ LightManager* LightManager::AllocLights(uint point_n, uint spot_n, uint directio
 	}
 
 	for (uint i = spot_size; i < spot_n; ++i) {
-		spot_lights[i] = new SpotLight(glm::vec4(0.0f), glm::vec3(0.0f), 0.0f, 0.0f,glm::vec3(0.0f),0.0f);
+		spot_lights[i] = new SpotLight(glm::vec4(0.0f), glm::vec3(0.0f), 0.0f, 0.0f,glm::vec3(0.0f),0.0f,0.0f);
 	}
 
 	spot_size = spot_n;
@@ -195,13 +195,16 @@ LightManager* LightManager::Push(Light* l, LIGHT_TYPE type) {
 	if (type == LIGHT_TYPE::UNDEFINED)
 		type = l->GetType();
 
-	if (point_count == point_size) {
+	if (type == LIGHT_TYPE::POINT && point_count == point_size) {
+		std::cout << "warning: reallocating lights is expensive. Initializing LightManager with a higher light count is preferred" << std::endl;
 		AllocLights(point_size + 1, spot_size, directional_size);
 	}
-	if (spot_count == spot_size) {
+	if (type == LIGHT_TYPE::SPOT && spot_count == spot_size) {
+		std::cout << "warning: reallocating lights is expensive. Initializing LightManager with a higher light count is preferred" << std::endl;
 		AllocLights(point_size, spot_size + 1, directional_size);
 	}
-	if (directional_count == directional_size) {
+	if (type == LIGHT_TYPE::DIRECTIONAL && directional_count == directional_size) {
+		std::cout << "warning: reallocating lights is expensive. Initializing LightManager with a higher light count is preferred" << std::endl;
 		AllocLights(point_size, spot_size, directional_size + 1);
 	}
 
@@ -249,6 +252,7 @@ void LightManager::Update(double dt) {
 	Compile();
 }
 
+//@TODO set update state to Light so we can know if the arrays should be re-compilled
 void LightManager::Compile() {
 	glm::vec4 aux;
 	for (uint i = 0; i < point_size; ++i) {
@@ -284,7 +288,8 @@ void LightManager::Compile() {
 		spot_directions[i * N_AXIS + 1] = ((SpotLight *)spot_lights[i])->GetDirection()[1];
 		spot_directions[i * N_AXIS + 2] = ((SpotLight *)spot_lights[i])->GetDirection()[2];
 
-		spot_angles[i] = ((SpotLight *)spot_lights[i])->GetAngle();
+		spot_angles[i * 2 + 0] = ((SpotLight *)spot_lights[i])->GetAngle();
+		spot_angles[i * 2 + 1] = ((SpotLight *)spot_lights[i])->GetAngleSoft();
 	}
 
 	for (uint i = 0; i < directional_size; ++i) {

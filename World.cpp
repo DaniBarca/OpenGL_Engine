@@ -23,11 +23,12 @@ void World::Init() {
 	LightManager::GetInstance()->Push(
 		new SpotLight(
 			glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), 
-			glm::vec3(0.0f, 3.0f, 0.0f), 
+			glm::vec3(0.0f, 3.0f, 0.0f),
 			10.0f, 
 			0.3f, 
 			glm::vec3(0.0f, -1.0f, 0.0f), 
-			0.1f
+			0.15f,
+			0.18f
 		)
 	);
 
