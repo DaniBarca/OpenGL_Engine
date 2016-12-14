@@ -1,5 +1,7 @@
 #version 330 core
 
+precision highp float;
+
 in vec3 fragment_normal;
 in vec3 fragment_position;
 in vec2 UV;
@@ -92,13 +94,7 @@ float point_specular(int index){
 
 // This function determines visibility and intensity of the spot light
 float sl_I_byangle(float x, float A, float B){
-    bool in_A = x < A;
-    bool in_B = x < B;
-
-    float visible_hard = float(in_A);
-    float visible_soft = float(!in_A && in_B);
-    
-    return visible_hard + visible_soft * ( 1.0 - ((x - A)/(B - A)) );
+    return clamp(1.0f - ((x - A)/(B - A)), 0.0f, 1.0f );
 }
 
 float spot_diffuse(int index){

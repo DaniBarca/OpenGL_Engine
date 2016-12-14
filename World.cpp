@@ -55,9 +55,10 @@ void World::Init() {
 	//dragon3->Init();
 
 	testmesh = new BasicMesh("models/suzanne.obj.bin","models/monaco.bmp");
-	//testmeshB = new BasicMesh("models/cosmic_ball.obj");
+	testmeshB = new BasicMesh("models/BOLLOFLAT.obj.bin","models/monaco.bmp");
+
 	testmesh->Init();
-	//testmeshB->Init();
+	testmeshB->Init();
 
 	//plane->SetRotation(90.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 	//testmesh->SetPosition(glm::vec3(0.0f, 0.25f, 0.0f));
@@ -74,7 +75,7 @@ void World::Update(double dt) {
 	//dragon3->Update(dt);
 
 	testmesh->Update(dt);
-	//testmeshB->Update(dt);
+	testmeshB->Update(dt);
 }
 
 void World::Draw() {
@@ -84,7 +85,7 @@ void World::Draw() {
 	//dragon3->Draw();
 
 	testmesh->Draw();
-	//testmeshB->Draw();
+	testmeshB->Draw();
 }
 
 void World::OnKeyPress(int key, int scancode, int action, int mods) {

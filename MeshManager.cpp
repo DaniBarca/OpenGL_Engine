@@ -150,7 +150,7 @@ Mesh * MeshManager::LoadMesh_OBJ(const char* path)
 	string pathbin = string(path) + ".bin";
 	GenerateBin(pathbin.c_str(), m);
 
-	return m;
+	return m; 
 }
 
 Mesh * MeshManager::LoadMesh_BIN(const char* path) {

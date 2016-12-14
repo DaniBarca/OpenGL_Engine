@@ -7,7 +7,7 @@ Camera::Camera()
 	near   = 0.1f;
 	far    = 100.0f;
 	
-	orbit_radius = 25.0f;
+	orbit_radius = 5.0f;
 
 	HFactor = 0.0f;
 	VFactor = 0.0f;
