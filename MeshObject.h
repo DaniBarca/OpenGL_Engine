@@ -11,6 +11,7 @@ private:
 	Mesh* mesh;
 
 	GLuint shaderID;
+
 	GLuint projectionID;
 	GLuint viewID;
 	GLuint transformID;
@@ -43,6 +44,10 @@ private:
 
 	GLuint textureID;
 
+	GLuint shadow_shaderID;
+	GLuint shadow_PVID;
+	GLuint shadow_MID;
+
 	GLuint vertex_buffer;
 	GLuint normal_buffer;
 	GLuint uvs_buffer;
@@ -70,5 +75,7 @@ public:
 
 	void Init();
 	void Update(double dt);
+
+	void DrawDepthMap(glm::mat4 PV);
 	void Draw();
 };

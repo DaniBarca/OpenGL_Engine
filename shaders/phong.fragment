@@ -6,8 +6,8 @@ in vec3 fragment_normal;
 in vec3 fragment_position;
 in vec2 UV;
 
-vec3 right;
-vec3 up;
+//vec3 right;
+//vec3 up;
 
 // Ouput data
 out vec3 color;
@@ -149,19 +149,23 @@ void main()
         0.0f
     );
 
-    right = normalize(cross(N, tocross));
-    up = normalize(cross(N,right));
+    //right = normalize(cross(N, tocross));
+    //up = normalize(cross(N,right));
     
-    color = texture( albedo, UV ).rgb * ambient_color * ambient();
+    vec3 albedo = texture( albedo, UV ).rgb;
+    color = vec3(0.0);
+
+    color += albedo * ambient_color * ambient();
+
     for(int i = 0; i < %N_POINT_LIGHTS%; ++i){
-        color = color + getPointLight(i);
+        color += albedo * getPointLight(i);
     }
 
     for(int i = 0; i < %N_SPOT_LIGHTS%; ++i){
-        color = color + getSpotLight(i);
+        color += albedo * getSpotLight(i);
     }
 
     for(int i = 0; i < %N_DIRECTIONAL_LIGHTS%; ++i){
-        color = color + getDirectionalLight(i);
+        color += albedo * getDirectionalLight(i);
     }
 }

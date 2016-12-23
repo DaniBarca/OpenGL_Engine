@@ -38,8 +38,16 @@ MeshObject::MeshObject() {
 		(int)LightManager::GetInstance()->GetNDirectionalLights(), 
 		parse_dict, &shaderID
 	);
-
+	
 	LoadUniforms();
+
+	Engine::GetInstance()->LoadShader(
+		"shaders/shadowmap.vertex", 
+		"shaders/shadowmap.fragment",
+		0, 0, 0, 
+		parse_dict, 
+		&shadow_shaderID
+	);
 }
 
 MeshObject::MeshObject(aiMesh* meshData) : MeshObject() {
@@ -88,6 +96,9 @@ void MeshObject::LoadUniforms() {
 	ambientIntensityID = glGetUniformLocation(shaderID, "ambient_intensity");
 
 	textureID = glGetUniformLocation(shaderID, "albedo");
+	
+	shadow_PVID = glGetUniformLocation(shadow_shaderID, "PV");
+	shadow_MID = glGetUniformLocation(shadow_shaderID, "M");
 }
 
 void MeshObject::Init(){
@@ -111,6 +122,36 @@ void MeshObject::Init(){
 
 void MeshObject::Update(double dt){
 	Object3D::Update(dt);
+}
+
+void MeshObject::DrawDepthMap(glm::mat4 PV) {
+	Engine::GetInstance()->LoadShader(
+		"shaders/shadowmap.vertex",
+		"shaders/shadowmap.fragment",
+		0, 0, 0,
+		parse_dict,
+		&shadow_shaderID
+	);
+
+	glUseProgram(shadow_shaderID);
+
+	glUniformMatrix4fv(shadow_PVID, 1, GL_FALSE, &PV[0][0]);
+	glUniformMatrix4fv(shadow_MID, 1, GL_FALSE, &(*transform)[0][0]);
+
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
+	glVertexAttribPointer(
+		0,
+		VERTICES_PER_POL,	//size
+		GL_FLOAT,			//type
+		GL_FALSE,			//normalized
+		0,					//stride
+		(void*)0			//array buffer offset
+	);
+
+	glDrawArrays(GL_TRIANGLES, 0, mesh->numVertices);
+	 
+	glDisableVertexAttribArray(0);
 }
 
 void MeshObject::Draw(){
@@ -210,6 +251,7 @@ void MeshObject::Draw(){
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
 }
 
 bool MeshObject::Import3D(const string& path) {

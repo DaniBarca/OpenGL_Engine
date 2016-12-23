@@ -38,6 +38,26 @@ using namespace std::placeholders;
 
 typedef unsigned int uint;
 
+//Directions
+/*enum DIRECTION {
+	FRONT = 0,
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT,
+	BACK,
+	N_DIRECTIONS
+} DIRECTION;
+
+glm::mat4x4 TURN[6] = {
+	glm::mat4(),
+	glm::rotate(90.0f, glm::vec3(0,0,1)),
+	glm::rotate(-90.0f,glm::vec3(0,0,1)),
+	glm::rotate(-90.0f,glm::vec3(0,1,0)),
+	glm::rotate(90.0f, glm::vec3(0,1,0)),
+	glm::rotate(180.0f,glm::vec3(0,1,0))
+};*/
+
 //Screen size
 constexpr uint SCREEN_WIDTH = 1024;
 constexpr uint SCREEN_HEIGHT = 768;

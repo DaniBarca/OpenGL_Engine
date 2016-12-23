@@ -4,6 +4,7 @@
 #include "Light.h"
 #include "DirectionalLight.h"
 #include "SpotLight.h"
+#include "MeshObject.h"
 
 class LightManager
 {
@@ -57,6 +58,13 @@ class LightManager
 	GLfloat* ambient_color;
 	GLfloat ambient_intensity;
 	GLfloat specular_exponent;
+
+	GLuint* shadowmaps_point;
+	GLuint* shadowmaps_spot;
+	GLuint* shadowmaps_directional;
+
+	GLuint shadow_framebuffer;
+	GLuint depthTexture;
 	
 	void Compile();
 
@@ -73,6 +81,8 @@ public:
 	size_t GetNDirectionalLights();
 
 	void Update(double dt);
+	
+	void GenerateShadows(std::vector<MeshObject*> items);
 
 	GLfloat* GetPointPositions();
 	GLfloat* GetPointIntensities();
@@ -97,4 +107,8 @@ public:
 	
 	LightManager* SetAmbientColor(glm::vec3 color);
 	LightManager* SetAmbientItensity(float i);
+
+	std::vector<Light*> GetPointLights();
+	std::vector<Light*> GetSpotLights();
+	std::vector<Light*> GetDirectionalLights();
 };

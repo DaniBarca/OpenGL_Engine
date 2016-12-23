@@ -16,76 +16,75 @@ World* World::GetInstance() {
 
 void World::Init() {
 	LightManager::GetInstance()
-		->AllocLights(1, 1, 0)
+		->AllocLights(0, 0, 1)
 		->SetAmbientColor(glm::vec3(256.0f,256.0f,256.0f))
-		->SetAmbientItensity(0.3f);
+		->SetAmbientItensity(0.0f);
+
+	//LightManager::GetInstance()->Push(
+	//	new SpotLight(
+	//		glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), 
+	//		glm::vec3(0.0f, 3.0f, 0.0f),
+	//		10.0f, 
+	//		0.3f, 
+	//		glm::vec3(0.0f, -1.0f, 0.0f), 
+	//		0.15f,
+	//		0.18f
+	//	)
+	//);
+    //
+	//LightManager::GetInstance()->Push(
+	//	new Light(
+	//		glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), 
+	//		glm::vec3(-10.0f,3.0f,0.0f),
+	//		10.0f, 
+	//		0.3f
+	//	)
+	//);
 
 	LightManager::GetInstance()->Push(
-		new SpotLight(
-			glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), 
-			glm::vec3(0.0f, 3.0f, 0.0f),
-			10.0f, 
-			0.3f, 
-			glm::vec3(0.0f, -1.0f, 0.0f), 
-			0.15f,
-			0.18f
+		new DirectionalLight(
+			glm::vec4(256.0f,256.0f,256.0f, 0.0f),
+			glm::vec3(0.0f,20.0f,0.0f),
+			10.0f,
+			0.5f,
+			glm::vec3(0.0f,-1.0f,0.0f)
 		)
 	);
 
-	LightManager::GetInstance()->Push(
-		new Light(
-			glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), 
-			glm::vec3(-10.0f,3.0f,0.0f),
-			10.0f, 
-			0.3f
-		)
-	);
+	items = std::vector<MeshObject*>();
 
-	//teapot = new Teapot();
-	//dragon = new Dragon();
-	//dragon2 = new Dragon();
-	//dragon3 = new Dragon();
+	items.push_back(new BasicMesh("models/suzanne.obj.bin", "models/monaco.bmp"));
+	items.push_back(new BasicMesh("models/BOLLOFLAT.obj.bin", "models/monaco.bmp"));
 
-	//dragon2->SetPosition(glm::vec3(1.0f, 0.0f, 0.0f));
-	//dragon3->SetPosition(glm::vec3(-1.0f, 0.0f, 0.0f));
+	for (uint i = 0; i < items.size(); ++i) {
+		items[i]->Init();
+	}
 
-	//teapot->Init();
-	//dragon->Init();
-	//dragon2->Init();
-	//dragon3->Init();
-
-	testmesh = new BasicMesh("models/suzanne.obj.bin","models/monaco.bmp");
-	testmeshB = new BasicMesh("models/BOLLOFLAT.obj.bin","models/monaco.bmp");
-
-	testmesh->Init();
-	testmeshB->Init();
-
-	//plane->SetRotation(90.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-	//testmesh->SetPosition(glm::vec3(0.0f, 0.25f, 0.0f));
-
-	Camera::GetInstance();
+	Camera::GetInstance(); 
 }
 
 void World::Update(double dt) {
+	//LightManager::GetInstance()->GetDirectionalLights()[0]->Transform = *LightManager::GetInstance()->GetDirectionalLights()[0]->Transform;
+
+	*LightManager::GetInstance()->GetDirectionalLights()[0]->Transform() = glm::rotate((float)(dt), glm::vec3(1, 0, 0))*(*LightManager::GetInstance()->GetDirectionalLights()[0]->Transform());
+
+
 	LightManager::GetInstance()->Update(dt);
 
-	//teapot->Update(dt);
-	//dragon->Update(dt);
-	//dragon2->Update(dt);
-	//dragon3->Update(dt);
-
-	testmesh->Update(dt);
-	testmeshB->Update(dt);
+	for (uint i = 0; i < items.size(); ++i) {
+		items[i]->Update(dt);
+	}
 }
 
 void World::Draw() {
-	//teapot->Draw();
-	//dragon->Draw();
-	//dragon2->Draw();
-	//dragon3->Draw();
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//LightManager::GetInstance()->GenerateShadows(items);
 
-	testmesh->Draw();
-	testmeshB->Draw();
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	for (uint i = 0; i < items.size(); ++i) {
+		items[i]->Draw();
+	}
 }
 
 void World::OnKeyPress(int key, int scancode, int action, int mods) {

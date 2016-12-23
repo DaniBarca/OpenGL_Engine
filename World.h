@@ -26,6 +26,8 @@ class World
 	BasicMesh* testmesh;
 	BasicMesh* testmeshB;
 
+	std::vector<MeshObject*> items;
+
 	uint pressed_keys;
 	bool clicking;
 

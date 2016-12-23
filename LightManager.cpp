@@ -62,6 +62,30 @@ LightManager::~LightManager()
 	delete[] directional_colors;
 	delete[] directional_shininess;
 	delete[] directional_directions;
+
+	// The framebuffer, which regroups 0, 1, or more textures, and 0 or 1 depth buffer.
+	glGenFramebuffers(1, &shadow_framebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, shadow_framebuffer);
+
+	// Depth texture. Slower than a depth buffer, but you can sample it later in your shader
+	glGenTextures(1, &depthTexture);
+	glBindTexture(GL_TEXTURE_2D, depthTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture, 0);
+
+	glDrawBuffer(GL_NONE); // No color buffer is drawn to.
+
+						   // Always check that our framebuffer is ok
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		std::cout << "DepthBuffer error" << std::endl;
+		getchar();
+		exit(-1);
+	}
 }
 
 LightManager* LightManager::AllocLights(uint point_n, uint spot_n, uint directional_n) {
@@ -312,6 +336,37 @@ void LightManager::Compile() {
 	}
 }
 
+void LightManager::GenerateShadows(std::vector<MeshObject*> items) {
+	//glBindFramebuffer(GL_FRAMEBUFFER, shadow_framebuffer);
+	glViewport(0, 0, 1024, 1024);
+	
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glm::mat4 inv_mat = glm::inverse(*directional_lights[0]->Transform());
+	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
+
+	glm::mat4 lightmat = depthProjectionMatrix * inv_mat;
+
+	for (uint i = 0; i < items.size(); ++i) {
+		items[i]->DrawDepthMap(lightmat); 
+
+		//for (uint j = 0; j < point_size; ++j) {
+
+		//}
+
+		//for (uint j = 0; j < spot_size; ++j) {
+
+		//}
+
+		//for (uint j = 0; j < directional_size; ++j) {
+
+		//}
+	}
+}
+
 /**
  * Get Point Data
  * */
@@ -404,4 +459,19 @@ LightManager * LightManager::SetAmbientItensity(float i)
 {
 	ambient_intensity = i;
 	return GetInstance();
+}
+
+std::vector<Light*> LightManager::GetPointLights()
+{
+	return point_lights;
+}
+
+std::vector<Light*> LightManager::GetSpotLights()
+{
+	return spot_lights;
+}
+
+std::vector<Light*> LightManager::GetDirectionalLights()
+{
+	return directional_lights;
 }
