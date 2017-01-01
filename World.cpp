@@ -256,39 +256,39 @@ void World::OnMouseMove(double x, double y) {
 }
 
 void World::LoadUniforms() {
-	projectionID = glGetUniformLocation(shaderID, "P");
-	viewID = glGetUniformLocation(shaderID, "V");
-	transformID = glGetUniformLocation(shaderID, "M");
+	projectionID              = glGetUniformLocation(shaderID, "P");
+	viewID                    = glGetUniformLocation(shaderID, "V");
+	transformID               = glGetUniformLocation(shaderID, "M");
 
-	point_positionsID = glGetUniformLocation(shaderID, "point_positions");
-	point_colorsID = glGetUniformLocation(shaderID, "point_colors");
-	point_intensitiesID = glGetUniformLocation(shaderID, "point_intensities");
-	point_shininessID = glGetUniformLocation(shaderID, "point_shininess");
+	point_positionsID         = glGetUniformLocation(shaderID, "point_positions");
+	point_colorsID            = glGetUniformLocation(shaderID, "point_colors");
+	point_intensitiesID       = glGetUniformLocation(shaderID, "point_intensities");
+	point_shininessID         = glGetUniformLocation(shaderID, "point_shininess");
 
-	spot_positionsID = glGetUniformLocation(shaderID, "spot_positions");
-	spot_colorsID = glGetUniformLocation(shaderID, "spot_colors");
-	spot_directionsID = glGetUniformLocation(shaderID, "spot_directions");
-	spot_intensitiesID = glGetUniformLocation(shaderID, "spot_intensities");
-	spot_shininessID = glGetUniformLocation(shaderID, "spot_shininess");
-	spot_anglesID = glGetUniformLocation(shaderID, "spot_angles");
+	spot_positionsID          = glGetUniformLocation(shaderID, "spot_positions");
+	spot_colorsID             = glGetUniformLocation(shaderID, "spot_colors");
+	spot_directionsID         = glGetUniformLocation(shaderID, "spot_directions");
+	spot_intensitiesID        = glGetUniformLocation(shaderID, "spot_intensities");
+	spot_shininessID          = glGetUniformLocation(shaderID, "spot_shininess");
+	spot_anglesID             = glGetUniformLocation(shaderID, "spot_angles");
 
-	directional_positionsID = glGetUniformLocation(shaderID, "directional_positions");
-	directional_colorsID = glGetUniformLocation(shaderID, "directional_colors");
-	directional_directionsID = glGetUniformLocation(shaderID, "directional_directions");
+	directional_positionsID   = glGetUniformLocation(shaderID, "directional_positions");
+	directional_colorsID      = glGetUniformLocation(shaderID, "directional_colors");
+	directional_directionsID  = glGetUniformLocation(shaderID, "directional_directions");
 	directional_intensitiesID = glGetUniformLocation(shaderID, "directional_intensities");
-	directional_shininessID = glGetUniformLocation(shaderID, "directional_shininess");
+	directional_shininessID   = glGetUniformLocation(shaderID, "directional_shininess");
 
-	cameraPositionID = glGetUniformLocation(shaderID, "camera_position");
+	cameraPositionID          = glGetUniformLocation(shaderID, "camera_position");
 
-	reflectivityDiffuseID = glGetUniformLocation(shaderID, "reflectivity_diffuse");
-	reflectivitySpecularID = glGetUniformLocation(shaderID, "reflectivity_specular");
-	reflectivityAmbientID = glGetUniformLocation(shaderID, "reflectivity_ambient");
+	reflectivityDiffuseID     = glGetUniformLocation(shaderID, "reflectivity_diffuse");
+	reflectivitySpecularID    = glGetUniformLocation(shaderID, "reflectivity_specular");
+	reflectivityAmbientID     = glGetUniformLocation(shaderID, "reflectivity_ambient");
 
-	ambientColorID = glGetUniformLocation(shaderID, "ambient_color");
-	ambientIntensityID = glGetUniformLocation(shaderID, "ambient_intensity");
+	ambientColorID            = glGetUniformLocation(shaderID, "ambient_color");
+	ambientIntensityID        = glGetUniformLocation(shaderID, "ambient_intensity");
 
-	textureID = glGetUniformLocation(shaderID, "albedo");
+	textureID                 = glGetUniformLocation(shaderID, "albedo");
 
-	shadow_PVID = glGetUniformLocation(shadow_shaderID, "PV");
-	shadow_MID = glGetUniformLocation(shadow_shaderID, "M");
+	shadow_PVID               = glGetUniformLocation(shadow_shaderID, "PV");
+	shadow_MID                = glGetUniformLocation(shadow_shaderID, "M");
 }
