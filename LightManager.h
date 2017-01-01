@@ -59,12 +59,9 @@ class LightManager
 	GLfloat ambient_intensity;
 	GLfloat specular_exponent;
 
-	GLuint* shadowmaps_point;
-	GLuint* shadowmaps_spot;
-	GLuint* shadowmaps_directional;
-
-	GLuint shadow_framebuffer;
-	GLuint depthTexture;
+	//GLuint* shadowmaps_point;
+	//GLuint* shadowmaps_spot;
+	//GLuint* shadowmaps_directional;
 	
 	void Compile();
 

@@ -128,9 +128,6 @@ Engine* Engine::Loop(function<void()> Init, function<void(double)> Update, funct
 	Init();
 	double currentFrame, delta, lastFrame = glfwGetTime();
 	do {
-		//Clear color buffer  
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		//Calculate delta between frames
 		currentFrame = glfwGetTime();
 		delta = currentFrame - lastFrame;

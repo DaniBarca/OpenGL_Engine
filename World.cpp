@@ -22,27 +22,6 @@ void World::Init() {
 		->SetAmbientColor(glm::vec3(256.0f,256.0f,256.0f))
 		->SetAmbientItensity(0.0f);
 
-	//LightManager::GetInstance()->Push(
-	//	new SpotLight(
-	//		glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), 
-	//		glm::vec3(0.0f, 3.0f, 0.0f),
-	//		10.0f, 
-	//		0.3f, 
-	//		glm::vec3(0.0f, -1.0f, 0.0f), 
-	//		0.15f,
-	//		0.18f
-	//	)
-	//);
-    //
-	//LightManager::GetInstance()->Push(
-	//	new Light(
-	//		glm::vec4(256.0f, 256.0f, 256.0f, 0.0f), 
-	//		glm::vec3(-10.0f,3.0f,0.0f),
-	//		10.0f, 
-	//		0.3f
-	//	)
-	//);
-
 	LightManager::GetInstance()->Push(
 		new DirectionalLight(
 			glm::vec4(256.0f,256.0f,256.0f, 0.0f),
@@ -80,7 +59,33 @@ void World::Init() {
 		parse_dict, &shaderID
 	);
 
-	// SHADOWMAP shader
+	// SHADOWMAP
+
+	// The shadowmap framebuffer
+	glGenFramebuffers(1, &shadow_framebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, shadow_framebuffer);
+
+	// Depth texture
+	glGenTextures(1, &depthTexture);
+	glBindTexture(GL_TEXTURE_2D, depthTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthTexture, 0);
+
+	glDrawBuffer(GL_NONE); // No color buffer is drawn to.
+
+						   // Always check that our framebuffer is ok
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		std::cout << "DepthBuffer error" << std::endl;
+		getchar();
+		exit(-1);
+	}
+
+
 	Engine::GetInstance()->LoadShader(
 		"shaders/shadowmap.vertex",
 		"shaders/shadowmap.fragment",
@@ -106,11 +111,6 @@ void World::Init() {
 }
 
 void World::Update(double dt) {
-	//LightManager::GetInstance()->GetDirectionalLights()[0]->Transform = *LightManager::GetInstance()->GetDirectionalLights()[0]->Transform;
-
-	//*LightManager::GetInstance()->GetDirectionalLights()[0]->Transform() = glm::rotate((float)(dt), glm::vec3(1, 0, 0))*(*LightManager::GetInstance()->GetDirectionalLights()[0]->Transform());
-
-
 	LightManager::GetInstance()->Update(dt);
 
 	for (uint i = 0; i < items.size(); ++i) {
@@ -120,52 +120,49 @@ void World::Update(double dt) {
 
 void World::Draw() {
 	/********* SHADOWS *********/
-	//glBindFramebuffer(GL_FRAMEBUFFER, shadow_framebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	//glViewport(0, 0, 1024, 1024);
+	glBindFramebuffer(GL_FRAMEBUFFER, shadow_framebuffer);
+	glViewport(0, 0, 1024, 1024);
 
-//	glEnable(GL_CULL_FACE);
-//	glCullFace(GL_BACK);
-//
-//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//
-//	
-//
-//	std::cout << ((DirectionalLight*)LightManager::GetInstance()->GetDirectionalLights()[0])->GetUp()[0] << " -- " << ((DirectionalLight*)LightManager::GetInstance()->GetDirectionalLights()[0])->GetUp()[1] << " -- " << ((DirectionalLight*)LightManager::GetInstance()->GetDirectionalLights()[0])->GetUp()[2] << std::endl;
-//
-//	glm::mat4 depth_V =
-//		//glm::inverse(
-//		glm::lookAt(
-//		((DirectionalLight*)LightManager::GetInstance()->GetDirectionalLights()[0])->GetDirection(),
-//			((DirectionalLight*)LightManager::GetInstance()->GetDirectionalLights()[0])->GetPosition(),
-//			((DirectionalLight*)LightManager::GetInstance()->GetDirectionalLights()[0])->GetUp()
-//		);
-//		//);
-//
-//	//glm::mat4 inv_mat = glm::inverse(*directional_lights[0]->Transform());
-//	glm::mat4 depth_P = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
-//
-//	glm::mat4 shadow_PV = depth_P * depth_V;
-//
-//	Engine::GetInstance()->LoadShader(
-//		"shaders/shadowmap.vertex",
-//		"shaders/shadowmap.fragment",
-//		0, 0, 0,
-//		parse_dict,
-//		&shadow_shaderID
-//	);
-//
-//	glUseProgram(shadow_shaderID);
-//
-//	glUniformMatrix4fv(shadow_PVID, 1, GL_FALSE, &shadow_PV[0][0]);
-//
-//	for (int i = 0; i < items.size(); ++i) {
-//		items[i]->DrawDepthMap(shadow_MID);
-//	}
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	std::cout << ((DirectionalLight*)LightManager::GetInstance()->GetDirectionalLights()[0])->GetUp()[0] << " -- " << ((DirectionalLight*)LightManager::GetInstance()->GetDirectionalLights()[0])->GetUp()[1] << " -- " << ((DirectionalLight*)LightManager::GetInstance()->GetDirectionalLights()[0])->GetUp()[2] << std::endl;
+
+	glm::mat4 depth_V =
+		glm::lookAt(
+			((DirectionalLight*)LightManager::GetInstance()->GetDirectionalLights()[0])->GetDirection(),
+			((DirectionalLight*)LightManager::GetInstance()->GetDirectionalLights()[0])->GetPosition(),
+			((DirectionalLight*)LightManager::GetInstance()->GetDirectionalLights()[0])->GetUp()
+		);
+
+	//glm::mat4 inv_mat = glm::inverse(*directional_lights[0]->Transform());
+	glm::mat4 depth_P = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
+
+	glm::mat4 shadow_PV = depth_P * depth_V;
+
+	Engine::GetInstance()->LoadShader(
+		"shaders/shadowmap.vertex",
+		"shaders/shadowmap.fragment",
+		0, 0, 0,
+		parse_dict,
+		&shadow_shaderID
+	);
+
+	glUseProgram(shadow_shaderID);
+
+	glUniformMatrix4fv(shadow_PVID, 1, GL_FALSE, &shadow_PV[0][0]);
+
+	for (int i = 0; i < items.size(); ++i) {
+		items[i]->DrawDepthMap(shadow_MID);
+	}
 
 
 	/********* OBJECTS *********/
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	static int preShaderID;
 
@@ -209,7 +206,6 @@ void World::Draw() {
 	glUniform3fv(directional_directionsID,  n_directional_lights, LightManager::GetInstance()->GetDirectionalDirections());
 	glUniform1fv(directional_intensitiesID, n_directional_lights, LightManager::GetInstance()->GetDirectionalIntensities());
 	glUniform1fv(directional_shininessID,   n_directional_lights, LightManager::GetInstance()->GetDirectionalShininess());
-
 
 	glUniform3fv(ambientColorID,     1, LightManager::GetInstance()->GetAmbientColor());
 	glUniform1fv(ambientIntensityID, 1, LightManager::GetInstance()->GetAmbientItensity());

@@ -31,6 +31,9 @@ class World
 
 	static std::map<string, string> parse_dict;
 
+	GLuint shadow_framebuffer;
+	GLuint depthTexture;
+
 	GLuint shaderID;
 
 	GLuint projectionID;
@@ -68,7 +71,6 @@ class World
 	GLuint shadow_shaderID;
 	GLuint shadow_PVID;
 	GLuint shadow_MID;
-
 
 	std::vector<std::string> shaderPaths;
 	std::vector<GLenum> shaderTypes;

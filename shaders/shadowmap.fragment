@@ -5,5 +5,5 @@ precision highp float;
 layout(location = 0) out float fragmentdepth;
 
 void main(){
-	fragmentdepth = 1.0f;// gl_FragCoord.z;
+	fragmentdepth = gl_FragCoord.z;
 }
