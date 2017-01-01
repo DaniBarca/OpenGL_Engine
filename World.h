@@ -8,8 +8,6 @@
 #include "MeshObject.h"
 #include "Camera.h"
 
-#include "Teapot.h"
-#include "Dragon.h"
 #include "BasicMesh.h"
 
 #include "RotatingLight.h"
@@ -21,8 +19,6 @@ class World
 	~World();
 
 	aiScene asScene;
-	Teapot* teapot;
-	Dragon* dragon, *dragon2, *dragon3;
 	BasicMesh* testmesh;
 	BasicMesh* testmeshB;
 
@@ -30,6 +26,54 @@ class World
 
 	uint pressed_keys;
 	bool clicking;
+
+	///////////////////////////////////////////
+
+	static std::map<string, string> parse_dict;
+
+	GLuint shaderID;
+
+	GLuint projectionID;
+	GLuint viewID;
+	GLuint transformID;
+
+	GLuint point_positionsID;
+	GLuint point_colorsID;
+	GLuint point_intensitiesID;
+	GLuint point_shininessID;
+
+	GLuint spot_positionsID;
+	GLuint spot_colorsID;
+	GLuint spot_directionsID;
+	GLuint spot_intensitiesID;
+	GLuint spot_shininessID;
+	GLuint spot_anglesID;
+
+	GLuint directional_positionsID;
+	GLuint directional_colorsID;
+	GLuint directional_directionsID;
+	GLuint directional_intensitiesID;
+	GLuint directional_shininessID;
+
+	GLuint cameraPositionID;
+	GLuint reflectivityDiffuseID;
+	GLuint reflectivitySpecularID;
+	GLuint reflectivityAmbientID;
+
+	GLuint ambientColorID;
+	GLuint ambientIntensityID;
+
+	GLuint textureID;
+
+	GLuint shadow_shaderID;
+	GLuint shadow_PVID;
+	GLuint shadow_MID;
+
+
+	std::vector<std::string> shaderPaths;
+	std::vector<GLenum> shaderTypes;
+
+	///////////////////////////////////////////
 
 public:
 	static World* GetInstance();
@@ -45,4 +89,6 @@ public:
 	void OnMousePress(int button, int action, int mods);
 
 	void OnMouseMove(double x, double y);
+
+	void LoadUniforms();
 };

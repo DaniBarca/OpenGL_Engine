@@ -82,8 +82,6 @@ public:
 
 	void Update(double dt);
 	
-	void GenerateShadows(std::vector<MeshObject*> items);
-
 	GLfloat* GetPointPositions();
 	GLfloat* GetPointIntensities();
 	GLfloat* GetPointColors();

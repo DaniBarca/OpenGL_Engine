@@ -20,11 +20,3 @@ void BasicMesh::Init() {
 	reflectivity_specular = 0.5f;
 	reflectivity_ambient = 0.5f;
 }
-
-void BasicMesh::Update(double dt) {
-	MeshObject::Update(dt);
-}
-
-void BasicMesh::Draw() {
-	MeshObject::Draw();
-}

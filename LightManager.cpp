@@ -336,37 +336,6 @@ void LightManager::Compile() {
 	}
 }
 
-void LightManager::GenerateShadows(std::vector<MeshObject*> items) {
-	//glBindFramebuffer(GL_FRAMEBUFFER, shadow_framebuffer);
-	glViewport(0, 0, 1024, 1024);
-	
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glm::mat4 inv_mat = glm::inverse(*directional_lights[0]->Transform());
-	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
-
-	glm::mat4 lightmat = depthProjectionMatrix * inv_mat;
-
-	for (uint i = 0; i < items.size(); ++i) {
-		items[i]->DrawDepthMap(lightmat); 
-
-		//for (uint j = 0; j < point_size; ++j) {
-
-		//}
-
-		//for (uint j = 0; j < spot_size; ++j) {
-
-		//}
-
-		//for (uint j = 0; j < directional_size; ++j) {
-
-		//}
-	}
-}
-
 /**
  * Get Point Data
  * */

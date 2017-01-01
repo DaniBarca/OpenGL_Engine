@@ -9,7 +9,6 @@ Light::~Light()
 {}
 
 void Light::Update(double dt) {
-	Object3D::Update(dt);
 }
 
 void Light::Init() {}

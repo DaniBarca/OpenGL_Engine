@@ -12,7 +12,5 @@ public:
 	~BasicMesh();
 
 	void Init();
-	void Update(double dt);
-	void Draw();
 
 };
