@@ -39,6 +39,7 @@ class World
 	GLuint projectionID;
 	GLuint viewID;
 	GLuint transformID;
+	GLuint shadowProjectionViewID;
 
 	GLuint point_positionsID;
 	GLuint point_colorsID;
@@ -67,6 +68,7 @@ class World
 	GLuint ambientIntensityID;
 
 	GLuint textureID;
+	GLuint shadowID;
 
 	GLuint shadow_shaderID;
 	GLuint shadow_PVID;

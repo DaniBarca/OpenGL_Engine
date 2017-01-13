@@ -128,10 +128,7 @@ void World::Draw() {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	std::cout << ((DirectionalLight*)LightManager::GetInstance()->GetDirectionalLights()[0])->GetUp()[0] << " -- " << ((DirectionalLight*)LightManager::GetInstance()->GetDirectionalLights()[0])->GetUp()[1] << " -- " << ((DirectionalLight*)LightManager::GetInstance()->GetDirectionalLights()[0])->GetUp()[2] << std::endl;
-
-	glm::mat4 depth_V =
-		glm::lookAt(
+	glm::mat4 depth_V = glm::lookAt(
 			((DirectionalLight*)LightManager::GetInstance()->GetDirectionalLights()[0])->GetDirection(),
 			((DirectionalLight*)LightManager::GetInstance()->GetDirectionalLights()[0])->GetPosition(),
 			((DirectionalLight*)LightManager::GetInstance()->GetDirectionalLights()[0])->GetUp()
@@ -158,6 +155,12 @@ void World::Draw() {
 		items[i]->DrawDepthMap(shadow_MID);
 	}
 
+	glm::mat4 biasmatrix_PV = glm::mat4(
+		0.5, 0.0, 0.0, 0.0,
+		0.0, 0.5, 0.0, 0.0,
+		0.0, 0.0, 0.5, 0.0,
+		0.5, 0.5, 0.5, 1.0
+	) * shadow_PV;
 
 	/********* OBJECTS *********/
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -184,7 +187,8 @@ void World::Draw() {
 	glUseProgram(shaderID);
 
 	glUniformMatrix4fv(projectionID, 1, GL_FALSE, &(Camera::GetInstance()->getP())[0][0]);
-	glUniformMatrix4fv(viewID, 1, GL_FALSE, &(Camera::GetInstance()->getV())[0][0]);
+	glUniformMatrix4fv(viewID,       1, GL_FALSE, &(Camera::GetInstance()->getV())[0][0]);
+	glUniformMatrix4fv(shadowProjectionViewID, 1, GL_FALSE, &biasmatrix_PV[0][0]);
 
 	GLsizei n_point_lights = (GLsizei)LightManager::GetInstance()->GetNPointLights();
 	glUniform3fv(point_positionsID,   n_point_lights, LightManager::GetInstance()->GetPointPositions());
@@ -211,6 +215,10 @@ void World::Draw() {
 	glUniform1fv(ambientIntensityID, 1, LightManager::GetInstance()->GetAmbientItensity());
 
 	glUniform3fv(cameraPositionID, 1, &Camera::GetInstance()->GetPosition()[0]);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, depthTexture);
+	glUniform1i(shadowID, 1);
 
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	for (uint i = 0; i < items.size(); ++i) {
@@ -259,6 +267,7 @@ void World::LoadUniforms() {
 	projectionID              = glGetUniformLocation(shaderID, "P");
 	viewID                    = glGetUniformLocation(shaderID, "V");
 	transformID               = glGetUniformLocation(shaderID, "M");
+	shadowProjectionViewID    = glGetUniformLocation(shaderID, "shadow_depthbias_PV");
 
 	point_positionsID         = glGetUniformLocation(shaderID, "point_positions");
 	point_colorsID            = glGetUniformLocation(shaderID, "point_colors");
@@ -288,6 +297,7 @@ void World::LoadUniforms() {
 	ambientIntensityID        = glGetUniformLocation(shaderID, "ambient_intensity");
 
 	textureID                 = glGetUniformLocation(shaderID, "albedo");
+	shadowID                  = glGetUniformLocation(shaderID, "shadow");
 
 	shadow_PVID               = glGetUniformLocation(shadow_shaderID, "PV");
 	shadow_MID                = glGetUniformLocation(shadow_shaderID, "M");

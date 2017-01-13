@@ -15,7 +15,7 @@ DirectionalLight::DirectionalLight(glm::vec4 _color, glm::vec3 _position, float 
 	}
 
 	*transform = glm::lookAt(
-		_direction,
+		-_direction,
 		_position,
 		up
 	);
